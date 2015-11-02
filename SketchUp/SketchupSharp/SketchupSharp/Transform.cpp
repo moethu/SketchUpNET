@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see <http://www.gnu.org/licenses/>.
 
 */
-
 #include <slapi/slapi.h>
 #include <slapi/geometry.h>
 #include <slapi/initialize.h>
@@ -27,10 +26,9 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include <slapi/model/face.h>
 #include <slapi/model/edge.h>
 #include <slapi/model/vertex.h>
-#include <slapi/model/layer.h>
 #include <msclr/marshal.h>
+#include <slapi/model/component_instance.h>
 #include <vector>
-
 
 #pragma once
 
@@ -40,31 +38,28 @@ using namespace System::Collections::Generic;
 
 namespace SketchUpSharp
 {
-	public ref class Layer
+	public ref class Transform
 	{
 	public:
-		System::String^ Name;
 
-		Layer(System::String^ name)
+		array<double^>^ Data;
+
+		Transform(array<double^>^ data)
 		{
-			this->Name = name;
+			this->Data = data;
 		};
 
-		Layer(){};
+		Transform(){};
 
-		static Layer^ FromSU(SULayerRef layer)
+		static Transform^ FromSU(SUTransformation transformation)
 		{
-			SUStringRef name = SU_INVALID;
-			SUStringCreate(&name);
-			SULayerGetName(layer, &name);
-			size_t name_length = 0;
-			SUStringGetUTF8Length(name, &name_length);
-			char* name_utf8 = new char[name_length + 1];
-			SUStringGetUTF8(name, name_length + 1, name_utf8, &name_length);
-			SUStringRelease(&name);
-			
+			double* data = transformation.values;
 
-			Layer^ v = gcnew Layer(gcnew String(name_utf8));
+			array<double^>^ ar = gcnew array<double^>(16);
+			for (int i = 0; i < 16; i++)
+				ar[i] = data[i];
+
+			Transform^ v = gcnew Transform(ar);
 
 			return v;
 		};

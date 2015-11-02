@@ -9,9 +9,24 @@
 Load SKP Model
 </summary>
         </member>
+        <member name="F:SketchUpSharp.SketchUp.Instances">
+            <summary>
+Component Instances
+</summary>
+        </member>
+        <member name="F:SketchUpSharp.SketchUp.Components">
+            <summary>
+Component Definitions
+</summary>
+        </member>
+        <member name="F:SketchUpSharp.SketchUp.Groups">
+            <summary>
+Groups
+</summary>
+        </member>
         <member name="F:SketchUpSharp.SketchUp.Layers">
             <summary>
-Surfaces
+Layers
 </summary>
         </member>
         <member name="F:SketchUpSharp.SketchUp.Surfaces">
@@ -22,6 +37,11 @@ Surfaces
         <member name="T:SketchUpSharp.SketchUp">
             <summary>
 ArrayFireSharp
+</summary>
+        </member>
+        <member name="F:SketchUpSharp.Group.Surfaces">
+            <summary>
+Surfaces
 </summary>
         </member>
     </members>

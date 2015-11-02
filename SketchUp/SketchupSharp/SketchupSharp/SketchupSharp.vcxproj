@@ -124,16 +124,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Component.cpp" />
     <ClCompile Include="Corner.cpp" />
+    <ClCompile Include="Group.cpp" />
+    <ClCompile Include="Instance.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="SKSharpWrapper.cpp" />
     <ClCompile Include="Surface.cpp" />
+    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Component.h" />
     <ClInclude Include="Corner.h" />
+    <ClInclude Include="Group.h" />
+    <ClInclude Include="Instance.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Surface.h" />
+    <ClInclude Include="Transform.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

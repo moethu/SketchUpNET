@@ -27,6 +27,7 @@
 #include <slapi/model/face.h>
 #include <slapi/model/edge.h>
 #include <slapi/model/vertex.h>
+#include <slapi/model/curve.h>
 #include <msclr/marshal.h>
 #include <vector>
 #include "Vertex.h"
@@ -46,10 +47,13 @@ namespace SketchUpSharp
 		Vertex^ Start;
 		Vertex^ End;
 
-		Corner(Vertex ^ start, Vertex ^ end)
+		bool isArc;
+
+		Corner(Vertex ^ start, Vertex ^ end, bool isarc)
 		{
 			this->Start = start;
 			this->End = end;
+			this->isArc = isarc;
 		};
 
 		Corner(){};
@@ -65,12 +69,21 @@ namespace SketchUpSharp
 			SUVertexGetPosition(startVertex, &start);
 			SUVertexGetPosition(endVertex, &end);
 			
-			Corner^ v = gcnew Corner(Vertex::FromSU(start), Vertex::FromSU(end));
+			SUCurveRef curve = SU_INVALID;
+			SUEdgeGetCurve(edge, &curve);
+			SUCurveType type = SUCurveType::SUCurveType_Simple;
+			SUCurveGetType(curve, &type);
+			bool isarc = false;
+			if (type == SUCurveType::SUCurveType_Arc) isarc = true;
+			
+			Corner^ v = gcnew Corner(Vertex::FromSU(start), Vertex::FromSU(end), isarc);
 
 			return v;
 		};
 
 	};
+
+
 
 
 }

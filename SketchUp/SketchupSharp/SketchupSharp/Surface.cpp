@@ -27,9 +27,11 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include <slapi/model/face.h>
 #include <slapi/model/edge.h>
 #include <slapi/model/vertex.h>
+#include <slapi/model/layer.h>
 #include <msclr/marshal.h>
 #include <vector>
 #include "Corner.h"
+#include "Layer.h"
 
 #pragma once
 
@@ -45,9 +47,11 @@ namespace SketchUpSharp
 
 		System::Collections::Generic::List<Corner^>^ Corners;
 
+
 		Surface(System::Collections::Generic::List<Corner^>^ corners)
 		{
 			this->Corners = corners;
+
 		};
 
 		Surface(){};
@@ -68,6 +72,8 @@ namespace SketchUpSharp
 					corners->Add(Corner::FromSU(edges[j]));
 				}
 			}
+
+			
 
 			Surface^ v = gcnew Surface(corners);
 

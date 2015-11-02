@@ -28,6 +28,8 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include <slapi/model/edge.h>
 #include <slapi/model/vertex.h>
 #include <slapi/model/layer.h>
+#include <slapi/model/group.h>
+#include "surface.h"
 #include <msclr/marshal.h>
 #include <vector>
 
@@ -40,31 +42,57 @@ using namespace System::Collections::Generic;
 
 namespace SketchUpSharp
 {
-	public ref class Layer
+	public ref class Group
 	{
 	public:
 		System::String^ Name;
 
-		Layer(System::String^ name)
+		/// <summary>
+		/// Surfaces
+		/// </summary>
+		System::Collections::Generic::List<Surface^>^ Surfaces;
+
+		Group(System::String^ name, System::Collections::Generic::List<Surface^>^ surfaces)
 		{
 			this->Name = name;
+			this->Surfaces = surfaces;
 		};
 
-		Layer(){};
+		Group(){};
 
-		static Layer^ FromSU(SULayerRef layer)
+		static Group^ FromSU(SUGroupRef group)
 		{
 			SUStringRef name = SU_INVALID;
 			SUStringCreate(&name);
-			SULayerGetName(layer, &name);
+			SUGroupGetName(group, &name);
 			size_t name_length = 0;
 			SUStringGetUTF8Length(name, &name_length);
 			char* name_utf8 = new char[name_length + 1];
 			SUStringGetUTF8(name, name_length + 1, name_utf8, &name_length);
 			SUStringRelease(&name);
-			
 
-			Layer^ v = gcnew Layer(gcnew String(name_utf8));
+			SUEntitiesRef entities = SU_INVALID;
+			SUGroupGetEntities(group, &entities);
+
+			size_t faceCount = 0;
+			SUEntitiesGetNumFaces(entities, &faceCount);
+
+
+			System::Collections::Generic::List<Surface^>^ surfaces = gcnew System::Collections::Generic::List<Surface^>();
+
+			if (faceCount > 0) {
+				std::vector<SUFaceRef> faces(faceCount);
+				SUEntitiesGetFaces(entities, faceCount, &faces[0], &faceCount);
+
+
+				for (size_t i = 0; i < faceCount; i++) {
+					Surface^ surface = Surface::FromSU(faces[i]);
+					surfaces->Add(surface);
+				}
+			}
+
+
+			Group^ v = gcnew Group(gcnew String(name_utf8), surfaces);
 
 			return v;
 		};

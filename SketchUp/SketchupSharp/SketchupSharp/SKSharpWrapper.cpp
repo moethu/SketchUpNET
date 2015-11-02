@@ -32,7 +32,10 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include "Vertex.h"
 #include "Corner.h"
 #include "Surface.h"
+#include "Component.h"
 #include "Layer.h"
+#include "Group.h"
+#include "Instance.h"
 
 #pragma once
 
@@ -59,9 +62,24 @@ namespace SketchUpSharp
 		System::Collections::Generic::List<Surface^>^ Surfaces;
 
 		/// <summary>
-		/// Surfaces
+		/// Layers
 		/// </summary>
 		System::Collections::Generic::List<Layer^>^ Layers;
+
+		/// <summary>
+		/// Groups
+		/// </summary>
+		System::Collections::Generic::List<Group^>^ Groups;
+
+		/// <summary>
+		/// Component Definitions
+		/// </summary>
+		System::Collections::Generic::List<Component^>^ Components;
+
+		/// <summary>
+		/// Component Instances
+		/// </summary>
+		System::Collections::Generic::List<Instance^>^ Instances;
 
 		/// <summary>
 		/// Load SKP Model
@@ -86,6 +104,9 @@ namespace SketchUpSharp
 
 			Surfaces = gcnew System::Collections::Generic::List<Surface^>();
 			Layers = gcnew System::Collections::Generic::List<Layer^>();
+			Groups = gcnew System::Collections::Generic::List<Group^>();
+			Components = gcnew System::Collections::Generic::List<Component^>();
+			Instances = gcnew System::Collections::Generic::List<Instance^>();
 
 			SUEntitiesRef entities = SU_INVALID;
 			SUModelGetEntities(model, &entities);
@@ -104,7 +125,7 @@ namespace SketchUpSharp
 					Surfaces->Add(surface);
 				}
 			}
-
+			
 			//Get All Layers
 
 			size_t layerCount = 0;
@@ -117,6 +138,52 @@ namespace SketchUpSharp
 				for (size_t i = 0; i < layerCount; i++) {
 					Layer^ layer = Layer::FromSU(layers[i]);
 					Layers->Add(layer);
+				}
+			}
+
+			//Get All Groups
+		
+			size_t groupCount = 0;
+			SUEntitiesGetNumGroups(entities, &groupCount);
+
+			if (groupCount > 0) {
+				std::vector<SUGroupRef> groups(groupCount);
+				SUEntitiesGetGroups(entities, groupCount, &groups[0], &groupCount);
+
+				for (size_t i = 0; i < groupCount; i++) {
+					Group^ group = Group::FromSU(groups[i]);
+					Groups->Add(group);
+				}
+
+			}
+
+			//Get All Component Instances
+
+			size_t instanceCount = 0;
+			SUEntitiesGetNumInstances(entities, &instanceCount);
+
+			if (instanceCount > 0) {
+				std::vector<SUComponentInstanceRef> instances(instanceCount);
+				SUEntitiesGetInstances(entities, instanceCount, &instances[0], &instanceCount);
+				
+				for (size_t i = 0; i < instanceCount; i++) {
+					Instance^ inst = Instance::FromSU(instances[i]);
+					Instances->Add(inst);
+				}
+
+			}
+
+			// Get all Components
+			size_t compCount = 0;
+			SUModelGetNumComponentDefinitions(model, &compCount);
+
+			if (compCount > 0) {
+				std::vector<SUComponentDefinitionRef> comps(compCount);
+				SUModelGetComponentDefinitions(model, compCount, &comps[0], &compCount);
+				
+				for (size_t i = 0; i < compCount; i++) {
+					Component^ component = Component::FromSU(comps[i]);
+					Components->Add(component);
 				}
 			}
 

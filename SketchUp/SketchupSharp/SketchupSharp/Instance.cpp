@@ -27,9 +27,11 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include <slapi/model/face.h>
 #include <slapi/model/edge.h>
 #include <slapi/model/vertex.h>
-#include <slapi/model/layer.h>
+#include <slapi/model/component_instance.h>
 #include <msclr/marshal.h>
 #include <vector>
+#include "surface.h"
+#include "transform.h"
 
 
 #pragma once
@@ -40,31 +42,36 @@ using namespace System::Collections::Generic;
 
 namespace SketchUpSharp
 {
-	public ref class Layer
+	public ref class Instance
 	{
 	public:
 		System::String^ Name;
+		Transform^ Transformation;
 
-		Layer(System::String^ name)
+		Instance(System::String^ name, Transform^ transformation)
 		{
 			this->Name = name;
+			this->Transformation = transformation;
 		};
 
-		Layer(){};
+		Instance(){};
 
-		static Layer^ FromSU(SULayerRef layer)
+		static Instance^ FromSU(SUComponentInstanceRef comp)
 		{
 			SUStringRef name = SU_INVALID;
 			SUStringCreate(&name);
-			SULayerGetName(layer, &name);
+			SUComponentInstanceGetName(comp, &name);
 			size_t name_length = 0;
 			SUStringGetUTF8Length(name, &name_length);
 			char* name_utf8 = new char[name_length + 1];
 			SUStringGetUTF8(name, name_length + 1, name_utf8, &name_length);
 			SUStringRelease(&name);
-			
 
-			Layer^ v = gcnew Layer(gcnew String(name_utf8));
+			SUTransformation transform = SU_INVALID;
+			SUComponentInstanceGetTransform(comp, &transform);
+
+
+			Instance^ v = gcnew Instance(gcnew String(name_utf8), Transform::FromSU(transform));
 
 			return v;
 		};
