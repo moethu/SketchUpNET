@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        "SketchupSharp"
+    </assembly>
+    <members>
+        <member name="M:SketchUpSharp.SketchUp.LoadModel(System.String)">
+            <summary>
+Load SKP Model
+</summary>
+        </member>
+        <member name="F:SketchUpSharp.SketchUp.Layers">
+            <summary>
+Surfaces
+</summary>
+        </member>
+        <member name="F:SketchUpSharp.SketchUp.Surfaces">
+            <summary>
+Surfaces
+</summary>
+        </member>
+        <member name="T:SketchUpSharp.SketchUp">
+            <summary>
+ArrayFireSharp
+</summary>
+        </member>
+    </members>
+</doc>
