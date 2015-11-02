@@ -46,15 +46,17 @@ namespace SketchUpSharp
 	public:
 		System::String^ Name;
 		System::Collections::Generic::List<Surface^>^ Surfaces;
+		System::String^ Guid;
 
-		Component(System::String^ name, System::Collections::Generic::List<Surface^>^ surfaces)
+		Component(System::String^ name, System::String^ guid,System::Collections::Generic::List<Surface^>^ surfaces)
 		{
 			this->Name = name;
 			this->Surfaces = surfaces;
+			this->Guid = guid;
 		};
 
 		Component(){};
-
+	internal:
 		static Component^ FromSU(SUComponentDefinitionRef comp)
 		{
 			SUStringRef name = SU_INVALID;
@@ -72,6 +74,15 @@ namespace SketchUpSharp
 			size_t faceCount = 0;
 			SUEntitiesGetNumFaces(entities, &faceCount);
 
+			SUStringRef guid = SU_INVALID;
+			SUStringCreate(&guid);
+			SUComponentDefinitionGetGuid(comp, &guid);
+			size_t guid_length = 0;
+			SUStringGetUTF8Length(guid, &guid_length);
+			char* guid_utf8 = new char[guid_length + 1];
+			SUStringGetUTF8(guid, guid_length + 1, guid_utf8, &guid_length);
+			SUStringRelease(&guid);
+
 
 			System::Collections::Generic::List<Surface^>^ surfaces = gcnew System::Collections::Generic::List<Surface^>();
 
@@ -87,7 +98,7 @@ namespace SketchUpSharp
 			}
 
 
-			Component^ v = gcnew Component(gcnew String(name_utf8), surfaces);
+			Component^ v = gcnew Component(gcnew String(name_utf8), gcnew String(guid_utf8), surfaces);
 
 			return v;
 		};

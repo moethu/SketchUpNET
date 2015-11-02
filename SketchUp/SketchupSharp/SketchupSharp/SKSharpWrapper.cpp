@@ -74,7 +74,7 @@ namespace SketchUpSharp
 		/// <summary>
 		/// Component Definitions
 		/// </summary>
-		System::Collections::Generic::List<Component^>^ Components;
+		System::Collections::Generic::Dictionary<String^, Component^>^ Components;
 
 		/// <summary>
 		/// Component Instances
@@ -105,7 +105,7 @@ namespace SketchUpSharp
 			Surfaces = gcnew System::Collections::Generic::List<Surface^>();
 			Layers = gcnew System::Collections::Generic::List<Layer^>();
 			Groups = gcnew System::Collections::Generic::List<Group^>();
-			Components = gcnew System::Collections::Generic::List<Component^>();
+			Components = gcnew System::Collections::Generic::Dictionary<String^,Component^>();
 			Instances = gcnew System::Collections::Generic::List<Instance^>();
 
 			SUEntitiesRef entities = SU_INVALID;
@@ -157,6 +157,20 @@ namespace SketchUpSharp
 
 			}
 
+			// Get all Components
+			size_t compCount = 0;
+			SUModelGetNumComponentDefinitions(model, &compCount);
+
+			if (compCount > 0) {
+				std::vector<SUComponentDefinitionRef> comps(compCount);
+				SUModelGetComponentDefinitions(model, compCount, &comps[0], &compCount);
+
+				for (size_t i = 0; i < compCount; i++) {
+					Component^ component = Component::FromSU(comps[i]);
+					Components->Add(component->Guid,component);
+				}
+			}
+
 			//Get All Component Instances
 
 			size_t instanceCount = 0;
@@ -167,25 +181,13 @@ namespace SketchUpSharp
 				SUEntitiesGetInstances(entities, instanceCount, &instances[0], &instanceCount);
 				
 				for (size_t i = 0; i < instanceCount; i++) {
-					Instance^ inst = Instance::FromSU(instances[i]);
+					Instance^ inst = Instance::FromSU(instances[i],Components);
 					Instances->Add(inst);
 				}
 
 			}
 
-			// Get all Components
-			size_t compCount = 0;
-			SUModelGetNumComponentDefinitions(model, &compCount);
 
-			if (compCount > 0) {
-				std::vector<SUComponentDefinitionRef> comps(compCount);
-				SUModelGetComponentDefinitions(model, compCount, &comps[0], &compCount);
-				
-				for (size_t i = 0; i < compCount; i++) {
-					Component^ component = Component::FromSU(comps[i]);
-					Components->Add(component);
-				}
-			}
 
 			SUModelRelease(&model);
 			SUTerminate();

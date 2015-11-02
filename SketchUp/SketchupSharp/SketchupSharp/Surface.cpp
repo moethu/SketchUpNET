@@ -32,6 +32,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include "Corner.h"
 #include "Layer.h"
+#include "Vector.h"
 
 #pragma once
 
@@ -47,15 +48,16 @@ namespace SketchUpSharp
 
 		System::Collections::Generic::List<Corner^>^ Corners;
 
+		Vector^ Normal;
 
-		Surface(System::Collections::Generic::List<Corner^>^ corners)
+		Surface(System::Collections::Generic::List<Corner^>^ corners, Vector^ normal)
 		{
 			this->Corners = corners;
-
+			this->Normal = normal;
 		};
 
 		Surface(){};
-
+	internal:
 		static Surface^ FromSU(SUFaceRef face)
 		{
 			System::Collections::Generic::List<Corner^>^ corners = gcnew System::Collections::Generic::List<Corner^>();
@@ -73,9 +75,21 @@ namespace SketchUpSharp
 				}
 			}
 
-			
+			SUVector3D vector = SU_INVALID;
+			SUFaceGetNormal(face, &vector);
+			Vector^ normal = Vector::FromSU(vector);
 
-			Surface^ v = gcnew Surface(corners);
+			//size_t openingsCount = 0;
+			//SUFaceGetNumOpenings(face, &openingsCount);
+			//if (openingsCount > 0)
+			//{
+			//	std::vector<SUOpeningRef> openings(openingsCount);
+			//	SUFaceGetOpenings(face, openingsCount, &openings[0], &openingsCount);
+			//}
+
+
+
+			Surface^ v = gcnew Surface(corners, normal);
 
 			return v;
 		};

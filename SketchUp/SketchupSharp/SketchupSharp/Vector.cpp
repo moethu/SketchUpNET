@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with this program.If not, see <http://www.gnu.org/licenses/>.
 
 */
-
 #include <slapi/slapi.h>
 #include <slapi/geometry.h>
 #include <slapi/initialize.h>
@@ -27,10 +26,8 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include <slapi/model/face.h>
 #include <slapi/model/edge.h>
 #include <slapi/model/vertex.h>
-#include <slapi/model/layer.h>
 #include <msclr/marshal.h>
 #include <vector>
-
 
 #pragma once
 
@@ -40,31 +37,26 @@ using namespace System::Collections::Generic;
 
 namespace SketchUpSharp
 {
-	public ref class Layer
+	public ref class Vector
 	{
 	public:
-		System::String^ Name;
 
-		Layer(System::String^ name)
+		double X;
+		double Y;
+		double Z;
+
+		Vector(double x, double y, double z)
 		{
-			this->Name = name;
+			this->X = x;
+			this->Y = y;
+			this->Z = z;
 		};
 
-		Layer(){};
+		Vector(){};
 	internal:
-		static Layer^ FromSU(SULayerRef layer)
+		static Vector^ FromSU(SUVector3D vec)
 		{
-			SUStringRef name = SU_INVALID;
-			SUStringCreate(&name);
-			SULayerGetName(layer, &name);
-			size_t name_length = 0;
-			SUStringGetUTF8Length(name, &name_length);
-			char* name_utf8 = new char[name_length + 1];
-			SUStringGetUTF8(name, name_length + 1, name_utf8, &name_length);
-			SUStringRelease(&name);
-			
-			
-			Layer^ v = gcnew Layer(gcnew String(name_utf8));
+			Vector^ v = gcnew Vector(vec.x, vec.y, vec.z);
 
 			return v;
 		};

@@ -57,7 +57,7 @@ namespace SketchUpSharp
 		};
 
 		Corner(){};
-
+	internal:
 		static Corner^ FromSU(SUEdgeRef edge)
 		{
 			SUVertexRef startVertex = SU_INVALID;

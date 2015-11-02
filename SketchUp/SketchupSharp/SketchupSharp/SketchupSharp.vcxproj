@@ -132,6 +132,7 @@
     <ClCompile Include="SKSharpWrapper.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Vector.cpp" />
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -140,9 +141,14 @@
     <ClInclude Include="Group.h" />
     <ClInclude Include="Instance.h" />
     <ClInclude Include="Layer.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="Vector.h" />
     <ClInclude Include="Vertex.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SketchupSharp.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

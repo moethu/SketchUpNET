@@ -43,14 +43,24 @@ namespace SketchUpSharp
 	public:
 
 		array<double^>^ Data;
+	
+		double Scale;
+		double X;
+		double Y;
+		double Z;
 
 		Transform(array<double^>^ data)
 		{
 			this->Data = data;
+			this->Scale = *data[15];
+			this->Z =* data[14];
+			this->Y =* data[13];
+			this->X =* data[12];
+
 		};
 
 		Transform(){};
-
+	internal:
 		static Transform^ FromSU(SUTransformation transformation)
 		{
 			double* data = transformation.values;

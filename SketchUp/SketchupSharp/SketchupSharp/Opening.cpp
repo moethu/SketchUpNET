@@ -27,10 +27,11 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include <slapi/model/face.h>
 #include <slapi/model/edge.h>
 #include <slapi/model/vertex.h>
-#include <slapi/model/layer.h>
+#include <slapi/model/opening.h>
 #include <msclr/marshal.h>
 #include <vector>
-
+#include "Corner.h"
+#include "Layer.h"
 
 #pragma once
 
@@ -40,31 +41,53 @@ using namespace System::Collections::Generic;
 
 namespace SketchUpSharp
 {
-	public ref class Layer
+	public ref class Loop
 	{
 	public:
-		System::String^ Name;
 
-		Layer(System::String^ name)
+		System::Collections::Generic::List<Corner^>^ Corners;
+
+
+		Loop(System::Collections::Generic::List<Corner^>^ corners)
 		{
-			this->Name = name;
+			this->Corners = corners;
+
 		};
 
-		Layer(){};
+		Loop(){};
 	internal:
-		static Layer^ FromSU(SULayerRef layer)
+		static Loop^ FromSU(SULoopRef loop)
 		{
-			SUStringRef name = SU_INVALID;
-			SUStringCreate(&name);
-			SULayerGetName(layer, &name);
-			size_t name_length = 0;
-			SUStringGetUTF8Length(name, &name_length);
-			char* name_utf8 = new char[name_length + 1];
-			SUStringGetUTF8(name, name_length + 1, name_utf8, &name_length);
-			SUStringRelease(&name);
-			
-			
-			Layer^ v = gcnew Layer(gcnew String(name_utf8));
+			System::Collections::Generic::List<Corner^>^ corners = gcnew System::Collections::Generic::List<Corner^>();
+
+			size_t edgeCount = 0;
+			SULoop(opening, &edgeCount);
+			if (edgeCount > 0)
+			{
+				std::vector<SUEdgeRef> edges(edgeCount);
+				SUFaceGetEdges(face, edgeCount, &edges[0], &edgeCount);
+
+				for (size_t j = 0; j < edgeCount; j++)
+				{
+					corners->Add(Corner::FromSU(edges[j]));
+				}
+			}
+
+
+			size_t openingsCount = 0;
+			SUFaceGetNumOpenings(face, &openingsCount);
+			if (openingsCount > 0)
+			{
+				std::vector<SUOpeningRef> openings(openingsCount);
+				SUFaceGetOpenings(face, openingsCount, &openings[0], &openingsCount);
+
+				for (size_t j = 0; j < openingsCount; j++)
+				{
+					corners->Add(Corner::FromSU(openings[j]));
+				}
+			}
+
+			Surface^ v = gcnew Surface(corners);
 
 			return v;
 		};

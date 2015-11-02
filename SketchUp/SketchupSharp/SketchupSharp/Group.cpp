@@ -59,7 +59,7 @@ namespace SketchUpSharp
 		};
 
 		Group(){};
-
+	internal:
 		static Group^ FromSU(SUGroupRef group)
 		{
 			SUStringRef name = SU_INVALID;

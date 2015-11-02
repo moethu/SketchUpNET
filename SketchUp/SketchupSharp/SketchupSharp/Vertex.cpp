@@ -53,7 +53,7 @@ namespace SketchUpSharp
 		};
 
 		Vertex(){};
-
+	internal:
 		static Vertex^ FromSU(SUPoint3D point)
 		{
 			Vertex^ v = gcnew Vertex(point.x, point.y, point.z);
