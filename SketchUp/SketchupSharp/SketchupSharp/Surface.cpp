@@ -49,15 +49,60 @@ namespace SketchUpSharp
 		System::Collections::Generic::List<Corner^>^ Corners;
 
 		Vector^ Normal;
+		Vertex^ Centroid;
 
-		Surface(System::Collections::Generic::List<Corner^>^ corners, Vector^ normal)
+		Surface(System::Collections::Generic::List<Corner^>^ corners, Vector^ normal, Vertex^ centroid)
 		{
 			this->Corners = corners;
 			this->Normal = normal;
+			this->Centroid = centroid;
 		};
 
 		Surface(){};
 	internal:
+
+		static Vertex^ GetCentroid(System::Collections::Generic::List<Vertex^>^ vertices, int vertexCount)
+		{
+			Vertex^ centroid = gcnew Vertex(0, 0, vertices[0]->Z);
+			double signedArea = 0.0;
+			double x0 = 0.0; // Current vertex X
+			double y0 = 0.0; // Current vertex Y
+			double x1 = 0.0; // Next vertex X
+			double y1 = 0.0; // Next vertex Y
+			double a = 0.0;  // Partial signed area
+
+			// For all vertices except last
+			int i = 0;
+			for (i = 0; i<vertexCount - 1; ++i)
+			{ 
+				x0 = vertices[i]->X;
+				y0 = vertices[i]->Y;
+				x1 = vertices[i + 1]->X;
+				y1 = vertices[i + 1]->Y;
+				a = x0*y1 - x1*y0;
+				signedArea += a;
+				centroid->X += (x0 + x1)*a;
+				centroid->Y += (y0 + y1)*a;
+			}
+
+			// Do last vertex separately to avoid performing an expensive
+			// modulus operation in each iteration.
+			x0 = vertices[i]->X;
+			y0 = vertices[i]->Y;
+			x1 = vertices[0]->X;
+			y1 = vertices[0]->Y;
+			a = x0*y1 - x1*y0;
+			signedArea += a;
+			centroid->X += (x0 + x1)*a;
+			centroid->Y += (y0 + y1)*a;
+
+			signedArea *= 0.5;
+			centroid->X /= (6.0*signedArea);
+			centroid->Y /= (6.0*signedArea);
+
+			return centroid;
+		}
+
 		static Surface^ FromSU(SUFaceRef face)
 		{
 			System::Collections::Generic::List<Corner^>^ corners = gcnew System::Collections::Generic::List<Corner^>();
@@ -87,9 +132,26 @@ namespace SketchUpSharp
 			//	SUFaceGetOpenings(face, openingsCount, &openings[0], &openingsCount);
 			//}
 
+			System::Collections::Generic::List<Vertex^>^ vertices = gcnew System::Collections::Generic::List<Vertex^>();
 
+			size_t verticesCount = 0;
+			SUFaceGetNumVertices(face, &verticesCount);
+			if (verticesCount > 0)
+			{
+				std::vector<SUVertexRef> vs(verticesCount);
+				SUFaceGetVertices(face, verticesCount, &vs[0], &verticesCount);
+				
+				for (size_t j = 0; j < verticesCount; j++)
+				{
+					SUPoint3D pt = SU_INVALID;
+					SUVertexGetPosition(vs[j], &pt);
+					vertices->Add(Vertex::FromSU(pt));
+				}
+			}
 
-			Surface^ v = gcnew Surface(corners, normal);
+			Vertex^ centroid = GetCentroid(vertices, vertices->Count);
+
+			Surface^ v = gcnew Surface(corners, normal, centroid);
 
 			return v;
 		};
