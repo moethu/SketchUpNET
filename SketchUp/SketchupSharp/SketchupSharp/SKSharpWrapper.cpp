@@ -141,6 +141,9 @@ namespace SketchUpSharp
 				}
 			}
 
+
+
+
 			//Get All Groups
 		
 			size_t groupCount = 0;

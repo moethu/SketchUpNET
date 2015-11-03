@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SketchUpSharp.Test")]
+[assembly: AssemblyTitle("SketchUpSharp.Dynamo")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SketchUpSharp.Test")]
+[assembly: AssemblyProduct("SketchUpSharp.Dynamo")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("a80ddca9-5787-4857-8852-1fa70499a09c")]
+[assembly: Guid("866d0b3e-a772-4436-adeb-f3f7bdfe9455")]
 
 // Version information for an assembly consists of the following four values:
 //
