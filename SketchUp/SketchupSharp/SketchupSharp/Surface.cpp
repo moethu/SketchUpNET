@@ -28,6 +28,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include <slapi/model/edge.h>
 #include <slapi/model/vertex.h>
 #include <slapi/model/layer.h>
+#include <slapi/model/uv_helper.h>
 #include <msclr/marshal.h>
 #include <vector>
 #include "Corner.h"
@@ -47,15 +48,18 @@ namespace SketchUpSharp
 	public:
 
 		System::Collections::Generic::List<Corner^>^ Corners;
-
+		System::Collections::Generic::List<Vertex^>^ Vertices;
+		double Area;
 		Vector^ Normal;
 		Vertex^ Centroid;
 
-		Surface(System::Collections::Generic::List<Corner^>^ corners, Vector^ normal, Vertex^ centroid)
+		Surface(System::Collections::Generic::List<Corner^>^ corners, Vector^ normal, Vertex^ centroid, double area, System::Collections::Generic::List<Vertex^>^ vertices)
 		{
 			this->Corners = corners;
 			this->Normal = normal;
 			this->Centroid = centroid;
+			this->Area = area;
+			this->Vertices = vertices;
 		};
 
 		Surface(){};
@@ -124,13 +128,10 @@ namespace SketchUpSharp
 			SUFaceGetNormal(face, &vector);
 			Vector^ normal = Vector::FromSU(vector);
 
-			//size_t openingsCount = 0;
-			//SUFaceGetNumOpenings(face, &openingsCount);
-			//if (openingsCount > 0)
-			//{
-			//	std::vector<SUOpeningRef> openings(openingsCount);
-			//	SUFaceGetOpenings(face, openingsCount, &openings[0], &openingsCount);
-			//}
+			double area = 0;
+			SUFaceGetArea(face, &area);
+
+		
 
 			System::Collections::Generic::List<Vertex^>^ vertices = gcnew System::Collections::Generic::List<Vertex^>();
 
@@ -151,7 +152,7 @@ namespace SketchUpSharp
 
 			Vertex^ centroid = GetCentroid(vertices, vertices->Count);
 
-			Surface^ v = gcnew Surface(corners, normal, centroid);
+			Surface^ v = gcnew Surface(corners, normal, centroid,area, vertices);
 
 			return v;
 		};

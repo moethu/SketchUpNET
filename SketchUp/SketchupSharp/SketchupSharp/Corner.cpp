@@ -68,14 +68,14 @@ namespace SketchUpSharp
 			SUPoint3D end;
 			SUVertexGetPosition(startVertex, &start);
 			SUVertexGetPosition(endVertex, &end);
-			
+
 			SUCurveRef curve = SU_INVALID;
 			SUEdgeGetCurve(edge, &curve);
 			SUCurveType type = SUCurveType::SUCurveType_Simple;
 			SUCurveGetType(curve, &type);
 			bool isarc = false;
 			if (type == SUCurveType::SUCurveType_Arc) isarc = true;
-			
+		
 			Corner^ v = gcnew Corner(Vertex::FromSU(start), Vertex::FromSU(end), isarc);
 
 			return v;
