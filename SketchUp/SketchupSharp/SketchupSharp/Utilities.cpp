@@ -18,4 +18,50 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
-#include "Surface.cpp"
+
+#include <slapi/slapi.h>
+#include <slapi/geometry.h>
+#include <slapi/initialize.h>
+#include <slapi/unicodestring.h>
+#include <slapi/model/model.h>
+#include <slapi/model/entities.h>
+#include <slapi/model/layer.h>
+#include <msclr/marshal.h>
+#include <vector>
+
+
+#pragma once
+
+using namespace System;
+using namespace System::Collections;
+using namespace System::Collections::Generic;
+
+namespace SketchUpSharp
+{
+	public class Utilities
+	{
+		public:
+
+		static System::String^ GetLayerName(SULayerRef layer)
+		{
+			SUStringRef layername = SU_INVALID;
+			SULayerGetName(layer, &layername);
+			return GetString(layername);
+		}
+
+		static System::String^ GetString(SUStringRef name)
+		{
+			size_t name_length = 0;
+			SUStringGetUTF8Length(name, &name_length);
+			char* name_utf8 = new char[name_length + 1];
+			SUStringGetUTF8(name, name_length + 1, name_utf8, &name_length);
+			SUStringRelease(&name);
+
+			return gcnew System::String(name_utf8);
+		}
+	};
+
+
+
+
+}

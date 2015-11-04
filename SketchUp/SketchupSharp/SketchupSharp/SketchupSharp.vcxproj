@@ -129,9 +129,11 @@
     <ClCompile Include="Group.cpp" />
     <ClCompile Include="Instance.cpp" />
     <ClCompile Include="Layer.cpp" />
+    <ClCompile Include="Loop.cpp" />
     <ClCompile Include="SKSharpWrapper.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="Utilities.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
@@ -141,9 +143,11 @@
     <ClInclude Include="Group.h" />
     <ClInclude Include="Instance.h" />
     <ClInclude Include="Layer.h" />
+    <ClInclude Include="Loop.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="Utilities.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>

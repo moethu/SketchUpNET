@@ -3,18 +3,19 @@
 SketchUpSharp - a managed C++ Wrapper for the SketchUp C API
 Copyright(C) 2015, Autor: Maximilian Thumfart
 
-This program is free software : you can redistribute it and / or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-any later version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+and associated documentation files (the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-You should have received a copy of the GNU General Public License
-along with this program.If not, see <http://www.gnu.org/licenses/>.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
@@ -28,12 +29,14 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include <slapi/model/edge.h>
 #include <slapi/model/vertex.h>
 #include <slapi/model/layer.h>
-#include <slapi/model/uv_helper.h>
+#include <slapi/model/drawing_element.h>
 #include <msclr/marshal.h>
 #include <vector>
 #include "Corner.h"
 #include "Layer.h"
 #include "Vector.h"
+#include "Utilities.h"
+#include "loop.h"
 
 #pragma once
 
@@ -46,20 +49,23 @@ namespace SketchUpSharp
 	public ref class Surface
 	{
 	public:
-
-		System::Collections::Generic::List<Corner^>^ Corners;
+		Loop^ OuterEdges;
+		System::Collections::Generic::List<Loop^>^ InnerEdges;
 		System::Collections::Generic::List<Vertex^>^ Vertices;
 		double Area;
 		Vector^ Normal;
 		Vertex^ Centroid;
+		System::String^ Layer;
 
-		Surface(System::Collections::Generic::List<Corner^>^ corners, Vector^ normal, Vertex^ centroid, double area, System::Collections::Generic::List<Vertex^>^ vertices)
+		Surface(Loop^ outer, System::Collections::Generic::List<Loop^>^ inner, Vector^ normal, Vertex^ centroid, double area, System::Collections::Generic::List<Vertex^>^ vertices, System::String^ layername)
 		{
-			this->Corners = corners;
+			this->OuterEdges = outer;
+			this->InnerEdges = inner;
 			this->Normal = normal;
 			this->Centroid = centroid;
 			this->Area = area;
 			this->Vertices = vertices;
+			this->Layer = layername;
 		};
 
 		Surface(){};
@@ -109,20 +115,37 @@ namespace SketchUpSharp
 
 		static Surface^ FromSU(SUFaceRef face)
 		{
-			System::Collections::Generic::List<Corner^>^ corners = gcnew System::Collections::Generic::List<Corner^>();
-
+			System::Collections::Generic::List<Loop^>^ inner = gcnew System::Collections::Generic::List<Loop^>();
+			
+			SULoopRef outer = SU_INVALID;
+			SUFaceGetOuterLoop(face, &outer);
+			
 			size_t edgeCount = 0;
-			SUFaceGetNumEdges(face, &edgeCount);
+			SUFaceGetNumInnerLoops(face, &edgeCount);
 			if (edgeCount > 0)
 			{
-				std::vector<SUEdgeRef> edges(edgeCount);
-				SUFaceGetEdges(face, edgeCount, &edges[0], &edgeCount);
-
+				std::vector<SULoopRef> loops(edgeCount);
+				SUFaceGetInnerLoops(face, edgeCount, &loops[0], &edgeCount);
+			
 				for (size_t j = 0; j < edgeCount; j++)
 				{
-					corners->Add(Corner::FromSU(edges[j]));
+					inner->Add(Loop::FromSU(loops[j]));
 				}
 			}
+
+
+			//size_t edgeCount = 0;
+			//SUFaceGetNumEdges(face, &edgeCount);
+			//if (edgeCount > 0)
+			//{
+			//	std::vector<SUEdgeRef> edges(edgeCount);
+			//	SUFaceGetEdges(face, edgeCount, &edges[0], &edgeCount);
+			//
+			//	for (size_t j = 0; j < edgeCount; j++)
+			//	{
+			//		corners->Add(Corner::FromSU(edges[j]));
+			//	}
+			//}
 
 			SUVector3D vector = SU_INVALID;
 			SUFaceGetNormal(face, &vector);
@@ -131,7 +154,16 @@ namespace SketchUpSharp
 			double area = 0;
 			SUFaceGetArea(face, &area);
 
-		
+			// Layer
+			SULayerRef layer = SU_INVALID;
+			SUDrawingElementGetLayer(SUFaceToDrawingElement(face),&layer);
+			
+			System::String^ layername = gcnew System::String("");
+			if (!SUIsInvalid(layer))
+			{
+				layername = SketchUpSharp::Utilities::GetLayerName(layer);
+			}
+				
 
 			System::Collections::Generic::List<Vertex^>^ vertices = gcnew System::Collections::Generic::List<Vertex^>();
 
@@ -152,7 +184,7 @@ namespace SketchUpSharp
 
 			Vertex^ centroid = GetCentroid(vertices, vertices->Count);
 
-			Surface^ v = gcnew Surface(corners, normal, centroid,area, vertices);
+			Surface^ v = gcnew Surface(Loop::FromSU(outer), inner, normal, centroid,area, vertices, layername);
 
 			return v;
 		};

@@ -3,18 +3,19 @@
 SketchUpSharp - a managed C++ Wrapper for the SketchUp C API
 Copyright(C) 2015, Autor: Maximilian Thumfart
 
-This program is free software : you can redistribute it and / or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-any later version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+and associated documentation files (the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-You should have received a copy of the GNU General Public License
-along with this program.If not, see <http://www.gnu.org/licenses/>.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
@@ -34,6 +35,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include "surface.h"
 #include "transform.h"
 #include "component.h"
+#include "Utilities.h"
 
 
 #pragma once
@@ -74,34 +76,23 @@ namespace SketchUpSharp
 			SUStringRef instanceguid = SU_INVALID;
 			SUStringCreate(&instanceguid);
 			SUComponentInstanceGetGuid(comp, &instanceguid);
-			size_t instanceguid_length = 0;
-			SUStringGetUTF8Length(instanceguid, &instanceguid_length);
-			char* instanceguid_utf8 = new char[instanceguid_length + 1];
-			SUStringGetUTF8(instanceguid, instanceguid_length + 1, instanceguid_utf8, &instanceguid_length);
-			SUStringRelease(&instanceguid);
+			
+
+
 
 			SUStringRef guid = SU_INVALID;
 			SUStringCreate(&guid);
 			SUComponentDefinitionGetGuid(definition, &guid);
-			size_t guid_length = 0;
-			SUStringGetUTF8Length(guid, &guid_length);
-			char* guid_utf8 = new char[guid_length + 1];
-			SUStringGetUTF8(guid, guid_length + 1, guid_utf8, &guid_length);
-			SUStringRelease(&guid);
+			System::String^ guidstring = SketchUpSharp::Utilities::GetString(guid);
 			
-			Component^ parent = components[gcnew String(guid_utf8)];
+			Component^ parent = components[guidstring];
 
-			size_t name_length = 0;
-			SUStringGetUTF8Length(name, &name_length);
-			char* name_utf8 = new char[name_length + 1];
-			SUStringGetUTF8(name, name_length + 1, name_utf8, &name_length);
-			SUStringRelease(&name);
 
 			SUTransformation transform = SU_INVALID;
 			SUComponentInstanceGetTransform(comp, &transform);
 
 
-			Instance^ v = gcnew Instance(gcnew String(name_utf8), gcnew String(instanceguid_utf8), parent, Transform::FromSU(transform));
+			Instance^ v = gcnew Instance(SketchUpSharp::Utilities::GetString(name), SketchUpSharp::Utilities::GetString(instanceguid), parent, Transform::FromSU(transform));
 
 			return v;
 		};

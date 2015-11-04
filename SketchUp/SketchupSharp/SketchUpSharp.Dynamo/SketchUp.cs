@@ -3,18 +3,19 @@
 	SketchUpSharp Dynamo - SketchUp in Dynamo 
 	Copyright(C) 2015, Autor: Maximilian Thumfart
 
-	This program is free software : you can redistribute it and / or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	any later version.
+    Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+    and associated documentation files (the "Software"), to deal in the Software without restriction, 
+    including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+    and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+    subject to the following conditions:
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
+    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-	You should have received a copy of the GNU General Public License
-	along with this program.If not, see <http://www.gnu.org/licenses/>.
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+    INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
 using System;
@@ -128,11 +129,38 @@ namespace SketchUpSharp.Dynamo
         public static Autodesk.DesignScript.Geometry.Surface ToDSGeo(this SketchUpSharp.Surface v, Transform t = null)
         {
             List<Autodesk.DesignScript.Geometry.Curve> curves = new List<Autodesk.DesignScript.Geometry.Curve>();
-            foreach (Corner c in v.Corners) curves.Add(c.ToDSGeo(t).ToNurbsCurve());
+            foreach (Corner c in v.OuterEdges.Corners) curves.Add(c.ToDSGeo(t).ToNurbsCurve());
             int a = 0;
             Autodesk.DesignScript.Geometry.PolyCurve pc = Autodesk.DesignScript.Geometry.PolyCurve.ByJoinedCurves(curves);
             Autodesk.DesignScript.Geometry.Surface s = Autodesk.DesignScript.Geometry.Surface.ByPatch(pc);
+            
+             List<Autodesk.DesignScript.Geometry.Surface> inner = v.InnerLoops(t);
+
+            foreach(Autodesk.DesignScript.Geometry.Surface srf in inner)
+            {
+                Autodesk.DesignScript.Geometry.Geometry[] geo = s.Split(srf);
+                if (geo.Count() == 2) s = (Autodesk.DesignScript.Geometry.Surface)geo[0];
+
+            }
             return s;
+        }
+
+        [IsVisibleInDynamoLibrary(false)]
+        public static List<Autodesk.DesignScript.Geometry.Surface> InnerLoops(this SketchUpSharp.Surface v, Transform t = null)
+        {
+            List<Autodesk.DesignScript.Geometry.Surface> surfaces = new List<Autodesk.DesignScript.Geometry.Surface>();
+
+            foreach (Loop loop in v.InnerEdges)
+            {
+                List<Autodesk.DesignScript.Geometry.Curve> curves = new List<Autodesk.DesignScript.Geometry.Curve>();
+                foreach (Corner c in loop.Corners) curves.Add(c.ToDSGeo(t).ToNurbsCurve());
+                int a = 0;
+                Autodesk.DesignScript.Geometry.PolyCurve pc = Autodesk.DesignScript.Geometry.PolyCurve.ByJoinedCurves(curves);
+                Autodesk.DesignScript.Geometry.Surface s = Autodesk.DesignScript.Geometry.Surface.ByPatch(pc);
+                surfaces.Add(s);
+            }
+
+            return surfaces;
         }
     }
 }

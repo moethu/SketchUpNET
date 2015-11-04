@@ -28,10 +28,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <slapi/model/face.h>
 #include <slapi/model/edge.h>
 #include <slapi/model/vertex.h>
-#include <slapi/model/component_definition.h>
+#include <slapi/model/loop.h>
 #include <msclr/marshal.h>
 #include <vector>
-#include "surface.h"
+#include "Utilities.h"
+#include "corner.h"
 
 
 #pragma once
@@ -42,55 +43,35 @@ using namespace System::Collections::Generic;
 
 namespace SketchUpSharp
 {
-	public ref class Component
+	public ref class Loop
 	{
 	public:
-		System::String^ Name;
-		System::Collections::Generic::List<Surface^>^ Surfaces;
-		System::String^ Guid;
+		System::Collections::Generic::List<Corner^>^ Corners;
 
-		Component(System::String^ name, System::String^ guid,System::Collections::Generic::List<Surface^>^ surfaces)
+		Loop(System::Collections::Generic::List<Corner^>^ corners)
 		{
-			this->Name = name;
-			this->Surfaces = surfaces;
-			this->Guid = guid;
+			this->Corners = corners;
 		};
 
-		Component(){};
+		Loop(){};
 	internal:
-		static Component^ FromSU(SUComponentDefinitionRef comp)
+		static Loop^ FromSU(SULoopRef loop)
 		{
-			SUStringRef name = SU_INVALID;
-			SUStringCreate(&name);
-			SUComponentDefinitionGetName(comp, &name);
 
+			System::Collections::Generic::List<Corner^>^ edgelist = gcnew System::Collections::Generic::List<Corner^>();
 
-			SUEntitiesRef entities = SU_INVALID;
-			SUComponentDefinitionGetEntities(comp, &entities);
-
-			size_t faceCount = 0;
-			SUEntitiesGetNumFaces(entities, &faceCount);
-
-			SUStringRef guid = SU_INVALID;
-			SUStringCreate(&guid);
-			SUComponentDefinitionGetGuid(comp, &guid);
-
-
-			System::Collections::Generic::List<Surface^>^ surfaces = gcnew System::Collections::Generic::List<Surface^>();
-
-			if (faceCount > 0) {
-				std::vector<SUFaceRef> faces(faceCount);
-				SUEntitiesGetFaces(entities, faceCount, &faces[0], &faceCount);
-
-
-				for (size_t i = 0; i < faceCount; i++) {
-					Surface^ surface = Surface::FromSU(faces[i]);
-					surfaces->Add(surface);
+			size_t num_vertices;
+			SULoopGetNumVertices(loop, &num_vertices);
+			if (num_vertices > 0) {
+				std::vector<SUEdgeRef> edges(num_vertices);
+				SULoopGetEdges(loop, num_vertices, &edges[0], &num_vertices);
+				for (size_t i = 0; i < num_vertices; i++) {
+					SUEdgeRef edge = edges[i];
+					edgelist->Add(Corner::FromSU(edge));
 				}
 			}
 
-
-			Component^ v = gcnew Component(SketchUpSharp::Utilities::GetString(name), SketchUpSharp::Utilities::GetString(guid), surfaces);
+			Loop^ v = gcnew Loop(edgelist);
 
 			return v;
 		};
