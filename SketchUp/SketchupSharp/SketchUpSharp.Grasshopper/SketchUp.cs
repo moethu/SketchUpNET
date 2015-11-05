@@ -69,7 +69,7 @@ namespace SketchUpSharp.Grasshopper
             if (skp.LoadModel(path.Value))
             { 
                 foreach (Surface srf in skp.Surfaces)
-                    surfaces.Add(new GH_Brep(srf.ToRhinoGeo().ToBrep()));
+                    surfaces.Add(new GH_Brep(srf.ToRhinoGeo()));
 
                 foreach (Layer l in skp.Layers)
                     layers.Add(new GH_String(l.Name));
@@ -126,6 +126,7 @@ namespace SketchUpSharp.Grasshopper
             pManager.AddNumberParameter("Scale", "S", "Scale", GH_ParamAccess.item);
             pManager.AddBrepParameter("Surfaces", "Sf", "Surfaces", GH_ParamAccess.list);
             pManager.AddTextParameter("Parent Name", "PN", "Parent Name", GH_ParamAccess.item);
+            pManager.AddBrepParameter("Inner", "I", "Inner", GH_ParamAccess.list);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -140,16 +141,23 @@ namespace SketchUpSharp.Grasshopper
             GH_String parent = new GH_String(i.Parent.Name);
 
             List<GH_Brep> surfaces = new List<GH_Brep>();
+            List<GH_Brep> inner = new List<GH_Brep>();
+
 
                 foreach (Surface srf in i.Parent.Surfaces)
-                    surfaces.Add(new GH_Brep(srf.ToRhinoGeo(i.Transformation).ToBrep()));
-          
+                    surfaces.Add(new GH_Brep(srf.ToRhinoGeo(i.Transformation)));
+
+                foreach (Surface srf in i.Parent.Surfaces)
+                    foreach (Rhino.Geometry.Brep brep in srf.InnerLoops(i.Transformation))
+                        inner.Add(new GH_Brep(brep));
+
 
             DA.SetData(0, p);
             DA.SetData(1, name);
             DA.SetData(2, scale);
             DA.SetDataList(3, surfaces);
             DA.SetData(4, parent);
+            DA.SetDataList(5, inner);
         }
 
         // Properties
@@ -178,15 +186,16 @@ namespace SketchUpSharp.Grasshopper
             if (t == null)
                 return new Rhino.Geometry.Point3d(v.X , v.Y , v.Z );
             else
-                return new Rhino.Geometry.Point3d(v.X + t.X, v.Y+ t.Y, v.Z+t.Z);
+            {
+                Vertex transformed = t.GetTransformed(v);
+                return new Rhino.Geometry.Point3d(transformed.X, transformed.Y, transformed.Z);
+            }
         }
 
-        public static Rhino.Geometry.Vector3d ToRhinoGeo(this SketchUpSharp.Vector v, Transform t)
+        public static Rhino.Geometry.Vector3d ToRhinoGeo(this SketchUpSharp.Vector v)
         {
-            if (t == null)
                 return new Rhino.Geometry.Vector3d(v.X, v.Y, v.Z);
-            else
-                return new Rhino.Geometry.Vector3d(v.X + t.X, v.Y + t.Y, v.Z + t.Z);
+
         }
 
         public static Rhino.Geometry.Line ToRhinoGeo(this SketchUpSharp.Corner v, Transform t)
@@ -194,31 +203,38 @@ namespace SketchUpSharp.Grasshopper
             return new Rhino.Geometry.Line(v.Start.ToRhinoGeo(t), v.End.ToRhinoGeo(t));
         }
 
-        public static Rhino.Geometry.NurbsSurface ToRhinoGeo(this SketchUpSharp.Surface v, Transform t = null)
+        public static Rhino.Geometry.Brep ToRhinoGeo(this SketchUpSharp.Surface v, Transform t = null)
         {
             List<Rhino.Geometry.Curve> curves = new List<Rhino.Geometry.Curve>();
             foreach (Corner c in v.OuterEdges.Corners) curves.Add(c.ToRhinoGeo(t).ToNurbsCurve());
             int a = 0;
-            Rhino.Geometry.NurbsSurface s =  Rhino.Geometry.NurbsSurface.CreateNetworkSurface(curves, 3, 0, 0, 0,out a);
-            
-            //foreach (Rhino.Geometry.NurbsSurface s)
+            Rhino.Geometry.Brep b = Rhino.Geometry.NurbsSurface.CreateNetworkSurface(curves, 3, 0, 0, 0, out a).ToBrep();
+            List<Rhino.Geometry.Brep> inner = v.InnerLoops(t);
+
+            if (inner.Count > 0)
+            {
+                Rhino.Geometry.Brep[] result = Rhino.Geometry.Brep.CreateBooleanDifference(new List<Rhino.Geometry.Brep>() { b }.AsEnumerable(), inner.AsEnumerable(), 0);
+
+                if (result.Length > 0) return result[0];
+            }
 
 
-            return s;
+            return b;
         }
 
 
-        public static List<Rhino.Geometry.NurbsSurface> InnerLoops(this SketchUpSharp.Surface v, Transform t = null)
+        public static List<Rhino.Geometry.Brep> InnerLoops(this SketchUpSharp.Surface v, Transform t = null)
         {
-            List<Rhino.Geometry.NurbsSurface> surfaces = new List<Rhino.Geometry.NurbsSurface>();
+            List<Rhino.Geometry.Brep> surfaces = new List<Rhino.Geometry.Brep>();
 
             foreach (Loop loop in v.InnerEdges)
             {
                 List<Rhino.Geometry.Curve> curves = new List<Rhino.Geometry.Curve>();
                 foreach (Corner c in loop.Corners) curves.Add(c.ToRhinoGeo(t).ToNurbsCurve());
                 int a = 0;
-                Rhino.Geometry.NurbsSurface s = Rhino.Geometry.NurbsSurface.CreateNetworkSurface(curves, 3, 0, 0, 0, out a);
-                surfaces.Add(s);
+                Rhino.Geometry.NurbsSurface s = Rhino.Geometry.NurbsSurface.CreateNetworkSurface(curves,3, 0, 0, 0, out a);
+                if (s != null)
+                    surfaces.Add(s.ToBrep());
             }
 
             return surfaces;

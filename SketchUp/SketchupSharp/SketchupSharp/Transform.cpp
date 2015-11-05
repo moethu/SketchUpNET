@@ -27,10 +27,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <slapi/model/face.h>
 #include <slapi/model/edge.h>
 #include <slapi/model/vertex.h>
+#include <slapi/model/geometry_input.h>
+#include <slapi/transformation.h>
 #include <msclr/marshal.h>
 #include <slapi/model/component_instance.h>
 #include <vector>
-
+#include "vertex.h"
 #pragma once
 
 using namespace System;
@@ -43,20 +45,39 @@ namespace SketchUpSharp
 	{
 	public:
 
-		array<double^>^ Data;
+		Vertex^ GetTransformed(Vertex^ point)
+		{
+
+			Vertex^ transformedPoint = gcnew Vertex(point->X, point->Y, point->Z);
+
+			double uniform_scale_factor = 1.0 / this->Scale;
+
+			transformedPoint->X = (this->Data[0] * point->X) + (point->Y*this->Data[4]) + (point->Z*this->Data[8]) + this->Data[12];
+			transformedPoint->Y = (this->Data[1] * point->X) + (point->Y*this->Data[5]) + (point->Z*this->Data[9]) + this->Data[13];
+			transformedPoint->Z = (this->Data[2] * point->X) + (point->Y*this->Data[6]) + (point->Z*this->Data[10]) + this->Data[14];
+
+			transformedPoint->X = transformedPoint->X* this->Scale;
+			transformedPoint->Y = transformedPoint->Y* this->Scale;
+			transformedPoint->Z = transformedPoint->Z* this->Scale;
+
+			return transformedPoint;
+		}
+
+
+		array<double>^ Data;
 	
 		double Scale;
 		double X;
 		double Y;
 		double Z;
 
-		Transform(array<double^>^ data)
+		Transform(array<double>^ data)
 		{
 			this->Data = data;
-			this->Scale = *data[15];
-			this->Z =* data[14];
-			this->Y =* data[13];
-			this->X =* data[12];
+			this->Scale = data[15];
+			this->Z = data[14];
+			this->Y = data[13];
+			this->X = data[12];
 
 		};
 
@@ -66,13 +87,14 @@ namespace SketchUpSharp
 		{
 			double* data = transformation.values;
 
-			array<double^>^ ar = gcnew array<double^>(16);
+			array<double>^ ar = gcnew array<double>(16);
 			for (int i = 0; i < 16; i++)
 				ar[i] = data[i];
 
 			Transform^ v = gcnew Transform(ar);
 
 			return v;
+
 		};
 
 	};

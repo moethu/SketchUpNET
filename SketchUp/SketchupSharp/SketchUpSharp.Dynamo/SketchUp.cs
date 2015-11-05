@@ -107,16 +107,16 @@ namespace SketchUpSharp.Dynamo
             if (t == null)
                 return Autodesk.DesignScript.Geometry.Point.ByCoordinates(v.X, v.Y, v.Z);
             else
-                return Autodesk.DesignScript.Geometry.Point.ByCoordinates(v.X + t.X, v.Y + t.Y, v.Z + t.Z);
+            {
+                Vertex transformed = t.GetTransformed(v);
+                return Autodesk.DesignScript.Geometry.Point.ByCoordinates(transformed.X, transformed.Y, transformed.Z);
+            }
         }
 
         [IsVisibleInDynamoLibrary(false)]
-        public static Autodesk.DesignScript.Geometry.Vector ToDSGeo(this SketchUpSharp.Vector v, Transform t)
+        public static Autodesk.DesignScript.Geometry.Vector ToDSGeo(this SketchUpSharp.Vector v)
         {
-            if (t == null)
-                return Autodesk.DesignScript.Geometry.Vector.ByCoordinates(v.X, v.Y, v.Z);
-            else
-                return Autodesk.DesignScript.Geometry.Vector.ByCoordinates(v.X + t.X, v.Y + t.Y, v.Z + t.Z);
+            return Autodesk.DesignScript.Geometry.Vector.ByCoordinates(v.X, v.Y, v.Z);
         }
 
         [IsVisibleInDynamoLibrary(false)]

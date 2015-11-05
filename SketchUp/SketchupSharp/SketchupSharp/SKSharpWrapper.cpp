@@ -97,7 +97,7 @@ namespace SketchUpSharp
 
 			SUResult res = SUModelCreateFromFile(&model, path);
 
-
+			
 
 			if (res != SU_ERROR_NONE)
 				return false;
