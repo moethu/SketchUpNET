@@ -46,7 +46,8 @@ namespace SketchUpSharp
 		{
 			SUStringRef layername = SU_INVALID;
 			SULayerGetName(layer, &layername);
-			return GetString(layername);
+			System::String^ name = GetString(layername);
+			return name;
 		}
 
 		static System::String^ GetString(SUStringRef name)
@@ -56,9 +57,14 @@ namespace SketchUpSharp
 			char* name_utf8 = new char[name_length + 1];
 			SUStringGetUTF8(name, name_length + 1, name_utf8, &name_length);
 			SUStringRelease(&name);
-
 			return gcnew System::String(name_utf8);
 		}
+
+		static const char* ToString(System::String^ name)
+		{
+			return (const char*)(System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(name)).ToPointer();
+		}
+
 	};
 
 

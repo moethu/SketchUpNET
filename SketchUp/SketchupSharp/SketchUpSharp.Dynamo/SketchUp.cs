@@ -74,14 +74,14 @@ namespace SketchUpSharp.Dynamo
         /// </summary>
         /// <param name="cuda">Cuda Instance</param>
         [MultiReturn(new[] { "Surfaces", "Position", "Scale", "Name", "Parent Name" })]
-        public static Dictionary<string, object> GetInstance(Instance i)
+        public static Dictionary<string, object> GetInstance(Instance instance)
         {
             List<Autodesk.DesignScript.Geometry.Surface> surfaces = new List<Autodesk.DesignScript.Geometry.Surface>();
 
-            Autodesk.DesignScript.Geometry.Point p = Autodesk.DesignScript.Geometry.Point.ByCoordinates(i.Transformation.X, i.Transformation.Y, i.Transformation.Z);
+            Autodesk.DesignScript.Geometry.Point p = Autodesk.DesignScript.Geometry.Point.ByCoordinates(instance.Transformation.X, instance.Transformation.Y, instance.Transformation.Z);
 
-            foreach (Surface srf in i.Parent.Surfaces)
-                surfaces.Add(srf.ToDSGeo(i.Transformation));
+            foreach (Surface srf in instance.Parent.Surfaces)
+                surfaces.Add(srf.ToDSGeo(instance.Transformation));
 
 
 
@@ -89,9 +89,9 @@ namespace SketchUpSharp.Dynamo
             {
                 { "Surfaces", surfaces },
                 { "Position", p },
-                { "Scale", i.Transformation.Scale },
-                { "Name", i.Name },
-                { "Parent Name", i.Parent.Name }
+                { "Scale", instance.Transformation.Scale },
+                { "Name", instance.Name },
+                { "Parent Name", instance.Parent.Name }
 
             };
         }

@@ -62,6 +62,12 @@ namespace SketchUpSharp
 			return v;
 		};
 
+		SUVector3D ToSU()
+		{
+			SUVector3D point = { this->X, this->Y, this->Z };
+			return point;
+		}
+
 	};
 
 

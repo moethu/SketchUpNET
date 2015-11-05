@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SketchUpSharp.Dynamo")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("SketchUp for Dynamo")]
+[assembly: AssemblyDescription("SketchUp for Dynamo")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SketchUpSharp.Dynamo")]
+[assembly: AssemblyProduct("SketchUp for Dynamo")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

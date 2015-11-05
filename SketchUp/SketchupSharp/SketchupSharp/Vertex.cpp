@@ -62,6 +62,12 @@ namespace SketchUpSharp
 			return v;
 		};
 
+		SUPoint3D ToSU()
+		{
+			SUPoint3D point = { this->X, this->Y, this->Z };
+			return point;
+		}
+
 	};
 
 

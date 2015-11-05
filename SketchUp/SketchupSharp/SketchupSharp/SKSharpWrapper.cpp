@@ -198,6 +198,33 @@ namespace SketchUpSharp
 
 		};
 
+		bool WriteModel(System::String^ filename)
+		{
+			SUInitialize();
+			SUModelRef model = SU_INVALID;
+			SUResult res = SUModelCreate(&model);
+
+			if (res != SU_ERROR_NONE) return false;
+
+
+			SUEntitiesRef entities = SU_INVALID;
+			SUModelGetEntities(model, &entities);
+
+
+			int count = Surfaces->Count;
+			for (size_t i = 0; i < count; ++i)
+			{
+				SUEntitiesAddFaces(entities, 1, &Surfaces[i]->ToSU() );
+			}
+
+
+			SUModelSaveToFile(model, Utilities::ToString(filename));
+			SUModelRelease(&model);
+			SUTerminate();
+
+			return true;
+		}
+
 
 
 

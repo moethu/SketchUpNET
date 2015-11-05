@@ -113,6 +113,27 @@ namespace SketchUpSharp
 			return centroid;
 		}
 
+		SUFaceRef ToSU()
+		{
+			int count = Vertices->Count;
+
+			SULoopInputRef outer_loop = SU_INVALID;
+			SULoopInputCreate(&outer_loop);
+
+			SUPoint3D * points = (SUPoint3D *)malloc(*&count * sizeof(SUPoint3D));
+			
+			for (size_t i = 0; i < count; ++i) {
+				SULoopInputAddVertexIndex(outer_loop, i);
+
+				points[i] = Vertices[i]->ToSU();
+			}
+
+			SUFaceRef face = SU_INVALID;
+			SUFaceCreate(&face, points, &outer_loop);
+
+			return face;
+		}
+
 		static Surface^ FromSU(SUFaceRef face)
 		{
 			System::Collections::Generic::List<Loop^>^ inner = gcnew System::Collections::Generic::List<Loop^>();
@@ -133,19 +154,6 @@ namespace SketchUpSharp
 				}
 			}
 
-
-			//size_t edgeCount = 0;
-			//SUFaceGetNumEdges(face, &edgeCount);
-			//if (edgeCount > 0)
-			//{
-			//	std::vector<SUEdgeRef> edges(edgeCount);
-			//	SUFaceGetEdges(face, edgeCount, &edges[0], &edgeCount);
-			//
-			//	for (size_t j = 0; j < edgeCount; j++)
-			//	{
-			//		corners->Add(Corner::FromSU(edges[j]));
-			//	}
-			//}
 
 			SUVector3D vector = SU_INVALID;
 			SUFaceGetNormal(face, &vector);

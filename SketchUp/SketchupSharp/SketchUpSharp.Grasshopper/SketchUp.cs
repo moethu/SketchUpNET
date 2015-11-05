@@ -147,9 +147,7 @@ namespace SketchUpSharp.Grasshopper
                 foreach (Surface srf in i.Parent.Surfaces)
                     surfaces.Add(new GH_Brep(srf.ToRhinoGeo(i.Transformation)));
 
-                foreach (Surface srf in i.Parent.Surfaces)
-                    foreach (Rhino.Geometry.Brep brep in srf.InnerLoops(i.Transformation))
-                        inner.Add(new GH_Brep(brep));
+
 
 
             DA.SetData(0, p);
@@ -207,37 +205,31 @@ namespace SketchUpSharp.Grasshopper
         {
             List<Rhino.Geometry.Curve> curves = new List<Rhino.Geometry.Curve>();
             foreach (Corner c in v.OuterEdges.Corners) curves.Add(c.ToRhinoGeo(t).ToNurbsCurve());
-            int a = 0;
-            Rhino.Geometry.Brep b = Rhino.Geometry.NurbsSurface.CreateNetworkSurface(curves, 3, 0, 0, 0, out a).ToBrep();
-            List<Rhino.Geometry.Brep> inner = v.InnerLoops(t);
 
-            if (inner.Count > 0)
-            {
-                Rhino.Geometry.Brep[] result = Rhino.Geometry.Brep.CreateBooleanDifference(new List<Rhino.Geometry.Brep>() { b }.AsEnumerable(), inner.AsEnumerable(), 0);
+            foreach (Loop loop in v.InnerEdges)
+                foreach (Corner c in loop.Corners) curves.Add(c.ToRhinoGeo(t).ToNurbsCurve());
 
-                if (result.Length > 0) return result[0];
-            }
+            Rhino.Geometry.Brep b = Rhino.Geometry.Brep.CreateEdgeSurface(curves);
+           
+            v.InnerLoops(b,t);
 
 
             return b;
         }
 
 
-        public static List<Rhino.Geometry.Brep> InnerLoops(this SketchUpSharp.Surface v, Transform t = null)
+        public static void InnerLoops(this SketchUpSharp.Surface v, Rhino.Geometry.Brep b, Transform t = null)
         {
-            List<Rhino.Geometry.Brep> surfaces = new List<Rhino.Geometry.Brep>();
+
 
             foreach (Loop loop in v.InnerEdges)
             {
                 List<Rhino.Geometry.Curve> curves = new List<Rhino.Geometry.Curve>();
                 foreach (Corner c in loop.Corners) curves.Add(c.ToRhinoGeo(t).ToNurbsCurve());
-                int a = 0;
-                Rhino.Geometry.NurbsSurface s = Rhino.Geometry.NurbsSurface.CreateNetworkSurface(curves,3, 0, 0, 0, out a);
-                if (s != null)
-                    surfaces.Add(s.ToBrep());
+                b.Loops.AddPlanarFaceLoop(0, Rhino.Geometry.BrepLoopType.Inner, curves.AsEnumerable());
+
             }
 
-            return surfaces;
         }
     }
 }
