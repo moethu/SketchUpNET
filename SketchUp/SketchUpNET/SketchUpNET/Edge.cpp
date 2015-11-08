@@ -31,7 +31,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <slapi/model/curve.h>
 #include <msclr/marshal.h>
 #include <vector>
-#include "Vertex.h"
+#include "vertex.h"
 
 #pragma once
 
@@ -48,13 +48,10 @@ namespace SketchUpNET
 		Vertex^ Start;
 		Vertex^ End;
 
-		bool isArc;
-
-		Edge(Vertex ^ start, Vertex ^ end, bool isarc)
+		Edge(Vertex ^ start, Vertex ^ end)
 		{
 			this->Start = start;
 			this->End = end;
-			this->isArc = isarc;
 		};
 
 		Edge(){};
@@ -70,19 +67,53 @@ namespace SketchUpNET
 			SUVertexGetPosition(startVertex, &start);
 			SUVertexGetPosition(endVertex, &end);
 
-			SUCurveRef curve = SU_INVALID;
-			SUEdgeGetCurve(edge, &curve);
-			SUCurveType type = SUCurveType::SUCurveType_Simple;
-			SUCurveGetType(curve, &type);
-			bool isarc = false;
-			if (type == SUCurveType::SUCurveType_Arc) isarc = true;
-
-			Edge^ v = gcnew Edge(Vertex::FromSU(start), Vertex::FromSU(end), isarc);
+			Edge^ v = gcnew Edge(Vertex::FromSU(start), Vertex::FromSU(end));
 
 			return v;
 		};
 
+		SUEdgeRef ToSU()
+		{
+			SUEdgeRef edge = SU_INVALID;
+			SUPoint3D start = this->Start->ToSU();
+			SUPoint3D end = this->End->ToSU();
+			SUEdgeCreate(&edge,&start,&end);
+			return edge;
+		}
 
+		static SUEdgeRef* ListToSU(List<Edge^>^ list)
+		{
+			size_t size = list->Count;
+			SUEdgeRef * result = (SUEdgeRef *)malloc(*&size * sizeof(SUEdgeRef));
+			for (int i = 0; i < size; i++)
+			{
+				result[i] = list[i]->ToSU();
+			}
+			return result;
+		}
+
+		static List<Edge^>^ GetEntityEdges(SUEntitiesRef entities)
+		{
+			List<Edge^>^ edges = gcnew List<Edge^>();
+
+			// Get Edges
+			size_t edgeCount = 0;
+			SUEntitiesGetNumEdges(entities, false, &edgeCount);
+
+			if (edgeCount > 0)
+			{
+				std::vector<SUEdgeRef> edgevector(edgeCount);
+				SUEntitiesGetEdges(entities, false, edgeCount, &edgevector[0], &edgeCount);
+
+
+				for (size_t i = 0; i < edgeCount; i++) {
+					Edge^ edge = Edge::FromSU(edgevector[i]);
+					edges->Add(edge);
+				}
+			}
+
+			return edges;
+		}
 
 
 	};

@@ -31,8 +31,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <slapi/model/loop.h>
 #include <msclr/marshal.h>
 #include <vector>
-#include "Utilities.h"
 #include "edge.h"
+
 
 
 #pragma once
@@ -46,9 +46,9 @@ namespace SketchUpNET
 	public ref class Loop
 	{
 	public:
-		System::Collections::Generic::List<Edge^>^ Edges;
+		List<Edge^>^ Edges;
 
-		Loop(System::Collections::Generic::List<Edge^>^ corners)
+		Loop(List<Edge^>^ corners)
 		{
 			this->Edges = corners;
 		};
@@ -58,7 +58,7 @@ namespace SketchUpNET
 		static Loop^ FromSU(SULoopRef loop)
 		{
 
-			System::Collections::Generic::List<Edge^>^ edgelist = gcnew System::Collections::Generic::List<Edge^>();
+			List<Edge^>^ edgelist = gcnew List<Edge^>();
 			
 			size_t num_vertices;
 			SULoopGetNumVertices(loop, &num_vertices);
@@ -75,6 +75,7 @@ namespace SketchUpNET
 
 			return v;
 		};
+
 
 	};
 

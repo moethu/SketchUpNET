@@ -65,6 +65,10 @@ namespace SketchUpNET
 			return (const char*)(System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(name)).ToPointer();
 		}
 
+		
+
+
+
 	};
 
 

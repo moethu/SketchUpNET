@@ -32,6 +32,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <msclr/marshal.h>
 #include <vector>
 #include "surface.h"
+#include "edge.h"
+#include "curve.h"
+#include "utilities.h"
+#include "transform.h"
 
 
 #pragma once
@@ -46,12 +50,12 @@ namespace SketchUpNET
 	{
 	public:
 		System::String^ Name;
-		System::Collections::Generic::List<Surface^>^ Surfaces;
+		List<Surface^>^ Surfaces;
 		System::String^ Guid;
-		System::Collections::Generic::List<Curve^>^ Curves;
-		System::Collections::Generic::List<Edge^>^ Edges;
+		List<Curve^>^ Curves;
+		List<Edge^>^ Edges;
 
-		Component(System::String^ name, System::String^ guid, System::Collections::Generic::List<Surface^>^ surfaces, System::Collections::Generic::List<Curve^>^ curves, System::Collections::Generic::List<Edge^>^ edges)
+		Component(System::String^ name, System::String^ guid, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges)
 		{
 			this->Name = name;
 			this->Surfaces = surfaces;
@@ -68,73 +72,100 @@ namespace SketchUpNET
 			SUStringCreate(&name);
 			SUComponentDefinitionGetName(comp, &name);
 
-
 			SUEntitiesRef entities = SU_INVALID;
 			SUComponentDefinitionGetEntities(comp, &entities);
 
 			size_t faceCount = 0;
 			SUEntitiesGetNumFaces(entities, &faceCount);
 
-
 			
 			SUStringRef guid = SU_INVALID;
 			SUStringCreate(&guid);
 			SUComponentDefinitionGetGuid(comp, &guid);
 
+			List<Surface^>^ surfaces = Surface::GetEntitySurfaces(entities);
+			List<Curve^>^ curves = Curve::GetEntityCurves(entities);
+			List<Edge^>^ edges = Edge::GetEntityEdges(entities);
+			//List<Instance^>^ instances = Instance::GetEntityInstances(entities);
 
-			System::Collections::Generic::List<Surface^>^ surfaces = gcnew System::Collections::Generic::List<Surface^>();
-
-			size_t curveCount = 0;
-			SUEntitiesGetNumCurves(entities, &curveCount);
-			System::Collections::Generic::List<Curve^>^ curves = gcnew System::Collections::Generic::List<Curve^>();
-			if (curveCount > 0)
-			{
-				std::vector<SUCurveRef> curvevector(curveCount);
-				SUEntitiesGetCurves(entities, curveCount, &curvevector[0], &curveCount);
-
-
-				for (size_t i = 0; i < curveCount; i++) {
-					Curve^ curve = Curve::FromSU(curvevector[i]);
-					curves->Add(curve);
-				}
-			}
-
-
-			size_t edgeCount = 0;
-			SUEntitiesGetNumEdges(entities,false, &edgeCount);
-			System::Collections::Generic::List<Edge^>^ edges = gcnew System::Collections::Generic::List<Edge^>();
-			if (edgeCount > 0)
-			{
-				std::vector<SUEdgeRef> edgevector(edgeCount);
-				SUEntitiesGetEdges(entities, false,edgeCount, &edgevector[0], &edgeCount);
-
-
-				for (size_t i = 0; i < edgeCount; i++) {
-					Edge^ edge = Edge::FromSU(edgevector[i]);
-					edges->Add(edge);
-				}
-			}
-
-
-
-			if (faceCount > 0) {
-				std::vector<SUFaceRef> faces(faceCount);
-				SUEntitiesGetFaces(entities, faceCount, &faces[0], &faceCount);
-
-
-				for (size_t i = 0; i < faceCount; i++) {
-					Surface^ surface = Surface::FromSU(faces[i]);
-					surfaces->Add(surface);
-				}
-			}
-
-
-			Component^ v = gcnew Component(SketchUpNET::Utilities::GetString(name), SketchUpNET::Utilities::GetString(guid), surfaces, curves,edges);
+			Component^ v = gcnew Component(Utilities::GetString(name), Utilities::GetString(guid), surfaces, curves,edges);
 
 			return v;
 		};
 
 	};
 
+	public ref class Instance
+	{
+	public:
+		System::String^ Name;
+		Transform^ Transformation;
+		Component^ Parent;
+		System::String^ Guid;
 
+		Instance(System::String^ name, System::String^ guid, Component^ parent, Transform^ transformation)
+		{
+			this->Name = name;
+			this->Transformation = transformation;
+			this->Parent = parent;
+			this->Guid = guid;
+		};
+
+		Instance(){};
+	internal:
+		static Instance^ FromSU(SUComponentInstanceRef comp, Dictionary<String^, Component^>^ components)
+		{
+			SUStringRef name = SU_INVALID;
+			SUStringCreate(&name);
+			SUComponentInstanceGetName(comp, &name);
+
+			SUComponentDefinitionRef definition = SU_INVALID;
+			SUComponentInstanceGetDefinition(comp, &definition);
+
+			SUStringRef instanceguid = SU_INVALID;
+			SUStringCreate(&instanceguid);
+			SUComponentInstanceGetGuid(comp, &instanceguid);
+
+
+
+
+			SUStringRef guid = SU_INVALID;
+			SUStringCreate(&guid);
+			SUComponentDefinitionGetGuid(definition, &guid);
+			System::String^ guidstring = SketchUpNET::Utilities::GetString(guid);
+
+			Component^ parent = components[guidstring];
+
+
+			SUTransformation transform = SU_INVALID;
+			SUComponentInstanceGetTransform(comp, &transform);
+
+
+			Instance^ v = gcnew Instance(SketchUpNET::Utilities::GetString(name), SketchUpNET::Utilities::GetString(instanceguid), parent, Transform::FromSU(transform));
+
+			return v;
+		};
+		static List<Instance^>^ GetEntityInstances(SUEntitiesRef entities, Dictionary<String^, Component^>^ components)
+		{
+			List<Instance^>^ instancelist = gcnew List<Instance^>();
+
+			//Get All Component Instances
+
+			size_t instanceCount = 0;
+			SUEntitiesGetNumInstances(entities, &instanceCount);
+
+			if (instanceCount > 0) {
+				std::vector<SUComponentInstanceRef> instances(instanceCount);
+				SUEntitiesGetInstances(entities, instanceCount, &instances[0], &instanceCount);
+
+				for (size_t i = 0; i < instanceCount; i++) {
+					Instance^ inst = Instance::FromSU(instances[i], components);
+					instancelist->Add(inst);
+				}
+
+			}
+
+			return instancelist;
+		}
+	};
 }

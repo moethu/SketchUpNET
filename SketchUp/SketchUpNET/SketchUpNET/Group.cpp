@@ -30,9 +30,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <slapi/model/vertex.h>
 #include <slapi/model/layer.h>
 #include <slapi/model/group.h>
-#include "surface.h"
+#include "utilities.h"
 #include <msclr/marshal.h>
 #include <vector>
+#include "Surface.h"
+#include "Edge.h"
+#include "curve.h"
+
 
 
 #pragma once
@@ -51,12 +55,16 @@ namespace SketchUpNET
 		/// <summary>
 		/// Surfaces
 		/// </summary>
-		System::Collections::Generic::List<Surface^>^ Surfaces;
+		List<Surface^>^ Surfaces;
+		List<Edge^>^ Edges;
+		List<Curve^>^ Curves;
 
-		Group(System::String^ name, System::Collections::Generic::List<Surface^>^ surfaces)
+		Group(System::String^ name, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges)
 		{
 			this->Name = name;
 			this->Surfaces = surfaces;
+			this->Edges = edges;
+			this->Curves = curves;
 		};
 
 		Group(){};
@@ -75,21 +83,11 @@ namespace SketchUpNET
 			SUEntitiesGetNumFaces(entities, &faceCount);
 
 
-			System::Collections::Generic::List<Surface^>^ surfaces = gcnew System::Collections::Generic::List<Surface^>();
+			List<Surface^>^ surfaces = Surface::GetEntitySurfaces(entities);
+			List<Edge^>^ edges = Edge::GetEntityEdges(entities);
+			List<Curve^>^ curves = Curve::GetEntityCurves(entities);
 
-			if (faceCount > 0) {
-				std::vector<SUFaceRef> faces(faceCount);
-				SUEntitiesGetFaces(entities, faceCount, &faces[0], &faceCount);
-
-
-				for (size_t i = 0; i < faceCount; i++) {
-					Surface^ surface = Surface::FromSU(faces[i]);
-					surfaces->Add(surface);
-				}
-			}
-
-
-			Group^ v = gcnew Group(SketchUpNET::Utilities::GetString(name), surfaces);
+			Group^ v = gcnew Group(SketchUpNET::Utilities::GetString(name), surfaces, curves, edges);
 
 			return v;
 		};

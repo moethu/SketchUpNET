@@ -22,10 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <slapi/geometry.h>
 #include <slapi/initialize.h>
 #include <slapi/unicodestring.h>
-#include <slapi/model/model.h>
-#include <slapi/model/entities.h>
-#include <slapi/model/face.h>
-#include <slapi/model/edge.h>
 #include <slapi/model/vertex.h>
 #include <msclr/marshal.h>
 #include <vector>
@@ -48,23 +44,23 @@ namespace SketchUpNET
 
 		Vertex(double x, double y, double z)
 		{
-			this->X = x * 0.0254;
-			this->Y = y * 0.0254;
-			this->Z = z * 0.0254;
+			this->X = x;
+			this->Y = y;
+			this->Z = z;
 		};
 
 		Vertex(){};
 	internal:
 		static Vertex^ FromSU(SUPoint3D point)
 		{
-			Vertex^ v = gcnew Vertex(point.x, point.y, point.z);
+			Vertex^ v = gcnew Vertex(point.x* 0.0254, point.y* 0.0254, point.z* 0.0254);
 
 			return v;
 		};
 
 		SUPoint3D ToSU()
 		{
-			SUPoint3D point = { this->X, this->Y, this->Z };
+			SUPoint3D point = { this->X * 39.3701, this->Y* 39.3701, this->Z* 39.3701 };
 			return point;
 		}
 

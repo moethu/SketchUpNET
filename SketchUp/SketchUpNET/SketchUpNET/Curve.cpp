@@ -45,18 +45,22 @@ namespace SketchUpNET
 	{
 	public:
 
-		System::Collections::Generic::List<Edge^>^ Edges = gcnew System::Collections::Generic::List<Edge^>();
+		List<Edge^>^ Edges = gcnew List<Edge^>();
+		bool isArc;
 
-		Curve(System::Collections::Generic::List<Edge^>^ edges)
+		Curve(List<Edge^>^ edges, bool isarc)
 		{
 			this->Edges = edges;
+			this->isArc = isarc;
 		};
 
 		Curve(){};
+
 	internal:
+
 		static Curve^ FromSU(SUCurveRef curve)
 		{
-			System::Collections::Generic::List<Edge^>^ edgelist = gcnew System::Collections::Generic::List<Edge^>();
+			List<Edge^>^ edgelist = gcnew List<Edge^>();
 
 			size_t edgecount = 0;
 			SUCurveGetNumEdges(curve, &edgecount);
@@ -71,13 +75,64 @@ namespace SketchUpNET
 				}
 			}
 
-		
-			Curve^ v = gcnew Curve(edgelist);
+			SUCurveType type = SUCurveType::SUCurveType_Simple;
+			SUCurveGetType(curve, &type);
+			bool isArc = false;
+			if (type == SUCurveType::SUCurveType_Arc) isArc = true;
+
+
+			Curve^ v = gcnew Curve(edgelist, isArc);
 
 			return v;
 		};
+		
+		SUCurveRef ToSU()
+		{
+			SUCurveRef curve = SU_INVALID;
+			size_t size = this->Edges->Count;
+
+			SUEdgeRef * edges = (SUEdgeRef *)malloc(*&size * sizeof(SUEdgeRef));
+	
+			for (int i = 0; i < size; i++)
+			{
+				edges[i] = this->Edges[i]->ToSU();
+			}
+			SUCurveCreateWithEdges(&curve, edges, size);
+			return curve;
+		}
+
+		static SUCurveRef* ListToSU(List<Curve^>^ curves)
+		{
+			size_t size = curves->Count;
+			SUCurveRef * result = (SUCurveRef *)malloc(*&size * sizeof(SUCurveRef));
+			for (int i = 0; i < size; i++)
+			{
+				result[i] = curves[i]->ToSU();
+			}
+			return result;
+		}
+
+		static List<Curve^>^ GetEntityCurves(SUEntitiesRef entities)
+		{
+			List<Curve^>^ curves = gcnew List<Curve^>();
+
+			// GetCurves
+			size_t curveCount = 0;
+			SUEntitiesGetNumCurves(entities, &curveCount);
+			if (curveCount > 0)
+			{
+				std::vector<SUCurveRef> curvevector(curveCount);
+				SUEntitiesGetCurves(entities, curveCount, &curvevector[0], &curveCount);
 
 
+				for (size_t i = 0; i < curveCount; i++) {
+					Curve^ curve = Curve::FromSU(curvevector[i]);
+					curves->Add(curve);
+				}
+			}
+
+			return curves;
+		}
 
 
 	};

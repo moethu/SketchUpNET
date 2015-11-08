@@ -129,7 +129,6 @@
     <ClCompile Include="Curve.cpp" />
     <ClCompile Include="Edge.cpp" />
     <ClCompile Include="Group.cpp" />
-    <ClCompile Include="Instance.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Loop.cpp" />
     <ClCompile Include="SketchUpNET.cpp" />
@@ -144,7 +143,6 @@
     <ClInclude Include="Curve.h" />
     <ClInclude Include="Edge.h" />
     <ClInclude Include="Group.h" />
-    <ClInclude Include="Instance.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Loop.h" />
     <ClInclude Include="resource.h" />

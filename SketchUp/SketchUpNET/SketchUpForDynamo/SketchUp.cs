@@ -111,11 +111,87 @@ namespace SketchUpForDynamo
             };
         }
 
+        /// <summary>
+        /// Write SketchUp Model
+        /// </summary>
+        /// <param name="path">Path to SketchUp file</param>
+        public static void WriteModel(string path, List<Autodesk.DesignScript.Geometry.Surface> surfaces = null, List<Autodesk.DesignScript.Geometry.Curve> curves = null)
+        {
+            SketchUpNET.SketchUp skp = new SketchUpNET.SketchUp();
+            skp.Surfaces = new List<Surface>();
+            skp.Edges = new List<Edge>();
+            skp.Curves = new List<Curve>();
+
+            if (curves != null)
+            foreach (Autodesk.DesignScript.Geometry.Curve curve in curves)
+            {
+                if (curve.GetType() == typeof(Autodesk.DesignScript.Geometry.Line))
+                {
+                    Autodesk.DesignScript.Geometry.Line line = (Autodesk.DesignScript.Geometry.Line)curve;
+                    skp.Edges.Add(line.ToSKPGeo());
+                }
+                else
+                {
+                    Curve skpcurve = new Curve();
+                    skpcurve.Edges = new List<Edge>();
+                    foreach (Autodesk.DesignScript.Geometry.Curve tesselated in curve.ApproximateWithArcAndLineSegments())
+                    {                      
+                        Edge e = new Edge(tesselated.StartPoint.ToSKPGeo(), tesselated.EndPoint.ToSKPGeo());
+                        skpcurve.Edges.Add(e);
+                    }
+                    skp.Curves.Add(skpcurve);
+                }
+            }
+
+            if (surfaces != null)
+            foreach (Autodesk.DesignScript.Geometry.Surface surface in surfaces)
+                skp.Surfaces.Add(surface.ToSKPGeo());
+
+            if (System.IO.File.Exists(path))
+                skp.AppendToModel(path);
+            else 
+                skp.WriteNewModel(path);
+
+        }
+
     }
 
     [IsVisibleInDynamoLibrary(false)]
     public static class Geometry
     {
+        [IsVisibleInDynamoLibrary(false)]
+        public static SketchUpNET.Vertex ToSKPGeo(this Autodesk.DesignScript.Geometry.Point p)
+        {
+            return new Vertex(p.X, p.Y, p.Z);
+        }
+
+        [IsVisibleInDynamoLibrary(false)]
+        public static SketchUpNET.Edge ToSKPGeo(this Autodesk.DesignScript.Geometry.Line p)
+        {
+            return new Edge(p.StartPoint.ToSKPGeo(), p.EndPoint.ToSKPGeo());
+        }
+
+        [IsVisibleInDynamoLibrary(false)]
+        public static SketchUpNET.Surface ToSKPGeo(this Autodesk.DesignScript.Geometry.Surface surface)
+        {
+            Surface srf = new Surface();
+            srf.Vertices = new List<Vertex>();
+
+            foreach (Autodesk.DesignScript.Geometry.Curve curve in surface.PerimeterCurves())
+            {
+                foreach (Autodesk.DesignScript.Geometry.Curve tesselated in curve.ApproximateWithArcAndLineSegments())
+                {
+                    srf.Vertices.Add(tesselated.StartPoint.ToSKPGeo());
+                }
+            }
+
+            return srf;
+
+        }
+
+
+
+
         [IsVisibleInDynamoLibrary(false)]
         public static Autodesk.DesignScript.Geometry.Point ToDSGeo(this SketchUpNET.Vertex v, Transform t)
         {

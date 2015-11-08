@@ -32,11 +32,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <slapi/model/drawing_element.h>
 #include <msclr/marshal.h>
 #include <vector>
-#include "Curve.h"
-#include "Layer.h"
-#include "Vector.h"
-#include "Utilities.h"
 #include "loop.h"
+#include "vertex.h"
+#include "vector.h"
+#include "utilities.h"
+
 
 #pragma once
 
@@ -50,19 +50,19 @@ namespace SketchUpNET
 	{
 	public:
 		Loop^ OuterEdges;
-		System::Collections::Generic::List<Loop^>^ InnerEdges;
-		System::Collections::Generic::List<Vertex^>^ Vertices;
+		List<Loop^>^ InnerEdges;
+		List<Vertex^>^ Vertices;
 		double Area;
 		Vector^ Normal;
-		Vertex^ Centroid;
+
 		System::String^ Layer;
 
-		Surface(Loop^ outer, System::Collections::Generic::List<Loop^>^ inner, Vector^ normal, Vertex^ centroid, double area, System::Collections::Generic::List<Vertex^>^ vertices, System::String^ layername)
+		Surface(Loop^ outer, List<Loop^>^ inner, Vector^ normal, double area, List<Vertex^>^ vertices, System::String^ layername)
 		{
 			this->OuterEdges = outer;
 			this->InnerEdges = inner;
 			this->Normal = normal;
-			this->Centroid = centroid;
+			
 			this->Area = area;
 			this->Vertices = vertices;
 			this->Layer = layername;
@@ -71,7 +71,7 @@ namespace SketchUpNET
 		Surface(){};
 	internal:
 
-		static Vertex^ GetCentroid(System::Collections::Generic::List<Vertex^>^ vertices, int vertexCount)
+		static Vertex^ GetCentroid(List<Vertex^>^ vertices, int vertexCount)
 		{
 			Vertex^ centroid = gcnew Vertex(0, 0, vertices[0]->Z);
 			double signedArea = 0.0;
@@ -134,9 +134,20 @@ namespace SketchUpNET
 			return face;
 		}
 
+		static SUFaceRef* ListToSU(List<Surface^>^ list)
+		{
+			size_t size = list->Count;
+			SUFaceRef * result = (SUFaceRef *)malloc(*&size * sizeof(SUFaceRef));
+			for (int i = 0; i < size; i++)
+			{
+				result[i] = list[i]->ToSU();
+			}
+			return result;
+		}
+
 		static Surface^ FromSU(SUFaceRef face)
 		{
-			System::Collections::Generic::List<Loop^>^ inner = gcnew System::Collections::Generic::List<Loop^>();
+			List<Loop^>^ inner = gcnew List<Loop^>();
 			
 			SULoopRef outer = SU_INVALID;
 			SUFaceGetOuterLoop(face, &outer);
@@ -169,11 +180,11 @@ namespace SketchUpNET
 			System::String^ layername = gcnew System::String("");
 			if (!SUIsInvalid(layer))
 			{
-				layername = SketchUpNET::Utilities::GetLayerName(layer);
+				layername = Utilities::GetLayerName(layer);
 			}
 				
-
-			System::Collections::Generic::List<Vertex^>^ vertices = gcnew System::Collections::Generic::List<Vertex^>();
+			
+			List<Vertex^>^ vertices = gcnew List<Vertex^>();
 
 			size_t verticesCount = 0;
 			SUFaceGetNumVertices(face, &verticesCount);
@@ -190,12 +201,33 @@ namespace SketchUpNET
 				}
 			}
 
-			Vertex^ centroid = GetCentroid(vertices, vertices->Count);
 
-			Surface^ v = gcnew Surface(Loop::FromSU(outer), inner, normal, centroid,area, vertices, layername);
+
+			Surface^ v = gcnew Surface(Loop::FromSU(outer), inner, normal, area, vertices, layername);
 
 			return v;
 		};
+
+		static List<Surface^>^ GetEntitySurfaces(SUEntitiesRef entities)
+		{
+			List<Surface^>^ surfaces = gcnew List<Surface^>();
+
+			size_t faceCount = 0;
+			SUEntitiesGetNumFaces(entities, &faceCount);
+
+			if (faceCount > 0) {
+				std::vector<SUFaceRef> faces(faceCount);
+				SUEntitiesGetFaces(entities, faceCount, &faces[0], &faceCount);
+
+
+				for (size_t i = 0; i < faceCount; i++) {
+					Surface^ surface = Surface::FromSU(faces[i]);
+					surfaces->Add(surface);
+				}
+			}
+
+			return surfaces;
+		}
 
 	};
 

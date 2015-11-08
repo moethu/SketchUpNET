@@ -30,10 +30,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <slapi/model/vertex.h>
 #include <msclr/marshal.h>
 #include <vector>
-#include "Vertex.h"
-#include "Curve.h"
+#include "Utilities.h"
 #include "Surface.h"
-#include "Component.h"
+#include "Edge.h"
+#include "Curve.h"
 #include "Layer.h"
 #include "Group.h"
 #include "Instance.h"
@@ -82,12 +82,12 @@ namespace SketchUpNET
 		System::Collections::Generic::List<Instance^>^ Instances;
 
 		/// <summary>
-		/// Curves
+		/// Curves (Arcs)
 		/// </summary>
 		System::Collections::Generic::List<Curve^>^ Curves; 
 
 		/// <summary>
-		/// Edges
+		/// Edges (Lines)
 		/// </summary>
 		System::Collections::Generic::List<Edge^>^ Edges;
 
@@ -112,34 +112,17 @@ namespace SketchUpNET
 			if (res != SU_ERROR_NONE)
 				return false;
 
-			Surfaces = gcnew System::Collections::Generic::List<Surface^>();
+
 			Layers = gcnew System::Collections::Generic::List<Layer^>();
 			Groups = gcnew System::Collections::Generic::List<Group^>();
 			Components = gcnew System::Collections::Generic::Dictionary<String^,Component^>();
-			Instances = gcnew System::Collections::Generic::List<Instance^>();
-			Curves = gcnew System::Collections::Generic::List<Curve^>();
-			Edges = gcnew System::Collections::Generic::List<Edge^>();
+
 
 			SUEntitiesRef entities = SU_INVALID;
 			SUModelGetEntities(model, &entities);
-			size_t faceCount = 0;
-			SUEntitiesGetNumFaces(entities, &faceCount);
-			
 
-
-			if (faceCount > 0) {
-				std::vector<SUFaceRef> faces(faceCount);
-				SUEntitiesGetFaces(entities, faceCount, &faces[0], &faceCount);
-				
-
-				for (size_t i = 0; i < faceCount; i++) {
-					Surface^ surface = Surface::FromSU(faces[i]);
-					Surfaces->Add(surface);
-				}
-			}
 			
 			//Get All Layers
-
 			size_t layerCount = 0;
 			SUModelGetNumLayers(model, &layerCount);
 
@@ -153,11 +136,7 @@ namespace SketchUpNET
 				}
 			}
 
-
-
-
-			//Get All Groups
-		
+			//Get All Groups	
 			size_t groupCount = 0;
 			SUEntitiesGetNumGroups(entities, &groupCount);
 
@@ -172,34 +151,6 @@ namespace SketchUpNET
 
 			}
 
-			size_t curveCount = 0;
-			SUEntitiesGetNumCurves(entities, &curveCount);
-			if (curveCount > 0)
-			{
-				std::vector<SUCurveRef> curvevector(curveCount);
-				SUEntitiesGetCurves(entities, curveCount, &curvevector[0], &curveCount);
-
-
-				for (size_t i = 0; i < curveCount; i++) {
-					Curve^ curve = Curve::FromSU(curvevector[i]);
-					Curves->Add(curve);
-				}
-			}
-
-			size_t edgeCount = 0;
-			SUEntitiesGetNumEdges(entities, false, &edgeCount);
-
-			if (edgeCount > 0)
-			{
-				std::vector<SUEdgeRef> edgevector(edgeCount);
-				SUEntitiesGetEdges(entities, false, edgeCount, &edgevector[0], &edgeCount);
-
-
-				for (size_t i = 0; i < edgeCount; i++) {
-					Edge^ edge = Edge::FromSU(edgevector[i]);
-					Edges->Add(edge);
-				}
-			}
 
 			// Get all Components
 			size_t compCount = 0;
@@ -211,26 +162,14 @@ namespace SketchUpNET
 
 				for (size_t i = 0; i < compCount; i++) {
 					Component^ component = Component::FromSU(comps[i]);
-					Components->Add(component->Guid,component);
+					Components->Add(component->Guid, component);
 				}
 			}
 
-			//Get All Component Instances
-
-			size_t instanceCount = 0;
-			SUEntitiesGetNumInstances(entities, &instanceCount);
-
-			if (instanceCount > 0) {
-				std::vector<SUComponentInstanceRef> instances(instanceCount);
-				SUEntitiesGetInstances(entities, instanceCount, &instances[0], &instanceCount);
-				
-				for (size_t i = 0; i < instanceCount; i++) {
-					Instance^ inst = Instance::FromSU(instances[i],Components);
-					Instances->Add(inst);
-				}
-
-			}
-
+			Surfaces = Surface::GetEntitySurfaces(entities);
+			Curves = Curve::GetEntityCurves(entities);
+			Edges = Edge::GetEntityEdges(entities);
+			Instances = Instance::GetEntityInstances(entities, Components);
 
 
 			SUModelRelease(&model);
@@ -239,7 +178,47 @@ namespace SketchUpNET
 
 		};
 
-		bool WriteModel(System::String^ filename)
+		/// <summary>
+		/// Append Data to existing Model
+		/// </summary>
+		bool AppendToModel(System::String^ filename)
+		{
+			msclr::interop::marshal_context oMarshalContext;
+
+			const char* path = oMarshalContext.marshal_as<const char*>(filename);
+
+			SUInitialize();
+
+
+			SUModelRef model = SU_INVALID;
+
+			SUResult res = SUModelCreateFromFile(&model, path);
+
+
+
+			if (res != SU_ERROR_NONE)
+				return false;
+
+
+			SUEntitiesRef entities = SU_INVALID;
+			SUModelGetEntities(model, &entities);
+
+			SUEntitiesAddFaces(entities, Surfaces->Count, Surface::ListToSU(Surfaces));
+			SUEntitiesAddEdges(entities, Edges->Count, Edge::ListToSU(Edges));
+			SUEntitiesAddCurves(entities, Curves->Count, Curve::ListToSU(Curves));
+
+			SUModelSaveToFile(model, Utilities::ToString(filename));
+
+			SUModelRelease(&model);
+			SUTerminate();
+			return true;
+
+		};
+
+		/// <summary>
+		/// Write to new empty Model
+		/// </summary>
+		bool WriteNewModel(System::String^ filename)
 		{
 			SUInitialize();
 			SUModelRef model = SU_INVALID;
@@ -251,14 +230,11 @@ namespace SketchUpNET
 			SUEntitiesRef entities = SU_INVALID;
 			SUModelGetEntities(model, &entities);
 
-
-			int count = Surfaces->Count;
-			for (size_t i = 0; i < count; ++i)
-			{
-				SUEntitiesAddFaces(entities, 1, &Surfaces[i]->ToSU() );
-			}
-
-
+			SUEntitiesAddFaces(entities, Surfaces->Count, Surface::ListToSU(Surfaces));
+			SUEntitiesAddEdges(entities, Edges->Count, Edge::ListToSU(Edges));
+			SUEntitiesAddCurves(entities, Curves->Count, Curve::ListToSU(Curves));
+			
+			
 			SUModelSaveToFile(model, Utilities::ToString(filename));
 			SUModelRelease(&model);
 			SUTerminate();

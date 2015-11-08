@@ -32,10 +32,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <slapi/model/component_definition.h>
 #include <msclr/marshal.h>
 #include <vector>
-
 #include "transform.h"
 #include "component.h"
-#include "Utilities.h"
 
 
 #pragma once
@@ -46,58 +44,7 @@ using namespace System::Collections::Generic;
 
 namespace SketchUpNET
 {
-	public ref class Instance
-	{
-	public:
-		System::String^ Name;
-		Transform^ Transformation;
-		Component^ Parent;
-		System::String^ Guid;
 
-		Instance(System::String^ name, System::String^ guid, Component^ parent, Transform^ transformation)
-		{
-			this->Name = name;
-			this->Transformation = transformation;
-			this->Parent = parent;
-			this->Guid = guid;
-		};
-
-		Instance(){};
-	internal:
-		static Instance^ FromSU(SUComponentInstanceRef comp, Dictionary<String^,Component^>^ components)
-		{
-			SUStringRef name = SU_INVALID;
-			SUStringCreate(&name);
-			SUComponentInstanceGetName(comp, &name);
-			
-			SUComponentDefinitionRef definition = SU_INVALID;
-			SUComponentInstanceGetDefinition(comp, &definition);
-
-			SUStringRef instanceguid = SU_INVALID;
-			SUStringCreate(&instanceguid);
-			SUComponentInstanceGetGuid(comp, &instanceguid);
-			
-			
-
-
-			SUStringRef guid = SU_INVALID;
-			SUStringCreate(&guid);
-			SUComponentDefinitionGetGuid(definition, &guid);
-			System::String^ guidstring = SketchUpNET::Utilities::GetString(guid);
-			
-			Component^ parent = components[guidstring];
-
-
-			SUTransformation transform = SU_INVALID;
-			SUComponentInstanceGetTransform(comp, &transform);
-
-
-			Instance^ v = gcnew Instance(SketchUpNET::Utilities::GetString(name), SketchUpNET::Utilities::GetString(instanceguid), parent, Transform::FromSU(transform));
-
-			return v;
-		};
-
-	};
 
 
 }
