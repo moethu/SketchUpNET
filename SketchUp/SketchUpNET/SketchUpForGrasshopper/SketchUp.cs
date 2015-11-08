@@ -1,6 +1,6 @@
 ﻿/*
 
-	SketchUpForGrasshopper - SketchUp in Grasshopper 
+	SketchUpForGrasshopper - Trimble(R) SketchUp(R) interface for McNeel's(R) Grasshopper(R) 
 	Copyright(C) 2015, Autor: Maximilian Thumfart
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of this software

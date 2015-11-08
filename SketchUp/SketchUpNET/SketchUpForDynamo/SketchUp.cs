@@ -1,6 +1,6 @@
 ﻿/*
 
-	SketchUpForDynamo - SketchUp in Dynamo 
+	SketchUpForDynamo - Trimble(R) SketchUp(R) interface for Autodesk's(R) Dynamo 
 	Copyright(C) 2015, Autor: Maximilian Thumfart
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of this software

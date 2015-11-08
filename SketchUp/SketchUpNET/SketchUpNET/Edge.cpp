@@ -1,6 +1,6 @@
 /*
 
-SketchUpNET - a managed C++ Wrapper for the SketchUp C API
+SketchUpNET - a C++ Wrapper for the Trimble(R) SketchUp(R) C API
 Copyright(C) 2015, Autor: Maximilian Thumfart
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software
