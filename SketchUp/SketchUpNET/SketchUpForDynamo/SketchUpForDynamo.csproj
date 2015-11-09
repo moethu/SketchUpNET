@@ -53,7 +53,7 @@
     </Reference>
     <Reference Include="SketchUpNET, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\x64\Debug\SketchUpNET.dll</HintPath>
+      <HintPath>..\x64\Release\SketchUpNET.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -77,13 +77,13 @@
     <EmbeddedResource Include="SketchUpForDynamoImages.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-   <Target Name="BeforeBuild"> 
-     <GetReferenceAssemblyPaths TargetFrameworkMoniker=".NETFramework, Version=v2.0"> 
-       <Output TaskParameter="FullFrameworkReferenceAssemblyPaths" PropertyName="FrameworkAssembliesPath" /> 
-     </GetReferenceAssemblyPaths> 
-     <GenerateResource UseSourcePath="true" Sources="$(ProjectDir)SketchUpForDynamoImages.resx" OutputResources="$(ProjectDir)SketchUpForDynamoImages.resources" References="$(FrameworkAssembliesPath)System.Drawing.dll" /> 
-     <AL TargetType="library" EmbedResources="$(ProjectDir)SketchUpForDynamoImages.resources" OutputAssembly="$(OutDir)SketchUpForDynamo.customization.dll" /> 
-   </Target> 
+  <Target Name="BeforeBuild">
+    <GetReferenceAssemblyPaths TargetFrameworkMoniker=".NETFramework, Version=v2.0">
+      <Output TaskParameter="FullFrameworkReferenceAssemblyPaths" PropertyName="FrameworkAssembliesPath" />
+    </GetReferenceAssemblyPaths>
+    <GenerateResource UseSourcePath="true" Sources="$(ProjectDir)SketchUpForDynamoImages.resx" OutputResources="$(ProjectDir)SketchUpForDynamoImages.resources" References="$(FrameworkAssembliesPath)System.Drawing.dll" />
+    <AL TargetType="library" EmbedResources="$(ProjectDir)SketchUpForDynamoImages.resources" OutputAssembly="$(OutDir)SketchUpForDynamo.customization.dll" />
+  </Target>
   <Target Name="AfterBuild">
   </Target>
 </Project>
