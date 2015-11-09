@@ -122,7 +122,7 @@ namespace SketchUpNET
 
 			SUPoint3D * points = (SUPoint3D *)malloc(*&count * sizeof(SUPoint3D));
 			
-			for (size_t i = 0; i < count; ++i) {
+			for (int i = 0; i < count; ++i) {
 				SULoopInputAddVertexIndex(outer_loop, i);
 
 				points[i] = Vertices[i]->ToSU();

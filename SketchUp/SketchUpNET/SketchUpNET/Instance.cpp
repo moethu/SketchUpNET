@@ -1,6 +1,6 @@
 /*
 
-SketchUpNET - a managed C++ Wrapper for the SketchUp C API
+SketchUpNET - a C++ Wrapper for the Trimble(R) SketchUp(R) C API
 Copyright(C) 2015, Autor: Maximilian Thumfart
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software
@@ -44,7 +44,79 @@ using namespace System::Collections::Generic;
 
 namespace SketchUpNET
 {
+	public ref class Instance
+	{
+	public:
+		System::String^ Name;
+		Transform^ Transformation;
+		Component^ Parent;
+		System::String^ Guid;
 
+		Instance(System::String^ name, System::String^ guid, Component^ parent, Transform^ transformation)
+		{
+			this->Name = name;
+			this->Transformation = transformation;
+			this->Parent = parent;
+			this->Guid = guid;
+		};
+
+		Instance(){};
+	internal:
+		static Instance^ FromSU(SUComponentInstanceRef comp, Dictionary<String^, Component^>^ components)
+		{
+			SUStringRef name = SU_INVALID;
+			SUStringCreate(&name);
+			SUComponentInstanceGetName(comp, &name);
+
+			SUComponentDefinitionRef definition = SU_INVALID;
+			SUComponentInstanceGetDefinition(comp, &definition);
+
+			SUStringRef instanceguid = SU_INVALID;
+			SUStringCreate(&instanceguid);
+			SUComponentInstanceGetGuid(comp, &instanceguid);
+
+
+
+
+			SUStringRef guid = SU_INVALID;
+			SUStringCreate(&guid);
+			SUComponentDefinitionGetGuid(definition, &guid);
+			System::String^ guidstring = SketchUpNET::Utilities::GetString(guid);
+
+			Component^ parent = components[guidstring];
+
+
+			SUTransformation transform = SU_INVALID;
+			SUComponentInstanceGetTransform(comp, &transform);
+
+
+			Instance^ v = gcnew Instance(SketchUpNET::Utilities::GetString(name), SketchUpNET::Utilities::GetString(instanceguid), parent, Transform::FromSU(transform));
+
+			return v;
+		};
+		static List<Instance^>^ GetEntityInstances(SUEntitiesRef entities, Dictionary<String^, Component^>^ components)
+		{
+			List<Instance^>^ instancelist = gcnew List<Instance^>();
+
+			//Get All Component Instances
+
+			size_t instanceCount = 0;
+			SUEntitiesGetNumInstances(entities, &instanceCount);
+
+			if (instanceCount > 0) {
+				std::vector<SUComponentInstanceRef> instances(instanceCount);
+				SUEntitiesGetInstances(entities, instanceCount, &instances[0], &instanceCount);
+
+				for (size_t i = 0; i < instanceCount; i++) {
+					Instance^ inst = Instance::FromSU(instances[i], components);
+					instancelist->Add(inst);
+				}
+
+			}
+
+			return instancelist;
+		}
+	};
 
 
 }
