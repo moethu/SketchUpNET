@@ -1,16 +1,18 @@
-<Workspace Version="0.9.1.3096" X="-839.128029097947" Y="125.86458993453" zoom="0.624252623673389" Name="Home" Description="" RunType="Automatic" RunPeriod="1000" HasRunWithoutCrash="True">
+<Workspace Version="0.9.1.3096" X="-591.26905387316" Y="227.066666547872" zoom="0.455061973320509" Name="Home" Description="" RunType="Automatic" RunPeriod="1000" HasRunWithoutCrash="True">
   <NamespaceResolutionMap />
   <Elements>
-    <Dynamo.Nodes.CodeBlockNodeModel guid="5a426bbf-bc4c-4823-b4fb-a4ee603fcb07" type="Dynamo.Nodes.CodeBlockNodeModel" nickname="Code Block" x="1533.44945904154" y="-98.7855559789397" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" CodeText="&quot;C:\Users\mthumfart\Documents\GitHub\SketchUpSharp\SketchUp\SketchUpNET\Testfiles\TestModel.skp&quot;;" ShouldFocus="false" />
+    <Dynamo.Nodes.CodeBlockNodeModel guid="5a426bbf-bc4c-4823-b4fb-a4ee603fcb07" type="Dynamo.Nodes.CodeBlockNodeModel" nickname="Code Block" x="1533.44945904154" y="-98.7855559789397" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" CodeText="&quot;C:\Users\mthumfart\Documents\GitHub\SketchUpNET\SketchUp\SketchUpNET\Testfiles\TestModel.skp&quot;;" ShouldFocus="false" />
     <Dynamo.Nodes.DSFunction guid="b12ac3da-3bec-4705-81b6-214944e0f9d0" type="Dynamo.Nodes.DSFunction" nickname="SketchUp.LoadModel" x="2361.59390674256" y="-102.38618818965" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" assembly="..\SketchUpForDynamo\bin\Debug\SketchUpForDynamo.dll" function="SketchUpForDynamo.SketchUp.LoadModel@string" />
+    <Dynamo.Nodes.DSFunction guid="d02c88c6-a346-4d09-83bc-0b989b10d994" type="Dynamo.Nodes.DSFunction" nickname="SketchUp.GetInstance" x="2550.35794814311" y="-36.3608135708644" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" assembly="..\SketchUpForDynamo\bin\Debug\SketchUpForDynamo.dll" function="SketchUpForDynamo.SketchUp.GetInstance@var" />
   </Elements>
   <Connectors>
     <Dynamo.Models.ConnectorModel start="5a426bbf-bc4c-4823-b4fb-a4ee603fcb07" start_index="0" end="b12ac3da-3bec-4705-81b6-214944e0f9d0" end_index="0" portType="0" />
+    <Dynamo.Models.ConnectorModel start="b12ac3da-3bec-4705-81b6-214944e0f9d0" start_index="2" end="d02c88c6-a346-4d09-83bc-0b989b10d994" end_index="0" portType="0" />
   </Connectors>
   <Notes />
   <Annotations />
   <Presets />
   <Cameras>
-    <Camera Name="Background Preview" eyeX="12.9905092404536" eyeY="7.679683348155" eyeZ="14.1094649268036" lookX="-10.7778545624104" lookY="-6.81310473745001" lookZ="-16.0933079974481" upX="-0.0678141877383041" upY="0.992546162208494" upZ="-0.101258956220483" />
+    <Camera Name="Background Preview" eyeX="57.4680763636679" eyeY="45.9956318272922" eyeZ="75.4086059372073" lookX="-57.4680763636679" lookY="-45.9956318272922" lookZ="-75.4086059372073" upX="-0.14149963890681" upY="0.972369931263351" upZ="-0.185673356337021" />
   </Cameras>
 </Workspace>
