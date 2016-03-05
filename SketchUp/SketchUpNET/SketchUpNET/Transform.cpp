@@ -89,7 +89,10 @@ namespace SketchUpNET
 
 			array<double>^ ar = gcnew array<double>(16);
 			for (int i = 0; i < 16; i++)
-				ar[i] = data[i];
+				if (i == 12 || i==13 ||i==14)
+					ar[i] = data[i] * 0.0254;
+				else
+					ar[i] = data[i];
 
 			Transform^ v = gcnew Transform(ar);
 
