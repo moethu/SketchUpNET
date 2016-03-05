@@ -210,27 +210,37 @@ namespace SketchUpForGrasshopper
             foreach (Loop loop in v.InnerEdges)
                 foreach (SketchUpNET.Edge c in loop.Edges) curves.Add(c.ToRhinoGeo(t).ToNurbsCurve());
 
-            Rhino.Geometry.Brep b = Rhino.Geometry.Brep.CreateEdgeSurface(curves);
-           
-            v.InnerLoops(b,t);
+            Rhino.Geometry.Curve[] crv = Rhino.Geometry.Curve.JoinCurves(curves);
+            Rhino.Geometry.NurbsSurface.
+            Rhino.Geometry.Surface b = Rhino.Geometry.Surface.CreateExtrusion(crv[0],v.Normal.ToRhinoGeo());
 
+            List<Rhino.Geometry.Brep> breps = v.InnerLoops(t);
 
-            return b;
+            Rhino.Geometry.Brep result = b.ToBrep();
+
+            if (breps.Count > 0)
+            {
+                Rhino.Geometry.Brep[] tmp = Rhino.Geometry.Brep.CreateBooleanDifference(new List<Rhino.Geometry.Brep>() { b.ToBrep() }, breps, 0);
+                if (tmp.Length > 0) result = tmp[0];
+            }
+            return result;
         }
 
 
-        public static void InnerLoops(this SketchUpNET.Surface v, Rhino.Geometry.Brep b, Transform t = null)
+        public static List<Rhino.Geometry.Brep> InnerLoops(this SketchUpNET.Surface v, Transform t = null)
         {
-
+            List<Rhino.Geometry.Brep> breps = new List<Rhino.Geometry.Brep>();
 
             foreach (Loop loop in v.InnerEdges)
             {
                 List<Rhino.Geometry.Curve> curves = new List<Rhino.Geometry.Curve>();
                 foreach (SketchUpNET.Edge c in loop.Edges) curves.Add(c.ToRhinoGeo(t).ToNurbsCurve());
-                b.Loops.AddPlanarFaceLoop(0, Rhino.Geometry.BrepLoopType.Inner, curves.AsEnumerable());
 
+                Rhino.Geometry.Curve[] crv = Rhino.Geometry.Curve.JoinCurves(curves);
+                Rhino.Geometry.Surface b = Rhino.Geometry.Surface.CreateExtrusion(crv[0], v.Normal.ToRhinoGeo());
+                breps.Add(b.ToBrep());
             }
-
+            return breps;
         }
     }
 }
