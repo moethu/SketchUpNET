@@ -50,18 +50,20 @@ namespace SketchUpNET
 	{
 	public:
 		System::String^ Name;
+		System::String^ Description;
 		List<Surface^>^ Surfaces;
 		System::String^ Guid;
 		List<Curve^>^ Curves;
 		List<Edge^>^ Edges;
 
-		Component(System::String^ name, System::String^ guid, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges)
+		Component(System::String^ name, System::String^ guid, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges, System::String^ desc)
 		{
 			this->Name = name;
 			this->Surfaces = surfaces;
 			this->Guid = guid;
 			this->Curves = curves;
 			this->Edges = edges;
+			this->Description = desc;
 		};
 
 		Component(){};
@@ -71,6 +73,10 @@ namespace SketchUpNET
 			SUStringRef name = SU_INVALID;
 			SUStringCreate(&name);
 			SUComponentDefinitionGetName(comp, &name);
+
+			SUStringRef desc = SU_INVALID;
+			SUStringCreate(&desc);
+			SUComponentDefinitionGetDescription(comp, &desc);
 
 			SUEntitiesRef entities = SU_INVALID;
 			SUComponentDefinitionGetEntities(comp, &entities);
@@ -88,7 +94,7 @@ namespace SketchUpNET
 			List<Edge^>^ edges = Edge::GetEntityEdges(entities);
 			//List<Instance^>^ instances = Instance::GetEntityInstances(entities);
 
-			Component^ v = gcnew Component(Utilities::GetString(name), Utilities::GetString(guid), surfaces, curves,edges);
+			Component^ v = gcnew Component(Utilities::GetString(name), Utilities::GetString(guid), surfaces, curves, edges, Utilities::GetString(desc));
 
 			return v;
 		};
