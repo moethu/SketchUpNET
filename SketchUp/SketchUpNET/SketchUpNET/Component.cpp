@@ -68,7 +68,7 @@ namespace SketchUpNET
 
 		Component(){};
 	internal:
-		static Component^ FromSU(SUComponentDefinitionRef comp)
+		static Component^ FromSU(SUComponentDefinitionRef comp, bool includeMeshes)
 		{
 			SUStringRef name = SU_INVALID;
 			SUStringCreate(&name);
@@ -89,7 +89,7 @@ namespace SketchUpNET
 			SUStringCreate(&guid);
 			SUComponentDefinitionGetGuid(comp, &guid);
 
-			List<Surface^>^ surfaces = Surface::GetEntitySurfaces(entities);
+			List<Surface^>^ surfaces = Surface::GetEntitySurfaces(entities, includeMeshes);
 			List<Curve^>^ curves = Curve::GetEntityCurves(entities);
 			List<Edge^>^ edges = Edge::GetEntityEdges(entities);
 			//List<Instance^>^ instances = Instance::GetEntityInstances(entities);

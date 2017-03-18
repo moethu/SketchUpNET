@@ -92,9 +92,17 @@ namespace SketchUpNET
 		System::Collections::Generic::List<Edge^>^ Edges;
 
 		/// <summary>
-		/// Load SKP Model
+		/// Load SKP Model without Meshes
 		/// </summary>
 		bool LoadModel(System::String^ filename)
+		{
+			return LoadModel(filename, false);
+		}
+
+		/// <summary>
+		/// Load SKP Model
+		/// </summary>
+		bool LoadModel(System::String^ filename, bool includeMeshes)
 		{
 			msclr::interop::marshal_context oMarshalContext;
 
@@ -145,7 +153,7 @@ namespace SketchUpNET
 				SUEntitiesGetGroups(entities, groupCount, &groups[0], &groupCount);
 
 				for (size_t i = 0; i < groupCount; i++) {
-					Group^ group = Group::FromSU(groups[i]);
+					Group^ group = Group::FromSU(groups[i], includeMeshes);
 					Groups->Add(group);
 				}
 
@@ -161,12 +169,12 @@ namespace SketchUpNET
 				SUModelGetComponentDefinitions(model, compCount, &comps[0], &compCount);
 
 				for (size_t i = 0; i < compCount; i++) {
-					Component^ component = Component::FromSU(comps[i]);
+					Component^ component = Component::FromSU(comps[i], includeMeshes);
 					Components->Add(component->Guid, component);
 				}
 			}
 
-			Surfaces = Surface::GetEntitySurfaces(entities);
+			Surfaces = Surface::GetEntitySurfaces(entities, includeMeshes);
 			Curves = Curve::GetEntityCurves(entities);
 			Edges = Edge::GetEntityEdges(entities);
 			Instances = Instance::GetEntityInstances(entities, Components);

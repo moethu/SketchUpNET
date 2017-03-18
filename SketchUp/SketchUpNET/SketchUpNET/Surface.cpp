@@ -30,12 +30,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <slapi/model/vertex.h>
 #include <slapi/model/layer.h>
 #include <slapi/model/drawing_element.h>
+#include <slapi/model/mesh_helper.h>
 #include <msclr/marshal.h>
 #include <vector>
 #include "loop.h"
 #include "vertex.h"
 #include "vector.h"
 #include "utilities.h"
+#include "Mesh.h"
 
 
 #pragma once
@@ -52,16 +54,18 @@ namespace SketchUpNET
 		Loop^ OuterEdges;
 		List<Loop^>^ InnerEdges;
 		List<Vertex^>^ Vertices;
+		Mesh^ FaceMesh;
 		double Area;
 		Vector^ Normal;
 
 		System::String^ Layer;
 
-		Surface(Loop^ outer, List<Loop^>^ inner, Vector^ normal, double area, List<Vertex^>^ vertices, System::String^ layername)
+		Surface(Loop^ outer, List<Loop^>^ inner, Vector^ normal, double area, List<Vertex^>^ vertices, Mesh^ m, System::String^ layername)
 		{
 			this->OuterEdges = outer;
 			this->InnerEdges = inner;
 			this->Normal = normal;
+			this->FaceMesh = m;
 			
 			this->Area = area;
 			this->Vertices = vertices;
@@ -145,7 +149,7 @@ namespace SketchUpNET
 			return result;
 		}
 
-		static Surface^ FromSU(SUFaceRef face)
+		static Surface^ FromSU(SUFaceRef face, bool includeMeshes)
 		{
 			List<Loop^>^ inner = gcnew List<Loop^>();
 			
@@ -201,14 +205,15 @@ namespace SketchUpNET
 				}
 			}
 
+			Mesh^ m = (includeMeshes)? Mesh::FromSU(face) : nullptr;
 
-
-			Surface^ v = gcnew Surface(Loop::FromSU(outer), inner, normal, area, vertices, layername);
+			Surface^ v = gcnew Surface(Loop::FromSU(outer), inner, normal, area, vertices,m, layername);
 
 			return v;
-		};
+		}
 
-		static List<Surface^>^ GetEntitySurfaces(SUEntitiesRef entities)
+
+		static List<Surface^>^ GetEntitySurfaces(SUEntitiesRef entities, bool includeMeshes)
 		{
 			List<Surface^>^ surfaces = gcnew List<Surface^>();
 
@@ -221,7 +226,7 @@ namespace SketchUpNET
 
 
 				for (size_t i = 0; i < faceCount; i++) {
-					Surface^ surface = Surface::FromSU(faces[i]);
+					Surface^ surface = Surface::FromSU(faces[i], includeMeshes);
 					surfaces->Add(surface);
 				}
 			}

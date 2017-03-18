@@ -37,24 +37,29 @@ namespace SketchUpForDynamo
         /// Load SketchUp Model
         /// </summary>
         /// <param name="path">Path to SketchUp file</param>
-        [MultiReturn(new[] { "Surfaces", "Layers", "Instances", "Curves", "Edges" })]
-        public static Dictionary<string, object> LoadModel(string path)
+        [MultiReturn(new[] { "Surfaces", "Layers", "Instances", "Curves", "Edges", "Meshes" })]
+        public static Dictionary<string, object> LoadModel(string path, bool includeMeshes = true)
         {
             List<Autodesk.DesignScript.Geometry.Surface> surfaces = new List<Autodesk.DesignScript.Geometry.Surface>();
+            List<Autodesk.DesignScript.Geometry.Mesh> meshes = new List<Autodesk.DesignScript.Geometry.Mesh>();
             List<string> layers = new List<string>();
             List<Instance> Instances = new List<Instance>();
             List<List<Autodesk.DesignScript.Geometry.Line>> curves = new List<List<Autodesk.DesignScript.Geometry.Line>>();
             List<Autodesk.DesignScript.Geometry.Line> edges = new List<Autodesk.DesignScript.Geometry.Line>();
 
             SketchUpNET.SketchUp skp = new SketchUpNET.SketchUp();
-            if (skp.LoadModel(path))
+            if (skp.LoadModel(path, includeMeshes))
             {
 
                 foreach (Curve c in skp.Curves)
                     curves.Add(c.ToDSGeo());
 
-                    foreach (Surface srf in skp.Surfaces)
-                        surfaces.Add(srf.ToDSGeo());
+                foreach (Surface srf in skp.Surfaces)
+                {
+                    surfaces.Add(srf.ToDSGeo());
+                    if (srf.FaceMesh != null)
+                        meshes.Add(srf.FaceMesh.ToDSGeo());
+                }
 
                     foreach (Layer l in skp.Layers)
                         layers.Add(l.Name);
@@ -75,6 +80,7 @@ namespace SketchUpForDynamo
                 { "Instances", Instances },
                 { "Curves", curves },
                 { "Edges", edges },
+                { "Meshes", meshes}
             };
         }
 
@@ -82,17 +88,22 @@ namespace SketchUpForDynamo
         /// SketchUp Component Instance Data
         /// </summary>
         /// <param name="instance">SketchUp Component Instance</param>
-        [MultiReturn(new[] { "Surfaces","Curves","Edges", "Position", "Scale", "Name", "Parent Name" })]
+        [MultiReturn(new[] { "Surfaces","Curves","Meshes","Edges", "Position", "Scale", "Name", "Parent Name" })]
         public static Dictionary<string, object> GetInstance(Instance instance)
         {
             List<Autodesk.DesignScript.Geometry.Surface> surfaces = new List<Autodesk.DesignScript.Geometry.Surface>();
             List<List<Autodesk.DesignScript.Geometry.Line>> curves = new List<List<Autodesk.DesignScript.Geometry.Line>>();
             List<Autodesk.DesignScript.Geometry.Line> edges = new List<Autodesk.DesignScript.Geometry.Line>();
+            List<Autodesk.DesignScript.Geometry.Mesh> meshes = new List<Autodesk.DesignScript.Geometry.Mesh>();
 
             Autodesk.DesignScript.Geometry.Point p = Autodesk.DesignScript.Geometry.Point.ByCoordinates(instance.Transformation.X, instance.Transformation.Y, instance.Transformation.Z);
 
             foreach (Surface srf in instance.Parent.Surfaces)
+            {
                 surfaces.Add(srf.ToDSGeo(instance.Transformation));
+                if (srf.FaceMesh != null)
+                    meshes.Add(srf.FaceMesh.ToDSGeo(instance.Transformation));
+            }
             foreach (Curve c in instance.Parent.Curves)
                 curves.Add(c.ToDSGeo(instance.Transformation));
             foreach (Edge e in instance.Parent.Edges)
@@ -102,6 +113,7 @@ namespace SketchUpForDynamo
             {
                 { "Surfaces", surfaces },
                 { "Curves", curves },
+                { "Meshes", meshes },
                 { "Edges", edges },
                 { "Position", p },
                 { "Scale", instance.Transformation.Scale },
@@ -226,6 +238,24 @@ namespace SketchUpForDynamo
 
             return edges;
         }
+
+        [IsVisibleInDynamoLibrary(false)]
+        public static Autodesk.DesignScript.Geometry.Mesh ToDSGeo(this SketchUpNET.Mesh mesh, Transform t = null)
+        {
+            List<Autodesk.DesignScript.Geometry.Point> points = new List<Autodesk.DesignScript.Geometry.Point>();
+            foreach (var v in mesh.Vertices)
+                points.Add(v.ToDSGeo(t));
+
+            List<Autodesk.DesignScript.Geometry.IndexGroup> faces = new List<Autodesk.DesignScript.Geometry.IndexGroup>();
+            foreach (var v in mesh.Faces)
+                faces.Add(Autodesk.DesignScript.Geometry.IndexGroup.ByIndices(Convert.ToUInt32(v.A),Convert.ToUInt32(v.B),Convert.ToUInt32(v.C)));
+
+
+            Autodesk.DesignScript.Geometry.Mesh m = Autodesk.DesignScript.Geometry.Mesh.ByPointsFaceIndices(points, faces);
+
+            return m;
+        }
+
 
         [IsVisibleInDynamoLibrary(false)]
         public static Autodesk.DesignScript.Geometry.Surface ToDSGeo(this SketchUpNET.Surface v, Transform t = null)

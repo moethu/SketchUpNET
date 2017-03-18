@@ -18,26 +18,13 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
-
 #include <slapi/slapi.h>
 #include <slapi/geometry.h>
 #include <slapi/initialize.h>
 #include <slapi/unicodestring.h>
-#include <slapi/model/model.h>
-#include <slapi/model/entities.h>
-#include <slapi/model/face.h>
-#include <slapi/model/edge.h>
 #include <slapi/model/vertex.h>
-#include <slapi/model/layer.h>
-#include <slapi/model/group.h>
-#include "utilities.h"
 #include <msclr/marshal.h>
 #include <vector>
-#include "Surface.h"
-#include "Edge.h"
-#include "curve.h"
-
-
 
 #pragma once
 
@@ -47,50 +34,22 @@ using namespace System::Collections::Generic;
 
 namespace SketchUpNET
 {
-	public ref class Group
+	public ref class MeshFace
 	{
 	public:
-		System::String^ Name;
 
-		/// <summary>
-		/// Surfaces
-		/// </summary>
-		List<Surface^>^ Surfaces;
-		List<Edge^>^ Edges;
-		List<Curve^>^ Curves;
+		int A;
+		int B;
+		int C;
 
-		Group(System::String^ name, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges)
+		MeshFace(int a, int b, int c)
 		{
-			this->Name = name;
-			this->Surfaces = surfaces;
-			this->Edges = edges;
-			this->Curves = curves;
+			this->A = a;
+			this->B = b;
+			this->C = c;
 		};
 
-		Group(){};
-	internal:
-		static Group^ FromSU(SUGroupRef group, bool includeMeshes)
-		{
-			SUStringRef name = SU_INVALID;
-			SUStringCreate(&name);
-			SUGroupGetName(group, &name);
-
-
-			SUEntitiesRef entities = SU_INVALID;
-			SUGroupGetEntities(group, &entities);
-
-			size_t faceCount = 0;
-			SUEntitiesGetNumFaces(entities, &faceCount);
-
-
-			List<Surface^>^ surfaces = Surface::GetEntitySurfaces(entities, includeMeshes);
-			List<Edge^>^ edges = Edge::GetEntityEdges(entities);
-			List<Curve^>^ curves = Curve::GetEntityCurves(entities);
-
-			Group^ v = gcnew Group(SketchUpNET::Utilities::GetString(name), surfaces, curves, edges);
-
-			return v;
-		};
+		MeshFace() {};
 
 	};
 
