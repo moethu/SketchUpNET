@@ -69,7 +69,7 @@ namespace SketchUpNET
 
 		Group(){};
 	internal:
-		static Group^ FromSU(SUGroupRef group, bool includeMeshes)
+		static Group^ FromSU(SUGroupRef group, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials)
 		{
 			SUStringRef name = SU_INVALID;
 			SUStringCreate(&name);
@@ -83,7 +83,7 @@ namespace SketchUpNET
 			SUEntitiesGetNumFaces(entities, &faceCount);
 
 
-			List<Surface^>^ surfaces = Surface::GetEntitySurfaces(entities, includeMeshes);
+			List<Surface^>^ surfaces = Surface::GetEntitySurfaces(entities, includeMeshes, materials);
 			List<Edge^>^ edges = Edge::GetEntityEdges(entities);
 			List<Curve^>^ curves = Curve::GetEntityCurves(entities);
 

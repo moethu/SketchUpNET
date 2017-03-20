@@ -77,6 +77,11 @@ namespace SketchUpNET
 		System::Collections::Generic::Dictionary<String^, Component^>^ Components;
 
 		/// <summary>
+		/// Material Definitions
+		/// </summary>
+		System::Collections::Generic::Dictionary<String^, Material^>^ Materials;
+
+		/// <summary>
 		/// Component Instances
 		/// </summary>
 		System::Collections::Generic::List<Instance^>^ Instances;
@@ -124,11 +129,26 @@ namespace SketchUpNET
 			Layers = gcnew System::Collections::Generic::List<Layer^>();
 			Groups = gcnew System::Collections::Generic::List<Group^>();
 			Components = gcnew System::Collections::Generic::Dictionary<String^,Component^>();
-
+			Materials = gcnew System::Collections::Generic::Dictionary<String^, Material^>();
+			Materials->Add("", gcnew Material());
 
 			SUEntitiesRef entities = SU_INVALID;
 			SUModelGetEntities(model, &entities);
 
+			//Get All Materials
+			size_t matCount = 0;
+			SUModelGetNumMaterials(model, &matCount);
+
+			if (matCount > 0) {
+				std::vector<SUMaterialRef> materials(matCount);
+				SUModelGetMaterials(model, matCount, &materials[0], &matCount);
+
+				for (size_t i = 0; i < matCount; i++) {
+					Material^ mat = Material::FromSU(materials[i]);
+					if (!Materials->ContainsKey(mat->Name))
+						Materials->Add(mat->Name, mat);
+				}
+			}
 			
 			//Get All Layers
 			size_t layerCount = 0;
@@ -153,7 +173,7 @@ namespace SketchUpNET
 				SUEntitiesGetGroups(entities, groupCount, &groups[0], &groupCount);
 
 				for (size_t i = 0; i < groupCount; i++) {
-					Group^ group = Group::FromSU(groups[i], includeMeshes);
+					Group^ group = Group::FromSU(groups[i], includeMeshes, Materials);
 					Groups->Add(group);
 				}
 
@@ -169,12 +189,12 @@ namespace SketchUpNET
 				SUModelGetComponentDefinitions(model, compCount, &comps[0], &compCount);
 
 				for (size_t i = 0; i < compCount; i++) {
-					Component^ component = Component::FromSU(comps[i], includeMeshes);
+					Component^ component = Component::FromSU(comps[i], includeMeshes, Materials);
 					Components->Add(component->Guid, component);
 				}
 			}
 
-			Surfaces = Surface::GetEntitySurfaces(entities, includeMeshes);
+			Surfaces = Surface::GetEntitySurfaces(entities, includeMeshes, Materials);
 			Curves = Curve::GetEntityCurves(entities);
 			Edges = Edge::GetEntityEdges(entities);
 			Instances = Instance::GetEntityInstances(entities, Components);

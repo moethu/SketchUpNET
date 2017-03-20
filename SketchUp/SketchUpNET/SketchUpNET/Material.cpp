@@ -28,14 +28,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <slapi/model/face.h>
 #include <slapi/model/edge.h>
 #include <slapi/model/vertex.h>
-#include <slapi/model/component_definition.h>
+#include <slapi/color.h>
+#include <slapi/model/drawing_element.h>
+#include <slapi/model/material.h>
 #include <msclr/marshal.h>
 #include <vector>
-#include "surface.h"
-#include "edge.h"
-#include "curve.h"
+#include "loop.h"
+#include "vertex.h"
+#include "vector.h"
 #include "utilities.h"
-
+#include "Color.h"
 
 
 #pragma once
@@ -46,58 +48,88 @@ using namespace System::Collections::Generic;
 
 namespace SketchUpNET
 {
-	public ref class Component
+	public ref class Material
 	{
 	public:
-		System::String^ Name;
-		System::String^ Description;
-		List<Surface^>^ Surfaces;
-		System::String^ Guid;
-		List<Curve^>^ Curves;
-		List<Edge^>^ Edges;
 
-		Component(System::String^ name, System::String^ guid, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges, System::String^ desc)
+		Color^ Colour;
+		System::String^ Name;
+		double Opacity;
+		bool UseOpacity;
+		bool UsesColor;
+		bool UsesTexture;
+
+		Material( System::String^ name, Color^ color, bool useOpacity, double opacity, bool usesColor, bool usesTexture)
 		{
+			this->Colour = color;
 			this->Name = name;
-			this->Surfaces = surfaces;
-			this->Guid = guid;
-			this->Curves = curves;
-			this->Edges = edges;
-			this->Description = desc;
+			this->Opacity = opacity;
+			this->UseOpacity = useOpacity;
+			this->UsesColor = usesColor;
+			this->UsesTexture = usesTexture;
 		};
 
-		Component(){};
+		Material() { 
+			this->Name = ""; 
+			this->Colour = gcnew Color(0, 0, 0, 0);
+			this->Opacity = 0;
+			this->UseOpacity = false;
+			this->UsesColor = true;
+			this->UsesTexture = false;
+		};
+
+		
 	internal:
-		static Component^ FromSU(SUComponentDefinitionRef comp, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials)
+
+
+		static Material^ FromSU(SUMaterialRef material)
 		{
 			SUStringRef name = SU_INVALID;
 			SUStringCreate(&name);
-			SUComponentDefinitionGetName(comp, &name);
+			SUMaterialGetName(material, &name);
+			String^ n = SketchUpNET::Utilities::GetString(name);
 
-			SUStringRef desc = SU_INVALID;
-			SUStringCreate(&desc);
-			SUComponentDefinitionGetDescription(comp, &desc);
 
-			SUEntitiesRef entities = SU_INVALID;
-			SUComponentDefinitionGetEntities(comp, &entities);
+			bool useopacity = false;
+			SUMaterialGetUseOpacity(material, &useopacity);
 
-			size_t faceCount = 0;
-			SUEntitiesGetNumFaces(entities, &faceCount);
+			SUColor color = SU_INVALID;
+			SUMaterialGetColor(material, &color);
 
+			SUMaterialType type = SUMaterialType::SUMaterialType_Colored;
+			SUMaterialGetType(material, &type);
 			
-			SUStringRef guid = SU_INVALID;
-			SUStringCreate(&guid);
-			SUComponentDefinitionGetGuid(comp, &guid);
+			bool usesColor = false;
+			bool usesTexture = false;
 
-			List<Surface^>^ surfaces = Surface::GetEntitySurfaces(entities, includeMeshes, materials);
-			List<Curve^>^ curves = Curve::GetEntityCurves(entities);
-			List<Edge^>^ edges = Edge::GetEntityEdges(entities);
-			//List<Instance^>^ instances = Instance::GetEntityInstances(entities);
+			if (type == SUMaterialType::SUMaterialType_Colored)
+			{
+				usesColor = true;
+				usesTexture = false;
+			}
 
-			Component^ v = gcnew Component(Utilities::GetString(name), Utilities::GetString(guid), surfaces, curves, edges, Utilities::GetString(desc));
+			if (type == SUMaterialType::SUMaterialType_ColorizedTexture)
+			{
+				usesColor = true;
+				usesTexture = true;
+			}
+
+			if (type == SUMaterialType::SUMaterialType_Textured)
+			{
+				usesColor = false;
+				usesTexture = true;
+			}
+
+			double opacity = 0;
+			SUMaterialGetOpacity(material, &opacity);
+
+			Color^ c = Color::FromSU(color);
+
+			Material^ v = gcnew Material(n, c, useopacity, opacity, usesColor, usesTexture);
 
 			return v;
-		};
+		}
+
 
 	};
 

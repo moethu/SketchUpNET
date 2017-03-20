@@ -66,7 +66,7 @@ namespace SketchUpNET
 			SUPoint3D end;
 			SUVertexGetPosition(startVertex, &start);
 			SUVertexGetPosition(endVertex, &end);
-
+			
 			Edge^ v = gcnew Edge(Vertex::FromSU(start), Vertex::FromSU(end));
 
 			return v;

@@ -18,17 +18,13 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
-
 #include <slapi/slapi.h>
 #include <slapi/geometry.h>
 #include <slapi/initialize.h>
 #include <slapi/unicodestring.h>
-#include <slapi/model/model.h>
-#include <slapi/model/entities.h>
-#include <slapi/model/layer.h>
+#include <slapi/color.h>
 #include <msclr/marshal.h>
 #include <vector>
-
 
 #pragma once
 
@@ -38,44 +34,39 @@ using namespace System::Collections::Generic;
 
 namespace SketchUpNET
 {
-	public class Utilities
+	public ref class Color
 	{
-		public:
+	public:
 
-		static System::String^ GetLayerName(SULayerRef layer)
+		byte R;
+		byte G;
+		byte B;
+		byte A;
+
+		Color(byte a, byte r, byte g, byte b)
 		{
-			SUStringRef layername = SU_INVALID;
-			SUStringCreate(&layername);
-			SULayerGetName(layer, &layername);
-			System::String^ name = GetString(layername);
+			this->R = r;
+			this->G = g;
+			this->B = b;
+			this->A = a;
+		};
 
-			return name;
-		}
-
-
-		static System::String^ GetString(SUStringRef name)
+		Color() {};
+	internal:
+		static Color^ FromSU(SUColor color)
 		{
-			size_t name_length = 0;
-			SUStringGetUTF8Length(name, &name_length);
-			char* name_utf8 = new char[name_length +1];
-			SUStringGetUTF8(name, name_length+1, name_utf8, &name_length);
-			
+			Color^ v = gcnew Color(color.alpha, color.red, color.green, color.blue);
 
-			return gcnew System::String(name_utf8);
-		}
+			return v;
+		};
 
-		static const char* ToString(System::String^ name)
+		SUColor ToSU()
 		{
-			return (const char*)(System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(name)).ToPointer();
+			SUColor c = { this->R,this->G,this->B,this->A };
+			return c;
 		}
-
-		
-
-
 
 	};
-
-
 
 
 }

@@ -38,7 +38,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include "vector.h"
 #include "utilities.h"
 #include "Mesh.h"
-
+#include "Material.h"
 
 #pragma once
 
@@ -57,16 +57,19 @@ namespace SketchUpNET
 		Mesh^ FaceMesh;
 		double Area;
 		Vector^ Normal;
+		Material^ BackMaterial;
+		Material^ FrontMaterial;
 
 		System::String^ Layer;
 
-		Surface(Loop^ outer, List<Loop^>^ inner, Vector^ normal, double area, List<Vertex^>^ vertices, Mesh^ m, System::String^ layername)
+		Surface(Loop^ outer, List<Loop^>^ inner, Vector^ normal, double area, List<Vertex^>^ vertices, Mesh^ m, System::String^ layername, Material^ backmat, Material^ frontmat)
 		{
 			this->OuterEdges = outer;
 			this->InnerEdges = inner;
 			this->Normal = normal;
 			this->FaceMesh = m;
-			
+			this->BackMaterial = backmat;
+			this->FrontMaterial = frontmat;
 			this->Area = area;
 			this->Vertices = vertices;
 			this->Layer = layername;
@@ -149,7 +152,7 @@ namespace SketchUpNET
 			return result;
 		}
 
-		static Surface^ FromSU(SUFaceRef face, bool includeMeshes)
+		static Surface^ FromSU(SUFaceRef face, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials)
 		{
 			List<Loop^>^ inner = gcnew List<Loop^>();
 			
@@ -207,13 +210,29 @@ namespace SketchUpNET
 
 			Mesh^ m = (includeMeshes)? Mesh::FromSU(face) : nullptr;
 
-			Surface^ v = gcnew Surface(Loop::FromSU(outer), inner, normal, area, vertices,m, layername);
+			SUMaterialRef mback = SU_INVALID;
+			SUFaceGetBackMaterial(face, &mback);
+			SUStringRef mbackNameRef = SU_INVALID;
+			SUMaterialGetName(mback, &mbackNameRef);
+			System::String^ mbackName = SketchUpNET::Utilities::GetString(mbackNameRef);
+
+			SUMaterialRef minner = SU_INVALID;
+			SUFaceGetFrontMaterial(face, &minner);
+			SUStringRef minnerNameRef = SU_INVALID;
+			SUMaterialGetName(minner, &minnerNameRef);
+			
+			System::String^ minnerName = SketchUpNET::Utilities::GetString(minnerNameRef);
+
+			Material^ backMat = (materials->ContainsKey(mbackName)) ? materials[mbackName] : Material::FromSU(mback);
+			Material^ frontMat = (materials->ContainsKey(minnerName)) ? materials[minnerName] : Material::FromSU(minner);
+
+			Surface^ v = gcnew Surface(Loop::FromSU(outer), inner, normal, area, vertices,m, layername, backMat, frontMat);
 
 			return v;
 		}
 
 
-		static List<Surface^>^ GetEntitySurfaces(SUEntitiesRef entities, bool includeMeshes)
+		static List<Surface^>^ GetEntitySurfaces(SUEntitiesRef entities, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials)
 		{
 			List<Surface^>^ surfaces = gcnew List<Surface^>();
 
@@ -226,7 +245,7 @@ namespace SketchUpNET
 
 
 				for (size_t i = 0; i < faceCount; i++) {
-					Surface^ surface = Surface::FromSU(faces[i], includeMeshes);
+					Surface^ surface = Surface::FromSU(faces[i], includeMeshes, materials);
 					surfaces->Add(surface);
 				}
 			}

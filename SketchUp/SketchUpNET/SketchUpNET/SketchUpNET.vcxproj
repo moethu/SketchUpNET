@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Color.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Curve.cpp" />
     <ClCompile Include="Edge.cpp" />
@@ -149,6 +150,7 @@
     <ClCompile Include="Instance.cpp" />
     <ClCompile Include="Layer.cpp" />
     <ClCompile Include="Loop.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshFace.cpp" />
     <ClCompile Include="SketchUpNET.cpp" />
@@ -159,6 +161,7 @@
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Curve.h" />
     <ClInclude Include="Edge.h" />
@@ -166,6 +169,7 @@
     <ClInclude Include="Instance.h" />
     <ClInclude Include="Layer.h" />
     <ClInclude Include="Loop.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshFace.h" />
     <ClInclude Include="resource.h" />

@@ -75,7 +75,7 @@ namespace SketchUpNET
 			SUStringCreate(&instanceguid);
 			SUComponentInstanceGetGuid(comp, &instanceguid);
 
-
+			
 
 
 			SUStringRef guid = SU_INVALID;
@@ -88,7 +88,7 @@ namespace SketchUpNET
 
 			SUTransformation transform = SU_INVALID;
 			SUComponentInstanceGetTransform(comp, &transform);
-
+			
 
 			Instance^ v = gcnew Instance(SketchUpNET::Utilities::GetString(name), SketchUpNET::Utilities::GetString(instanceguid), parent, Transform::FromSU(transform));
 
