@@ -1,0 +1,193 @@
+// Copyright 2016 Trimble Navigation Ltd. All Rights Reserved.
+#ifndef SKETCHUP_MODEL_IMAGE_REP_H_
+#define SKETCHUP_MODEL_IMAGE_REP_H_
+
+#include <SketchUpAPI/color.h>
+#include <SketchUpAPI/model/defs.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+@struct SUImageRepRef
+@brief References an image representation object.
+@since SketchUp 2017, API 5.0
+*/
+  
+/**
+@brief Creates a new image object with no image data. Image data can be set
+       using any of SUImageRepCopy, SUImageRepSetData, SUImageRepLoadFile.
+@since SketchUp 2017, API 5.0
+@param[out] image The image object created.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if image is NULL
+- \ref SU_ERROR_OVERWRITE_VALID if image already references a valid object
+*/
+SU_RESULT SUImageRepCreate(SUImageRepRef* image);
+
+/**
+@brief Releases an image object.
+@since SketchUp 2017, API 5.0
+@param[in] image The image object.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if image is an invalid object
+- \ref SU_ERROR_NULL_POINTER_INPUT if image is NULL
+*/
+SU_RESULT SUImageRepRelease(SUImageRepRef* image);
+
+/**
+@brief Copies data from the copy_image to image.
+@since SketchUp 2017, API 5.0
+@param[in,out] image      The image object to be altered.
+@param[in]     copy_image The original image to copy from.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if image or copy_image are not a valid objects
+*/
+SU_RESULT SUImageRepCopy(SUImageRepRef image, SUImageRepRef copy_image);
+
+/**
+@brief Sets the image data for the given image. Makes a copy of the data rather
+       than taking ownership.
+@since SketchUp 2017, API 5.0
+@param[in,out] image          The image object used to load the data.
+@param[in]     width          The width of the image in pixels.
+@param[in]     height         The height of the image in pixels.
+@param[in]     bits_per_pixel The number of bits per pixel.
+@param[in]     row_padding    The size in Bytes of row padding in each row of
+                              pixel_data.
+@param[in]     pixel_data     The raw image data.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if image is not a valid object
+- \ref SU_ERROR_NULL_POINTER_INPUT if pixel_data is NULL
+- \ref SU_ERROR_OUT_OF_RANGE if width or height are 0
+- \ref SU_ERROR_OUT_OF_RANGE if bits per pixel is not 8, 24, or 32
+*/
+SU_RESULT SUImageRepSetData(SUImageRepRef image, size_t width, size_t height,
+    size_t bits_per_pixel, size_t row_padding, const SUByte pixel_data[]);
+
+/**
+@brief Loads image data from the specified file into the provided image.
+@since SketchUp 2017, API 5.0
+@param[in,out] image     The image object used to load the file.
+@param[in]     file_path The file path of the source image file. Assumed to be
+                         UTF-8 encoded.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if image is not a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if file_path is NULL
+- \ref SU_ERROR_SERIALIZATION if the load operation fails
+*/
+SU_RESULT SUImageRepLoadFile(SUImageRepRef image, const char* file_path);
+
+/**
+@brief Saves an image object to an image file specified by a path.
+@since SketchUp 2017, API 5.0
+@param[in] image     The image object.
+@param[in] file_path The file path of the destination image file. Assumed to be
+                     UTF-8 encoded.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if image is not a valid object
+- \ref SU_ERROR_NULL_POINTER_INPUT if file_path is NULL
+- \ref SU_ERROR_NO_DATA if image contains no data
+- \ref SU_ERROR_SERIALIZATION if the save operation fails 
+*/
+SU_RESULT SUImageRepSaveToFile(SUImageRepRef image, const char* file_path);
+
+/**
+@brief Retrieves the width and height dimensions of an image object in pixels.
+@since SketchUp 2017, API 5.0
+@param[in]  image  The image object.
+@param[out] width  The width dimension retrieved.
+@param[out] height The height dimension retrieved.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if image is not a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if width or height is NULL
+*/
+SU_RESULT SUImageRepGetPixelDimensions(SUImageRepRef image, size_t* width,
+    size_t* height);
+
+/**
+@brief Retrieves the size of the row padding of an image, in bytes.
+@since SketchUp 2017, API 5.0
+@param[in]  image           The image object.
+@param[out] row_padding The row padding retrieved.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if image is not a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if row_padding is NULL
+ */
+SU_RESULT SUImageRepGetRowPadding(SUImageRepRef image, size_t* row_padding);
+
+/**
+@brief Resizes the dimensions of an image object to the given width and height
+       in pixels.
+@since SketchUp 2017, API 5.0
+@param[in] image The image object.
+@param[in] width  The new width.
+@param[in] height The new height.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if image is not a valid object
+- \ref SU_ERROR_OUT_OF_RANGE if width or height are 0
+*/
+SU_RESULT SUImageRepResize(SUImageRepRef image, size_t width, size_t height);
+
+/**
+@brief Converts an image object to be 32 bits per pixel.
+@since SketchUp 2017, API 5.0
+@param[in] image  The image object.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if image is not a valid object
+- \ref SU_ERROR_NO_DATA if image contains no data
+*/
+SU_RESULT SUImageRepConvertTo32BitsPerPixel(SUImageRepRef image);
+
+/**
+@brief  Returns the total size and bits-per-pixel value of an image. This
+        function is useful to determine the size of the buffer necessary to be
+        passed into \ref SUImageRepGetData. The returned data can be used along
+        with the returned bits-per-pixel value and the image dimensions to
+        compute RGBA values at individual pixels of the image.
+@since SketchUp 2017, API 5.0
+@param[in]  image          The image object.
+@param[out] data_size      The total size of the image data in bytes.
+@param[out] bits_per_pixel The number of bits per pixel of the image data.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if image is an invalid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if data_size or bits_per_pixel is NULL
+*/
+SU_RESULT SUImageRepGetDataSize(SUImageRepRef image, size_t* data_size,
+    size_t* bits_per_pixel);
+
+/**
+@brief Returns the pixel data for an image. The given array must be large
+       enough to hold the image's data. This size can be obtained by calling
+       \ref SUImageRepGetDataSize.
+@since SketchUp 2017, API 5.0
+@param[in]  image      The image object.
+@param[in]  data_size  The size of the byte array.
+@param[out] pixel_data The image data retrieved.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if image is an invalid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if pixel_data is NULL
+- \ref SU_ERROR_INSUFFICIENT_SIZE if data_size is insufficient for the image
+data
+*/
+SU_RESULT SUImageRepGetData(SUImageRepRef image, size_t data_size,
+    SUByte pixel_data[]);
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif
+
+#endif  // SKETCHUP_MODEL_IMAGE_REP_H_

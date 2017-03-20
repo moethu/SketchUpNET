@@ -69,12 +69,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="slapi.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="SketchUpForDynamoImages.resx" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SketchUpForDynamoImages.resx" />
+    <Content Include="SketchUpAPI.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">

@@ -19,18 +19,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 */
 
-#include <slapi/slapi.h>
-#include <slapi/geometry.h>
-#include <slapi/initialize.h>
-#include <slapi/unicodestring.h>
-#include <slapi/model/model.h>
-#include <slapi/model/entities.h>
-#include <slapi/model/face.h>
-#include <slapi/model/edge.h>
-#include <slapi/model/vertex.h>
-#include <slapi/color.h>
-#include <slapi/model/drawing_element.h>
-#include <slapi/model/material.h>
+#include <SketchUpAPI/slapi.h>
+#include <SketchUpAPI/geometry.h>
+#include <SketchUpAPI/initialize.h>
+#include <SketchUpAPI/unicodestring.h>
+#include <SketchUpAPI/model/model.h>
+#include <SketchUpAPI/model/entities.h>
+#include <SketchUpAPI/model/face.h>
+#include <SketchUpAPI/model/edge.h>
+#include <SketchUpAPI/model/vertex.h>
+#include <SketchUpAPI/color.h>
+#include <SketchUpAPI/model/drawing_element.h>
+#include <SketchUpAPI/model/material.h>
 #include <msclr/marshal.h>
 #include <vector>
 #include "loop.h"

@@ -18,11 +18,11 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
-#include <slapi/slapi.h>
-#include <slapi/geometry.h>
-#include <slapi/initialize.h>
-#include <slapi/unicodestring.h>
-#include <slapi/model/vertex.h>
+#include <SketchUpAPI/slapi.h>
+#include <SketchUpAPI/geometry.h>
+#include <SketchUpAPI/initialize.h>
+#include <SketchUpAPI/unicodestring.h>
+#include <SketchUpAPI/model/vertex.h>
 #include <msclr/marshal.h>
 #include <vector>
 

@@ -19,13 +19,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 */
 
-#include <slapi/slapi.h>
-#include <slapi/geometry.h>
-#include <slapi/initialize.h>
-#include <slapi/unicodestring.h>
-#include <slapi/model/model.h>
-#include <slapi/model/entities.h>
-#include <slapi/model/layer.h>
+#include <SketchUpAPI/slapi.h>
+#include <SketchUpAPI/geometry.h>
+#include <SketchUpAPI/initialize.h>
+#include <SketchUpAPI/unicodestring.h>
+#include <SketchUpAPI/model/model.h>
+#include <SketchUpAPI/model/entities.h>
+#include <SketchUpAPI/model/layer.h>
 #include <msclr/marshal.h>
 #include <vector>
 

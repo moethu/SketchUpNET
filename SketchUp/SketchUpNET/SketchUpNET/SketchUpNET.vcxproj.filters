@@ -126,6 +126,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\API\slapi.dll" />
+    <Library Include="..\..\API\SketchUpAPI.lib" />
   </ItemGroup>
 </Project>
