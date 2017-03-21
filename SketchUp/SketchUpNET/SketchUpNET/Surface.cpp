@@ -213,12 +213,14 @@ namespace SketchUpNET
 			SUMaterialRef mback = SU_INVALID;
 			SUFaceGetBackMaterial(face, &mback);
 			SUStringRef mbackNameRef = SU_INVALID;
+			SUStringCreate(&mbackNameRef);
 			SUMaterialGetName(mback, &mbackNameRef);
 			System::String^ mbackName = SketchUpNET::Utilities::GetString(mbackNameRef);
 
 			SUMaterialRef minner = SU_INVALID;
 			SUFaceGetFrontMaterial(face, &minner);
 			SUStringRef minnerNameRef = SU_INVALID;
+			SUStringCreate(&minnerNameRef);
 			SUMaterialGetName(minner, &minnerNameRef);
 			
 			System::String^ minnerName = SketchUpNET::Utilities::GetString(minnerNameRef);
