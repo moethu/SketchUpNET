@@ -37,6 +37,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include "Layer.h"
 #include "Group.h"
 #include "Instance.h"
+#include "Component.h"
 
 #pragma once
 
@@ -197,7 +198,21 @@ namespace SketchUpNET
 			Surfaces = Surface::GetEntitySurfaces(entities, includeMeshes, Materials);
 			Curves = Curve::GetEntityCurves(entities);
 			Edges = Edge::GetEntityEdges(entities);
-			Instances = Instance::GetEntityInstances(entities, Components);
+			Instances = Instance::GetEntityInstances(entities);
+
+			for each (Instance^ var in Instances)
+			{
+				if (Components->ContainsKey(var->ParentID))
+				{
+					System::Object^ o = Components[var->ParentID];
+					var->Parent = o;
+				}
+			}
+
+			for each (KeyValuePair<String^, Component^>^ cmp in Components)
+			{
+				FixRefs(cmp->Value);
+			}
 
 
 			SUModelRelease(&model);
@@ -270,7 +285,20 @@ namespace SketchUpNET
 			return true;
 		}
 
+		private:
+			void FixRefs(Component^ comp)
+			{
+				for each (Instance^ var in comp->Instances)
+				{
+					if (Components->ContainsKey(var->ParentID))
+					{
+						System::Object^ o = Components[var->ParentID];
+						var->Parent = o;
 
+						FixRefs(Components[var->ParentID]);
+					}
+				}
+			}
 
 
 	};

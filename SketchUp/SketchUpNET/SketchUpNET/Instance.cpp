@@ -33,7 +33,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <msclr/marshal.h>
 #include <vector>
 #include "transform.h"
-#include "component.h"
+#include "Utilities.h"
 
 
 #pragma once
@@ -49,20 +49,22 @@ namespace SketchUpNET
 	public:
 		System::String^ Name;
 		Transform^ Transformation;
-		Component^ Parent;
+		String^ ParentID;
 		System::String^ Guid;
+		System::Object^ Parent;
 
-		Instance(System::String^ name, System::String^ guid, Component^ parent, Transform^ transformation)
+		Instance(System::String^ name, System::String^ guid, String^ parent, Transform^ transformation)
 		{
 			this->Name = name;
 			this->Transformation = transformation;
-			this->Parent = parent;
+			this->ParentID = parent;
 			this->Guid = guid;
 		};
 
+
 		Instance(){};
 	internal:
-		static Instance^ FromSU(SUComponentInstanceRef comp, Dictionary<String^, Component^>^ components)
+		static Instance^ FromSU(SUComponentInstanceRef comp)
 		{
 			SUStringRef name = SU_INVALID;
 			SUStringCreate(&name);
@@ -83,7 +85,7 @@ namespace SketchUpNET
 			SUComponentDefinitionGetGuid(definition, &guid);
 			System::String^ guidstring = SketchUpNET::Utilities::GetString(guid);
 
-			Component^ parent = components[guidstring];
+			String^ parent = guidstring;
 
 
 			SUTransformation transform = SU_INVALID;
@@ -94,7 +96,7 @@ namespace SketchUpNET
 
 			return v;
 		};
-		static List<Instance^>^ GetEntityInstances(SUEntitiesRef entities, Dictionary<String^, Component^>^ components)
+		static List<Instance^>^ GetEntityInstances(SUEntitiesRef entities)
 		{
 			List<Instance^>^ instancelist = gcnew List<Instance^>();
 
@@ -108,7 +110,7 @@ namespace SketchUpNET
 				SUEntitiesGetInstances(entities, instanceCount, &instances[0], &instanceCount);
 
 				for (size_t i = 0; i < instanceCount; i++) {
-					Instance^ inst = Instance::FromSU(instances[i], components);
+					Instance^ inst = Instance::FromSU(instances[i]);
 					instancelist->Add(inst);
 				}
 

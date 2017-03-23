@@ -35,7 +35,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include "edge.h"
 #include "curve.h"
 #include "utilities.h"
-
+#include "Transform.h"
+#include "Instance.h"
 
 
 #pragma once
@@ -52,11 +53,12 @@ namespace SketchUpNET
 		System::String^ Name;
 		System::String^ Description;
 		List<Surface^>^ Surfaces;
+		List<Instance^>^ Instances;
 		System::String^ Guid;
 		List<Curve^>^ Curves;
 		List<Edge^>^ Edges;
 
-		Component(System::String^ name, System::String^ guid, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges, System::String^ desc)
+		Component(System::String^ name, System::String^ guid, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges, List<Instance^>^ instances, System::String^ desc)
 		{
 			this->Name = name;
 			this->Surfaces = surfaces;
@@ -64,6 +66,7 @@ namespace SketchUpNET
 			this->Curves = curves;
 			this->Edges = edges;
 			this->Description = desc;
+			this->Instances = instances;
 		};
 
 		Component(){};
@@ -92,9 +95,12 @@ namespace SketchUpNET
 			List<Surface^>^ surfaces = Surface::GetEntitySurfaces(entities, includeMeshes, materials);
 			List<Curve^>^ curves = Curve::GetEntityCurves(entities);
 			List<Edge^>^ edges = Edge::GetEntityEdges(entities);
-			//List<Instance^>^ instances = Instance::GetEntityInstances(entities);
+			List<Instance^>^ instances = Instance::GetEntityInstances(entities);
 
-			Component^ v = gcnew Component(Utilities::GetString(name), Utilities::GetString(guid), surfaces, curves, edges, Utilities::GetString(desc));
+
+			
+
+			Component^ v = gcnew Component(Utilities::GetString(name), Utilities::GetString(guid), surfaces, curves, edges,instances, Utilities::GetString(desc));
 
 			return v;
 		};

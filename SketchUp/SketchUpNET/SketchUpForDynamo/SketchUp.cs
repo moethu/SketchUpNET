@@ -88,7 +88,7 @@ namespace SketchUpForDynamo
         /// SketchUp Component Instance Data
         /// </summary>
         /// <param name="instance">SketchUp Component Instance</param>
-        [MultiReturn(new[] { "Surfaces","Curves","Meshes","Edges", "Position", "Scale", "Name", "Parent Name" })]
+        [MultiReturn(new[] { "Surfaces","Curves","Instances","Meshes","Edges", "Position", "Scale", "Name", "Parent Name" })]
         public static Dictionary<string, object> GetInstance(Instance instance)
         {
             List<Autodesk.DesignScript.Geometry.Surface> surfaces = new List<Autodesk.DesignScript.Geometry.Surface>();
@@ -98,29 +98,67 @@ namespace SketchUpForDynamo
 
             Autodesk.DesignScript.Geometry.Point p = Autodesk.DesignScript.Geometry.Point.ByCoordinates(instance.Transformation.X, instance.Transformation.Y, instance.Transformation.Z);
 
-            foreach (Surface srf in instance.Parent.Surfaces)
+            Component parent = instance.Parent as Component;
+
+            foreach (Surface srf in parent.Surfaces)
             {
                 surfaces.Add(srf.ToDSGeo(instance.Transformation));
                 if (srf.FaceMesh != null)
                     meshes.Add(srf.FaceMesh.ToDSGeo(instance.Transformation));
             }
-            foreach (Curve c in instance.Parent.Curves)
+            foreach (Curve c in parent.Curves)
                 curves.Add(c.ToDSGeo(instance.Transformation));
-            foreach (Edge e in instance.Parent.Edges)
+            foreach (Edge e in parent.Edges)
                 edges.Add(e.ToDSGeo(instance.Transformation));
 
             return new Dictionary<string, object>
             {
                 { "Surfaces", surfaces },
                 { "Curves", curves },
+                { "Instances", parent.Instances },
                 { "Meshes", meshes },
                 { "Edges", edges },
                 { "Position", p },
                 { "Scale", instance.Transformation.Scale },
                 { "Name", instance.Name },
-                { "Parent Name", instance.Parent.Name }
+                { "Parent Name", parent.Name }
 
             };
+        }
+
+        /// <summary>
+        /// Flatten Instances
+        /// </summary>
+        /// <param name="instances"></param>
+        /// <returns>All Geometries</returns>
+        public static List<Autodesk.DesignScript.Geometry.Geometry> FlattenInstances(List<Instance> instances)
+        {
+            List<Autodesk.DesignScript.Geometry.Geometry> data = new List<Autodesk.DesignScript.Geometry.Geometry>();
+
+            foreach (Instance instance in instances)
+                FlattenInstance(instance, ref data);
+
+            return data;
+        }
+
+        private static void FlattenInstance(Instance instance, ref List<Autodesk.DesignScript.Geometry.Geometry> data)
+        {
+            Autodesk.DesignScript.Geometry.Point p = Autodesk.DesignScript.Geometry.Point.ByCoordinates(instance.Transformation.X, instance.Transformation.Y, instance.Transformation.Z);
+
+            Component parent = instance.Parent as Component;
+
+            foreach (Surface srf in parent.Surfaces)
+                data.Add(srf.ToDSGeo(instance.Transformation));
+
+            foreach (Curve c in parent.Curves)
+            {
+                var curves = c.ToDSGeo(instance.Transformation);
+                foreach (var curve in curves)
+                    data.Add(curve);
+            }      
+
+            foreach (Edge e in parent.Edges)
+                data.Add(e.ToDSGeo(instance.Transformation));
         }
 
         /// <summary>
@@ -260,21 +298,25 @@ namespace SketchUpForDynamo
         [IsVisibleInDynamoLibrary(false)]
         public static Autodesk.DesignScript.Geometry.Surface ToDSGeo(this SketchUpNET.Surface v, Transform t = null)
         {
-            List<Autodesk.DesignScript.Geometry.Curve> curves = new List<Autodesk.DesignScript.Geometry.Curve>();
-            foreach (Edge c in v.OuterEdges.Edges) curves.Add(c.ToDSGeo(t).ToNurbsCurve());
-            int a = 0;
-            Autodesk.DesignScript.Geometry.PolyCurve pc = Autodesk.DesignScript.Geometry.PolyCurve.ByJoinedCurves(curves);
-            Autodesk.DesignScript.Geometry.Surface s = Autodesk.DesignScript.Geometry.Surface.ByPatch(pc);
-            
-             List<Autodesk.DesignScript.Geometry.Surface> inner = v.InnerLoops(t);
-
-            foreach(Autodesk.DesignScript.Geometry.Surface srf in inner)
+            try
             {
-                Autodesk.DesignScript.Geometry.Geometry[] geo = s.Split(srf);
-                if (geo.Count() == 2) s = (Autodesk.DesignScript.Geometry.Surface)geo[0];
+                List<Autodesk.DesignScript.Geometry.Curve> curves = new List<Autodesk.DesignScript.Geometry.Curve>();
+                foreach (Edge c in v.OuterEdges.Edges) curves.Add(c.ToDSGeo(t).ToNurbsCurve());
+                int a = 0;
+                Autodesk.DesignScript.Geometry.PolyCurve pc = Autodesk.DesignScript.Geometry.PolyCurve.ByJoinedCurves(curves);
+                Autodesk.DesignScript.Geometry.Surface s = Autodesk.DesignScript.Geometry.Surface.ByPatch(pc);
 
+                List<Autodesk.DesignScript.Geometry.Surface> inner = v.InnerLoops(t);
+
+                foreach (Autodesk.DesignScript.Geometry.Surface srf in inner)
+                {
+                    Autodesk.DesignScript.Geometry.Geometry[] geo = s.Split(srf);
+                    if (geo.Count() == 2) s = (Autodesk.DesignScript.Geometry.Surface)geo[0];
+
+                }
+                return s;
             }
-            return s;
+            catch { return null; }
         }
 
         [IsVisibleInDynamoLibrary(false)]
