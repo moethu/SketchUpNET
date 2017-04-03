@@ -47,7 +47,14 @@ using namespace System::Collections::Generic;
 
 namespace SketchUpNET
 {
-
+	public enum class SKPVersion
+	{
+		V2013,
+		V2014,
+		V2015,
+		V2016,
+		V2017
+	};
 
 	/// <summary>
 	/// SKP
@@ -214,12 +221,49 @@ namespace SketchUpNET
 				FixRefs(cmp->Value);
 			}
 
+			for each (Group^ var in Groups)
+			{
+				FixRefs(var);
+			}
+
 
 			SUModelRelease(&model);
 			SUTerminate();
 			return true;
 
 		};
+
+		bool SaveAs(System::String^ filename, SKPVersion version, System::String^ newFilename)
+		{
+			msclr::interop::marshal_context oMarshalContext;
+			const char* path = oMarshalContext.marshal_as<const char*>(filename);
+			SUInitialize();
+
+			SUModelRef model = SU_INVALID;
+			SUResult res = SUModelCreateFromFile(&model, path);
+
+			if (res != SU_ERROR_NONE)
+				return false;
+
+			SUModelVersion saveversion = SUModelVersion::SUModelVersion_SU2017;
+
+			if (version == SKPVersion::V2013)
+				saveversion = SUModelVersion::SUModelVersion_SU2013;
+			else if (version == SKPVersion::V2014)
+				saveversion = SUModelVersion::SUModelVersion_SU2014;
+			else if (version == SKPVersion::V2015)
+				saveversion = SUModelVersion::SUModelVersion_SU2015;
+			else if (version == SKPVersion::V2016)
+				saveversion = SUModelVersion::SUModelVersion_SU2016;
+			else if (version == SKPVersion::V2017)
+				saveversion = SUModelVersion::SUModelVersion_SU2017;
+
+			SUModelSaveToFileWithVersion(model, Utilities::ToString(newFilename), saveversion);
+
+			SUModelRelease(&model);
+			SUTerminate();
+			return true;
+		}
 
 		/// <summary>
 		/// Append Data to existing Model
@@ -251,7 +295,7 @@ namespace SketchUpNET
 			SUEntitiesAddCurves(entities, Curves->Count, Curve::ListToSU(Curves));
 
 			SUModelSaveToFile(model, Utilities::ToString(filename));
-
+			
 			SUModelRelease(&model);
 			SUTerminate();
 			return true;
@@ -286,7 +330,23 @@ namespace SketchUpNET
 		}
 
 		private:
+
+
 			void FixRefs(Component^ comp)
+			{
+				for each (Instance^ var in comp->Instances)
+				{
+					if (Components->ContainsKey(var->ParentID))
+					{
+						System::Object^ o = Components[var->ParentID];
+						var->Parent = o;
+
+						FixRefs(Components[var->ParentID]);
+					}
+				}
+			}
+
+			void FixRefs(Group^ comp)
 			{
 				for each (Instance^ var in comp->Instances)
 				{
@@ -302,5 +362,6 @@ namespace SketchUpNET
 
 
 	};
+
 
 }
