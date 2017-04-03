@@ -60,8 +60,9 @@ namespace SketchUpNET
 		List<Curve^>^ Curves;
 		List<Instance^>^ Instances;
 		List<Group^>^ Groups;
+		Transform^ Transformation;
 
-		Group(System::String^ name, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges, List<Instance^>^ insts, List<Group^>^ group)
+		Group(System::String^ name, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges, List<Instance^>^ insts, List<Group^>^ group, Transform^ transformation)
 		{
 			this->Name = name;
 			this->Surfaces = surfaces;
@@ -69,6 +70,7 @@ namespace SketchUpNET
 			this->Curves = curves;
 			this->Instances = insts;
 			this->Groups = group;
+			this->Transformation = transformation;
 		};
 
 		Group(){};
@@ -86,14 +88,16 @@ namespace SketchUpNET
 			size_t faceCount = 0;
 			SUEntitiesGetNumFaces(entities, &faceCount);
 
-
+			SUTransformation transform = SU_INVALID;
+			SUGroupGetTransform(group, &transform);
+			
 			List<Surface^>^ surfaces = Surface::GetEntitySurfaces(entities, includeMeshes, materials);
 			List<Edge^>^ edges = Edge::GetEntityEdges(entities);
 			List<Curve^>^ curves = Curve::GetEntityCurves(entities);
 			List<Instance^>^ inst = Instance::GetEntityInstances(entities);
 			List<Group^>^ grps = Group::GetEntityGroups(entities, includeMeshes, materials);
-
-			Group^ v = gcnew Group(SketchUpNET::Utilities::GetString(name), surfaces, curves, edges, inst, grps);
+			
+			Group^ v = gcnew Group(SketchUpNET::Utilities::GetString(name), surfaces, curves, edges, inst, grps, Transform::FromSU(transform));
 
 			return v;
 		};

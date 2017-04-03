@@ -72,7 +72,7 @@ namespace SketchUpForDynamo
                 foreach (Edge e in skp.Edges)
                     edges.Add(e.ToDSGeo());
 
-                foreach (Group gr in grp)
+                foreach (Group gr in skp.Groups)
                     grp.Add(gr);
 
             }
@@ -93,7 +93,7 @@ namespace SketchUpForDynamo
         /// SketchUp Component Instance Data
         /// </summary>
         /// <param name="instance">SketchUp Component Instance</param>
-        [MultiReturn(new[] { "Surfaces","Curves","Instances","Meshes","Edges", "Position", "Scale", "Name", "Parent Name" })]
+        [MultiReturn(new[] { "Surfaces","Curves","Instances","Meshes","Edges", "Position", "Scale", "Name", "Parent Name", "Groups" })]
         public static Dictionary<string, object> GetInstance(Instance instance)
         {
             List<Autodesk.DesignScript.Geometry.Surface> surfaces = new List<Autodesk.DesignScript.Geometry.Surface>();
@@ -116,6 +116,11 @@ namespace SketchUpForDynamo
             foreach (Edge e in parent.Edges)
                 edges.Add(e.ToDSGeo(instance.Transformation));
 
+            foreach (Group grp in parent.Groups)
+            {
+                grp.Transformation = instance.Transformation;
+            }
+
             return new Dictionary<string, object>
             {
                 { "Surfaces", surfaces },
@@ -126,7 +131,8 @@ namespace SketchUpForDynamo
                 { "Position", p },
                 { "Scale", instance.Transformation.Scale },
                 { "Name", instance.Name },
-                { "Parent Name", parent.Name }
+                { "Parent Name", parent.Name },
+                { "Groups", parent.Groups }
 
             };
         }
@@ -134,9 +140,9 @@ namespace SketchUpForDynamo
         /// <summary>
         /// SketchUp Component Instance Data
         /// </summary>
-        /// <param name="instance">SketchUp Component Instance</param>
-        [MultiReturn(new[] { "Surfaces", "Curves", "Instances", "Meshes", "Edges",  "Name" })]
-        public static Dictionary<string, object> GetGroup(Group instance)
+        /// <param name="group">SketchUp Component Instance</param>
+        [MultiReturn(new[] { "Surfaces", "Curves", "Instances", "Meshes", "Edges",  "Name", "Groups" })]
+        public static Dictionary<string, object> GetGroup(Group group)
         {
             List<Autodesk.DesignScript.Geometry.Surface> surfaces = new List<Autodesk.DesignScript.Geometry.Surface>();
             List<List<Autodesk.DesignScript.Geometry.Line>> curves = new List<List<Autodesk.DesignScript.Geometry.Line>>();
@@ -144,18 +150,17 @@ namespace SketchUpForDynamo
             List<Autodesk.DesignScript.Geometry.Mesh> meshes = new List<Autodesk.DesignScript.Geometry.Mesh>();
             List<Instance> insts = new List<Instance>();
 
-
-            foreach (Surface srf in instance.Surfaces)
+            foreach (Surface srf in group.Surfaces)
             {
-                surfaces.Add(srf.ToDSGeo());
+                surfaces.Add(srf.ToDSGeo(group.Transformation));
                 if (srf.FaceMesh != null)
-                    meshes.Add(srf.FaceMesh.ToDSGeo());
+                    meshes.Add(srf.FaceMesh.ToDSGeo(group.Transformation));
             }
-            foreach (Curve c in instance.Curves)
-                curves.Add(c.ToDSGeo());
-            foreach (Edge e in instance.Edges)
-                edges.Add(e.ToDSGeo());
-            foreach (Instance e in instance.Instances)
+            foreach (Curve c in group.Curves)
+                curves.Add(c.ToDSGeo(group.Transformation));
+            foreach (Edge e in group.Edges)
+                edges.Add(e.ToDSGeo(group.Transformation));
+            foreach (Instance e in group.Instances)
                 insts.Add(e);
 
             return new Dictionary<string, object>
@@ -165,8 +170,8 @@ namespace SketchUpForDynamo
                 { "Instances", insts },
                 { "Meshes", meshes },
                 { "Edges", edges },
-                { "Name", instance.Name },
-
+                { "Name", group.Name },
+                { "Groups", group.Groups },
             };
         }
 
