@@ -211,7 +211,7 @@ namespace SketchUpForGrasshopper
                 foreach (SketchUpNET.Edge c in loop.Edges) curves.Add(c.ToRhinoGeo(t).ToNurbsCurve());
 
             Rhino.Geometry.Curve[] crv = Rhino.Geometry.Curve.JoinCurves(curves);
-            Rhino.Geometry.NurbsSurface.
+
             Rhino.Geometry.Surface b = Rhino.Geometry.Surface.CreateExtrusion(crv[0],v.Normal.ToRhinoGeo());
 
             List<Rhino.Geometry.Brep> breps = v.InnerLoops(t);

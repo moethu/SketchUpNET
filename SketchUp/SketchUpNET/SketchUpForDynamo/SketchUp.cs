@@ -33,11 +33,12 @@ namespace SketchUpForDynamo
 
     public static class SketchUp
     {
+        public static int T(int a, int b) { return a + b; }
         /// <summary>
         /// Load SketchUp Model
         /// </summary>
         /// <param name="path">Path to SketchUp file</param>
-        [MultiReturn(new[] { "Surfaces", "Layers", "Instances", "Curves", "Edges", "Meshes" })]
+        [MultiReturn(new[] { "Surfaces", "Layers", "Instances", "Curves", "Edges", "Meshes", "Groups" })]
         public static Dictionary<string, object> LoadModel(string path, bool includeMeshes = true)
         {
             List<Autodesk.DesignScript.Geometry.Surface> surfaces = new List<Autodesk.DesignScript.Geometry.Surface>();
@@ -46,6 +47,7 @@ namespace SketchUpForDynamo
             List<Instance> Instances = new List<Instance>();
             List<List<Autodesk.DesignScript.Geometry.Line>> curves = new List<List<Autodesk.DesignScript.Geometry.Line>>();
             List<Autodesk.DesignScript.Geometry.Line> edges = new List<Autodesk.DesignScript.Geometry.Line>();
+            List<Group> grp = new List<Group>();
 
             SketchUpNET.SketchUp skp = new SketchUpNET.SketchUp();
             if (skp.LoadModel(path, includeMeshes))
@@ -61,16 +63,18 @@ namespace SketchUpForDynamo
                         meshes.Add(srf.FaceMesh.ToDSGeo());
                 }
 
-                    foreach (Layer l in skp.Layers)
-                        layers.Add(l.Name);
+                foreach (Layer l in skp.Layers)
+                    layers.Add(l.Name);
 
-                    foreach (Instance i in skp.Instances)
-                        Instances.Add(i);
+                foreach (Instance i in skp.Instances)
+                    Instances.Add(i);
 
-                    foreach (Edge e in skp.Edges)
-                        edges.Add(e.ToDSGeo());
-                
-                
+                foreach (Edge e in skp.Edges)
+                    edges.Add(e.ToDSGeo());
+
+                foreach (Group gr in grp)
+                    grp.Add(gr);
+
             }
 
             return new Dictionary<string, object>
@@ -80,7 +84,8 @@ namespace SketchUpForDynamo
                 { "Instances", Instances },
                 { "Curves", curves },
                 { "Edges", edges },
-                { "Meshes", meshes}
+                { "Meshes", meshes},
+                { "Groups", grp }
             };
         }
 
@@ -125,6 +130,46 @@ namespace SketchUpForDynamo
 
             };
         }
+
+        /// <summary>
+        /// SketchUp Component Instance Data
+        /// </summary>
+        /// <param name="instance">SketchUp Component Instance</param>
+        [MultiReturn(new[] { "Surfaces", "Curves", "Instances", "Meshes", "Edges",  "Name" })]
+        public static Dictionary<string, object> GetGroup(Group instance)
+        {
+            List<Autodesk.DesignScript.Geometry.Surface> surfaces = new List<Autodesk.DesignScript.Geometry.Surface>();
+            List<List<Autodesk.DesignScript.Geometry.Line>> curves = new List<List<Autodesk.DesignScript.Geometry.Line>>();
+            List<Autodesk.DesignScript.Geometry.Line> edges = new List<Autodesk.DesignScript.Geometry.Line>();
+            List<Autodesk.DesignScript.Geometry.Mesh> meshes = new List<Autodesk.DesignScript.Geometry.Mesh>();
+            List<Instance> insts = new List<Instance>();
+
+
+            foreach (Surface srf in instance.Surfaces)
+            {
+                surfaces.Add(srf.ToDSGeo());
+                if (srf.FaceMesh != null)
+                    meshes.Add(srf.FaceMesh.ToDSGeo());
+            }
+            foreach (Curve c in instance.Curves)
+                curves.Add(c.ToDSGeo());
+            foreach (Edge e in instance.Edges)
+                edges.Add(e.ToDSGeo());
+            foreach (Instance e in instance.Instances)
+                insts.Add(e);
+
+            return new Dictionary<string, object>
+            {
+                { "Surfaces", surfaces },
+                { "Curves", curves },
+                { "Instances", insts },
+                { "Meshes", meshes },
+                { "Edges", edges },
+                { "Name", instance.Name },
+
+            };
+        }
+
 
         /// <summary>
         /// Flatten Instances

@@ -36,7 +36,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include "Surface.h"
 #include "Edge.h"
 #include "curve.h"
-
+#include "Instance.h"
 
 
 #pragma once
@@ -58,13 +58,17 @@ namespace SketchUpNET
 		List<Surface^>^ Surfaces;
 		List<Edge^>^ Edges;
 		List<Curve^>^ Curves;
+		List<Instance^>^ Instances;
+		List<Group^>^ Groups;
 
-		Group(System::String^ name, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges)
+		Group(System::String^ name, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges, List<Instance^>^ insts, List<Group^>^ group)
 		{
 			this->Name = name;
 			this->Surfaces = surfaces;
 			this->Edges = edges;
 			this->Curves = curves;
+			this->Instances = insts;
+			this->Groups = group;
 		};
 
 		Group(){};
@@ -86,12 +90,34 @@ namespace SketchUpNET
 			List<Surface^>^ surfaces = Surface::GetEntitySurfaces(entities, includeMeshes, materials);
 			List<Edge^>^ edges = Edge::GetEntityEdges(entities);
 			List<Curve^>^ curves = Curve::GetEntityCurves(entities);
+			List<Instance^>^ inst = Instance::GetEntityInstances(entities);
+			List<Group^>^ grps = Group::GetEntityGroups(entities, includeMeshes, materials);
 
-			Group^ v = gcnew Group(SketchUpNET::Utilities::GetString(name), surfaces, curves, edges);
+			Group^ v = gcnew Group(SketchUpNET::Utilities::GetString(name), surfaces, curves, edges, inst, grps);
 
 			return v;
 		};
 
+		static List<Group^>^ GetEntityGroups(SUEntitiesRef entities, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials)
+		{
+			List<Group^>^ groups = gcnew List<Group^>();
+
+			size_t instanceCount = 0;
+			SUEntitiesGetNumGroups(entities, &instanceCount);
+
+			if (instanceCount > 0) {
+				std::vector<SUGroupRef> instances(instanceCount);
+				SUEntitiesGetGroups(entities, instanceCount, &instances[0], &instanceCount);
+
+				for (size_t i = 0; i < instanceCount; i++) {
+					Group^ inst = Group::FromSU(instances[i], includeMeshes, materials);
+					groups->Add(inst);
+				}
+
+			}
+
+			return groups;
+		}
 	};
 
 

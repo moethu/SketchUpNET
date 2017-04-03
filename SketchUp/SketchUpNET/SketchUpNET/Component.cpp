@@ -33,6 +33,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <vector>
 #include "surface.h"
 #include "edge.h"
+#include "group.h"
 #include "curve.h"
 #include "utilities.h"
 #include "Transform.h"
@@ -57,8 +58,9 @@ namespace SketchUpNET
 		System::String^ Guid;
 		List<Curve^>^ Curves;
 		List<Edge^>^ Edges;
+		List<Group^>^ Groups;
 
-		Component(System::String^ name, System::String^ guid, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges, List<Instance^>^ instances, System::String^ desc)
+		Component(System::String^ name, System::String^ guid, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges, List<Instance^>^ instances, System::String^ desc, List<Group^>^ groups)
 		{
 			this->Name = name;
 			this->Surfaces = surfaces;
@@ -67,6 +69,7 @@ namespace SketchUpNET
 			this->Edges = edges;
 			this->Description = desc;
 			this->Instances = instances;
+			this->Groups = groups;
 		};
 
 		Component(){};
@@ -96,11 +99,11 @@ namespace SketchUpNET
 			List<Curve^>^ curves = Curve::GetEntityCurves(entities);
 			List<Edge^>^ edges = Edge::GetEntityEdges(entities);
 			List<Instance^>^ instances = Instance::GetEntityInstances(entities);
-
-
+			List<Group^>^ grps = Group::GetEntityGroups(entities, includeMeshes, materials);
+			
 			
 
-			Component^ v = gcnew Component(Utilities::GetString(name), Utilities::GetString(guid), surfaces, curves, edges,instances, Utilities::GetString(desc));
+			Component^ v = gcnew Component(Utilities::GetString(name), Utilities::GetString(guid), surfaces, curves, edges,instances, Utilities::GetString(desc), grps);
 
 			return v;
 		};

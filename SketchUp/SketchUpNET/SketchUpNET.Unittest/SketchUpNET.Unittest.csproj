@@ -78,6 +78,12 @@
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SketchUpForDynamo\SketchUpForDynamo.csproj">
+      <Project>{60201034-7cd1-4217-82bb-1161d8d0bb0a}</Project>
+      <Name>SketchUpForDynamo</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
