@@ -58,11 +58,12 @@ namespace SketchUpNET
 
 		System::String^ Layer;
 
-		Mesh(List<Vertex^>^ vs, List<Vector^>^ ns, List<MeshFace^>^ faces)
+		Mesh(List<Vertex^>^ vs, List<Vector^>^ ns, List<MeshFace^>^ faces, System::String^ layer)
 		{
 			this->Vertices = vs;
 			this->Normals = ns;
 			this->Faces = faces;
+			this->Layer = layer;
 		};
 
 		Mesh() {};
@@ -76,6 +77,15 @@ namespace SketchUpNET
 			List<Vector^>^ vectors = gcnew List<Vector^>();
 			List<MeshFace^>^ faces = gcnew List<MeshFace^>();
 			
+			// Layer
+			SULayerRef layer = SU_INVALID;
+			SUDrawingElementGetLayer(SUFaceToDrawingElement(face), &layer);
+
+			System::String^ layername = gcnew System::String("");
+			if (!SUIsInvalid(layer))
+			{
+				layername = Utilities::GetLayerName(layer);
+			}
 			
 			SUMeshHelperRef helper = SU_INVALID;
 			SUMeshHelperCreate(&helper, face);
@@ -126,7 +136,7 @@ namespace SketchUpNET
 
 			SUMeshHelperRelease(&helper);
 
-			Mesh^ m = gcnew Mesh(vertices,vectors, faces);
+			Mesh^ m = gcnew Mesh(vertices,vectors, faces, layername);
 
 			return m;
 		}

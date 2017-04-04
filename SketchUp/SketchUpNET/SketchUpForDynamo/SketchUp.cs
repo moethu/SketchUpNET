@@ -89,6 +89,50 @@ namespace SketchUpForDynamo
             };
         }
 
+
+        [MultiReturn(new[] { "Surfaces", "Instances", "Edges", "Meshes", "Groups" })]
+        public static Dictionary<string, object> LoadModelByLayer(string path, string layername, bool includeMeshes = true)
+        {
+            List<Autodesk.DesignScript.Geometry.Surface> surfaces = new List<Autodesk.DesignScript.Geometry.Surface>();
+            List<Autodesk.DesignScript.Geometry.Mesh> meshes = new List<Autodesk.DesignScript.Geometry.Mesh>();
+            List<Instance> Instances = new List<Instance>();
+            List<Autodesk.DesignScript.Geometry.Line> edges = new List<Autodesk.DesignScript.Geometry.Line>();
+            List<Group> grp = new List<Group>();
+
+            SketchUpNET.SketchUp skp = new SketchUpNET.SketchUp();
+            if (skp.LoadModel(path, includeMeshes))
+            {
+
+                foreach (Surface srf in skp.Surfaces.Where(s=>s.Layer == layername))
+                {
+                    surfaces.Add(srf.ToDSGeo());
+                    if (srf.FaceMesh != null)
+                        meshes.Add(srf.FaceMesh.ToDSGeo());
+                }
+
+                foreach (Instance i in skp.Instances.Where(s => s.Layer == layername))
+                    Instances.Add(i);
+
+                foreach (Edge e in skp.Edges.Where(s => s.Layer == layername))
+                    edges.Add(e.ToDSGeo());
+
+                foreach (Group gr in skp.Groups.Where(s => s.Layer == layername))
+                    grp.Add(gr);
+
+            }
+
+            return new Dictionary<string, object>
+            {
+                { "Surfaces", surfaces },
+                { "Instances", Instances },
+                { "Edges", edges },
+                { "Meshes", meshes},
+                { "Groups", grp }
+            };
+        }
+
+
+
         /// <summary>
         /// SketchUp Component Instance Data
         /// </summary>
@@ -236,7 +280,7 @@ namespace SketchUpForDynamo
                     skpcurve.Edges = new List<Edge>();
                     foreach (Autodesk.DesignScript.Geometry.Curve tesselated in curve.ApproximateWithArcAndLineSegments())
                     {                      
-                        Edge e = new Edge(tesselated.StartPoint.ToSKPGeo(), tesselated.EndPoint.ToSKPGeo());
+                        Edge e = new Edge(tesselated.StartPoint.ToSKPGeo(), tesselated.EndPoint.ToSKPGeo(),"");
                         skpcurve.Edges.Add(e);
                     }
                     skp.Curves.Add(skpcurve);
@@ -268,7 +312,7 @@ namespace SketchUpForDynamo
         [IsVisibleInDynamoLibrary(false)]
         public static SketchUpNET.Edge ToSKPGeo(this Autodesk.DesignScript.Geometry.Line p)
         {
-            return new Edge(p.StartPoint.ToSKPGeo(), p.EndPoint.ToSKPGeo());
+            return new Edge(p.StartPoint.ToSKPGeo(), p.EndPoint.ToSKPGeo(),"");
         }
 
         [IsVisibleInDynamoLibrary(false)]

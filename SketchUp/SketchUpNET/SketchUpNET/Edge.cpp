@@ -29,9 +29,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <SketchUpAPI/model/edge.h>
 #include <SketchUpAPI/model/vertex.h>
 #include <SketchUpAPI/model/curve.h>
+#include <SketchUpAPI/model/drawing_element.h>
 #include <msclr/marshal.h>
 #include <vector>
 #include "vertex.h"
+#include "utilities.h"
 
 #pragma once
 
@@ -47,11 +49,13 @@ namespace SketchUpNET
 
 		Vertex^ Start;
 		Vertex^ End;
+		System::String^ Layer;
 
-		Edge(Vertex ^ start, Vertex ^ end)
+		Edge(Vertex ^ start, Vertex ^ end, System::String^ layer)
 		{
 			this->Start = start;
 			this->End = end;
+			this->Layer = layer;
 		};
 
 		Edge(){};
@@ -66,8 +70,18 @@ namespace SketchUpNET
 			SUPoint3D end;
 			SUVertexGetPosition(startVertex, &start);
 			SUVertexGetPosition(endVertex, &end);
+
+			// Layer
+			SULayerRef layer = SU_INVALID;
+			SUDrawingElementGetLayer(SUEdgeToDrawingElement(edge), &layer);
+
+			System::String^ layername = gcnew System::String("");
+			if (!SUIsInvalid(layer))
+			{
+				layername = SketchUpNET::Utilities::GetLayerName(layer);
+			}
 			
-			Edge^ v = gcnew Edge(Vertex::FromSU(start), Vertex::FromSU(end));
+			Edge^ v = gcnew Edge(Vertex::FromSU(start), Vertex::FromSU(end), layername);
 
 			return v;
 		};

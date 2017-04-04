@@ -27,9 +27,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <SketchUpAPI/model/entities.h>
 #include <SketchUpAPI/model/face.h>
 #include <SketchUpAPI/model/edge.h>
+#include <SketchUpAPI/model/layer.h>
 #include <SketchUpAPI/model/vertex.h>
 #include <SketchUpAPI/model/component_instance.h>
 #include <SketchUpAPI/model/component_definition.h>
+#include <SketchUpAPI/model/drawing_element.h>
 #include <msclr/marshal.h>
 #include <vector>
 #include "transform.h"
@@ -52,13 +54,15 @@ namespace SketchUpNET
 		String^ ParentID;
 		System::String^ Guid;
 		System::Object^ Parent;
+		System::String^ Layer;
 
-		Instance(System::String^ name, System::String^ guid, String^ parent, Transform^ transformation)
+		Instance(System::String^ name, System::String^ guid, String^ parent, Transform^ transformation, System::String^ layername)
 		{
 			this->Name = name;
 			this->Transformation = transformation;
 			this->ParentID = parent;
 			this->Guid = guid;
+			this->Layer = layername;
 		};
 
 
@@ -78,7 +82,17 @@ namespace SketchUpNET
 			SUComponentInstanceGetGuid(comp, &instanceguid);
 
 			
+			
 
+			// Layer
+			SULayerRef layer = SU_INVALID;
+			SUDrawingElementGetLayer(SUComponentInstanceToDrawingElement(comp), &layer);
+
+			System::String^ layername = gcnew System::String("");
+			if (!SUIsInvalid(layer))
+			{
+				layername = Utilities::GetLayerName(layer);
+			}
 
 			SUStringRef guid = SU_INVALID;
 			SUStringCreate(&guid);
@@ -92,7 +106,7 @@ namespace SketchUpNET
 			SUComponentInstanceGetTransform(comp, &transform);
 			
 
-			Instance^ v = gcnew Instance(SketchUpNET::Utilities::GetString(name), SketchUpNET::Utilities::GetString(instanceguid), parent, Transform::FromSU(transform));
+			Instance^ v = gcnew Instance(SketchUpNET::Utilities::GetString(name), SketchUpNET::Utilities::GetString(instanceguid), parent, Transform::FromSU(transform), layername);
 
 			return v;
 		};

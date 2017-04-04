@@ -61,8 +61,9 @@ namespace SketchUpNET
 		List<Instance^>^ Instances;
 		List<Group^>^ Groups;
 		Transform^ Transformation;
+		System::String^ Layer;
 
-		Group(System::String^ name, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges, List<Instance^>^ insts, List<Group^>^ group, Transform^ transformation)
+		Group(System::String^ name, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges, List<Instance^>^ insts, List<Group^>^ group, Transform^ transformation, System::String^ layername)
 		{
 			this->Name = name;
 			this->Surfaces = surfaces;
@@ -71,6 +72,7 @@ namespace SketchUpNET
 			this->Instances = insts;
 			this->Groups = group;
 			this->Transformation = transformation;
+			this->Layer = layername;
 		};
 
 		Group(){};
@@ -97,7 +99,17 @@ namespace SketchUpNET
 			List<Instance^>^ inst = Instance::GetEntityInstances(entities);
 			List<Group^>^ grps = Group::GetEntityGroups(entities, includeMeshes, materials);
 			
-			Group^ v = gcnew Group(SketchUpNET::Utilities::GetString(name), surfaces, curves, edges, inst, grps, Transform::FromSU(transform));
+			// Layer
+			SULayerRef layer = SU_INVALID;
+			SUDrawingElementGetLayer(SUGroupToDrawingElement(group), &layer);
+
+			System::String^ layername = gcnew System::String("");
+			if (!SUIsInvalid(layer))
+			{
+				layername = SketchUpNET::Utilities::GetLayerName(layer);
+			}
+
+			Group^ v = gcnew Group(SketchUpNET::Utilities::GetString(name), surfaces, curves, edges, inst, grps, Transform::FromSU(transform), layername);
 
 			return v;
 		};
