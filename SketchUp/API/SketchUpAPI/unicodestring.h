@@ -3,7 +3,7 @@
 #ifndef SKETCHUP_UNICODESTRING_H_
 #define SKETCHUP_UNICODESTRING_H_
 
-#include <SketchUpAPI/common.h>
+#include <SketchUpAPI/defs.h>
 #include <stddef.h>
 
 #pragma pack(push, 8)
@@ -15,7 +15,6 @@ extern "C" {
 @struct SUStringRef
 @brief Stores a Unicode string for use as output string parameters in the API.
 */
-DEFINE_SU_TYPE(SUStringRef)
 
 /**
 @brief Creates an empty string.

@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Autodesk.DesignScript.Runtime;
-using DSCoreNodesUI;
 using Dynamo.Utilities;
 using Dynamo.Models;
 using SketchUpNET;

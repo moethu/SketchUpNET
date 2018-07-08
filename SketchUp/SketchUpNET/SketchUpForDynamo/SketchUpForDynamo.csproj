@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SketchUpForDynamo</RootNamespace>
     <AssemblyName>SketchUpForDynamo</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,25 +32,25 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DSCoreNodes">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Dynamo 0.8\DSCoreNodes.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\DSCoreNodes.dll</HintPath>
     </Reference>
     <Reference Include="DynamoCore">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Dynamo 0.8\DynamoCore.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\DynamoCore.dll</HintPath>
+    </Reference>
+    <Reference Include="DynamoServices">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\DynamoServices.dll</HintPath>
     </Reference>
     <Reference Include="DynamoUtilities">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Dynamo 0.8\DynamoUtilities.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\DynamoUtilities.dll</HintPath>
     </Reference>
     <Reference Include="ProtoCore">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Dynamo 0.8\ProtoCore.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\ProtoCore.dll</HintPath>
     </Reference>
     <Reference Include="ProtoGeometry">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Dynamo 0.8\ProtoGeometry.dll</HintPath>
-    </Reference>
-    <Reference Include="ProtoInterface">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Dynamo 0.8\ProtoInterface.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\ProtoGeometry.dll</HintPath>
     </Reference>
     <Reference Include="ProtoScript">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Dynamo 0.8\ProtoScript.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\Dynamo\Dynamo Core\2\ProtoScript.dll</HintPath>
     </Reference>
     <Reference Include="SketchUpNET, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>

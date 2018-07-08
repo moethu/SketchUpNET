@@ -12,6 +12,33 @@ extern "C" {
 #endif
 
 /**
+@brief Creates an attributes dictionary object.
+@since SketchUp 2018 M0, API 6.0
+@param[out] dictionary The attributes dictionary object created.
+@param[in]  name       The name of the attribute dictionary. Assumed to be UTF-8
+                       encoded.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_NULL_POINTER_INPUT if name is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if dictionary is NULL
+- \ref SU_ERROR_OVERWRITE_VALID if dictionary already references a valid object
+*/
+SU_RESULT SUAttributeDictionaryCreate(SUAttributeDictionaryRef* dictionary,
+                                      const char* name);
+
+/**
+@brief Releases an attributes dictionary object and its associated attributes.
+       If this dictionary has a parent, it will be removed from it.
+@since SketchUp 2018 M0, API 6.0
+@param[in,out] dictionary The attributes dictionary object.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_NULL_POINTER_INPUT if dictionary is NULL
+- \ref SU_ERROR_INVALID_INPUT if dictionary does not reference a valid object
+*/
+SU_RESULT SUAttributeDictionaryRelease(SUAttributeDictionaryRef* dictionary);
+
+/**
 @brief Converts from an \ref SUAttributeDictionaryRef to an \ref SUEntityRef.
        This is essentially an upcast operation.
 @since SketchUp 2014, API 2.0

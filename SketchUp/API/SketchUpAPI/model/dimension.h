@@ -7,6 +7,7 @@
 #include <SketchUpAPI/geometry.h>
 #include <SketchUpAPI/unicodestring.h>
 #include <SketchUpAPI/model/defs.h>
+#include <SketchUpAPI/model/arrow_type.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -17,18 +18,6 @@ extern "C" {
 @brief  A dimension entity reference.
 @since SketchUp 2017, API 5.0
 */
-
-/**
-@enum SUArrowType
-@brief Indicates the supported arrow types 
-*/
-enum SUArrowType {
-  SUArrowNone = 0,
-  SUArrowSlash,
-  SUArrowDot,
-  SUArrowClosed,
-  SUArrowOpen
-};
 
 /**
 @enum SUDimensionType

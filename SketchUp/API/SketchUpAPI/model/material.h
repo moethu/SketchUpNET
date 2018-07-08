@@ -74,13 +74,18 @@ SU_RESULT SUMaterialRelease(SUMaterialRef* material);
 
 /**
 @brief Sets the name of a material object.
+@warning *** Breaking Change: A new failure mode was added in SketchUp 2018,
+         API 6.0. Returns \ref SU_ERROR_INVALID_ARGUMENT if the material is
+         managed by a model and the provided name was previously associated
+         with a different material in the model.
 @param[in] material The material object.
-@param[in] name     The name to set the material name.
-                    Assumed to be UTF-8 encoded.
+@param[in] name     The name to set the material name. Assumed to be UTF-8
+                    encoded.
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if material is not a valid object
 - \ref SU_ERROR_NULL_POINTER_INPUT if name is NULL
+- \ref SU_ERROR_INVALID_ARGUMENT if material is managed and name is not unique
 */
 SU_RESULT SUMaterialSetName(SUMaterialRef material, const char* name);
 
@@ -242,6 +247,20 @@ SU_RESULT SUMaterialSetType(SUMaterialRef material,
 */
 SU_RESULT SUMaterialGetType(SUMaterialRef material,
                             enum SUMaterialType* type);
+
+/**
+@brief Retrieves the flag indicating whether the material is drawn with
+       transparency.
+@since SketchUp 2018, API 6.0
+@param[in]  material     The material object.
+@param[out] transparency The flag retrieved.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if material is not a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if is_drawn_transparent is NULL
+*/
+SU_RESULT SUMaterialIsDrawnTransparent(SUMaterialRef material,
+                                       bool* transparency);
 
 #ifdef __cplusplus
 }  // extern "C"

@@ -80,10 +80,6 @@ SU_RESULT SUComponentInstanceSetName(SUComponentInstanceRef instance,
 /**
 @brief Deallocates a component instance object created with \ref
        SUComponentDefinitionCreateInstance.
-
-The instance object must not be associated with a parent object. That is, if
-\ref SUEntitiesAddInstance is called with the instance object, then the
-instance object must not be released explicitly.
 @param[in] instance The component instance object.
 @return
 - \ref SU_ERROR_NONE on success
@@ -294,6 +290,37 @@ SU_RESULT SUComponentInstanceGetNumAttachedInstances(
 SU_RESULT SUComponentInstanceGetAttachedInstances(
     SUComponentInstanceRef instance, size_t len,
     SUComponentInstanceRef instances[], size_t* count);
+
+/**
+@brief Retrieves the number of drawing element this instance is attached to.
+@since SketchUp 2018, API 6.0
+@param[in]  instance The component instance object.
+@param[out] count    The number of drawing elements this component instance is
+                     attached to.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if instance is an invalid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if count is NULL
+*/
+SU_RESULT SUComponentInstanceGetNumAttachedToDrawingElements(
+    SUComponentInstanceRef instance, size_t* count);
+
+/**
+@brief Retrieves the drawing elements this instance is attached to.
+@since SketchUp 2018, API 6.0
+@param[in]  instance The component instance object.
+@param[in]  len      The number of instances to retrieve.
+@param[out] elements The drawing elements retrieved. These may be instances,
+                     groups or faces.
+@param[out] count    The number of drawing elements retrieved.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if instance is an invalid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if instances or count is NULL
+*/
+SU_RESULT SUComponentInstanceGetAttachedToDrawingElements(
+    SUComponentInstanceRef instance, size_t len,
+    SUDrawingElementRef elements[], size_t* count);
 
 #ifdef __cplusplus
 }  // extern "C"

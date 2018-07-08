@@ -129,8 +129,10 @@ MaterialTransparency     | SUTypedValueType_Bool
 ModelTransparency        | SUTypedValueType_Bool
 RenderMode               | SUTypedValueType_Int32
 SectionActiveColor       | SUTypedValueType_Color
+SectionCutFilled (since SketchUp 2018, API 6.0) | SUTypedValueType_Bool
 SectionCutWidth          | SUTypedValueType_Int32
 SectionDefaultCutColor   | SUTypedValueType_Color
+SectionDefaultFillColor (since SketchUp 2018, API 6.0) | SUTypedValueType_Color
 SectionInactiveColor     | SUTypedValueType_Color
 ShowViewName             | SUTypedValueType_Bool
 SilhouetteWidth          | SUTypedValueType_Int32

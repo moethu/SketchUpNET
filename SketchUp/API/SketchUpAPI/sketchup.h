@@ -7,14 +7,19 @@
 #include <SketchUpAPI/common.h>
 #include <SketchUpAPI/color.h>
 #include <SketchUpAPI/extension_license.h>
+#include <SketchUpAPI/geometry/bounding_box.h>
+#include <SketchUpAPI/geometry/plane3d.h>
 #include <SketchUpAPI/geometry/point2d.h>
+#include <SketchUpAPI/geometry/point3d.h>
+#include <SketchUpAPI/geometry/ray3d.h>
+#include <SketchUpAPI/geometry/transformation.h>
 #include <SketchUpAPI/geometry/vector2d.h>
+#include <SketchUpAPI/geometry/vector3d.h>
+#include <SketchUpAPI/length_formatter.h>
 #include <SketchUpAPI/sketchup_info.h>
-#include <SketchUpAPI/transformation.h>
 #include <SketchUpAPI/unicodestring.h>
 #include <SketchUpAPI/utils/math_helpers.h>
 #include <SketchUpAPI/initialize.h>
-#include <SketchUpAPI/model/geometry.h>
 #include <SketchUpAPI/model/arccurve.h>
 #include <SketchUpAPI/model/attribute_dictionary.h>
 #include <SketchUpAPI/model/axes.h>
@@ -37,6 +42,8 @@
 #include <SketchUpAPI/model/edge_use.h>
 #include <SketchUpAPI/model/entities.h>
 #include <SketchUpAPI/model/entity.h>
+#include <SketchUpAPI/model/entity_list.h>
+#include <SketchUpAPI/model/entity_list_iterator.h>
 #include <SketchUpAPI/model/face.h>
 #include <SketchUpAPI/model/font.h>
 #include <SketchUpAPI/model/geometry_input.h>
@@ -64,10 +71,10 @@
 #include <SketchUpAPI/model/shadow_info.h>
 #include <SketchUpAPI/model/style.h>
 #include <SketchUpAPI/model/styles.h>
+#include <SketchUpAPI/model/text.h>
 #include <SketchUpAPI/model/texture.h>
 #include <SketchUpAPI/model/texture_writer.h>
 #include <SketchUpAPI/model/typed_value.h>
 #include <SketchUpAPI/model/uv_helper.h>
 #include <SketchUpAPI/model/vertex.h>
-
 #endif  // SKETCHUP_SKETCHUP_H_

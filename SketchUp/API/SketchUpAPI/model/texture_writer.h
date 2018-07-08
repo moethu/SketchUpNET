@@ -117,6 +117,27 @@ SU_RESULT SUTextureWriterWriteTexture(SUTextureWriterRef writer,
                                       long texture_id,
                                       const char* path,
                                       bool reduce_size);
+
+/**
+ @brief  Retrieves an image from the given texture_id. The given image
+         representation object must have been constructed using one of the
+         SUImageRepCreate* functions. It must be released using \ref 
+         SUImageRepRelease.
+@since SketchUp 2017 M2, API 5.2
+@param[in] writer      The texture writer object.
+@param[in] texture_id  The id of the texture.
+@param[out] image      The image object retrieved.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if writer is not a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if image is NULL
+- \ref SU_ERROR_INVALID_OUTPUT if image is not a valid object.
+- \ref SU_ERROR_NO_DATA if there is no texture in the given texture_id.
+*/
+SU_RESULT SUTextureWriterGetImageRep(SUTextureWriterRef writer,
+                                     long texture_id,
+                                     SUImageRepRef* image);
+
 /**
 @brief  Writes out all the textures loaded into a texture writer object. The
         file names and formats are those of the image file used to create the

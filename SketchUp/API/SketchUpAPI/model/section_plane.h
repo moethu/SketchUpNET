@@ -5,6 +5,7 @@
 
 #include <SketchUpAPI/common.h>
 #include <SketchUpAPI/geometry.h>
+#include <SketchUpAPI/unicodestring.h>
 #include <SketchUpAPI/model/defs.h>
 
 #ifdef __cplusplus
@@ -13,7 +14,7 @@ extern "C" {
 
 /**
 @struct SUSectionPlaneRef
-@brief  An sectionPlane entity reference.
+@brief  A sectionPlane entity reference.
 @since SketchUp 2016, API 4.0
 */
 
@@ -118,7 +119,7 @@ SU_RESULT SUSectionPlaneGetPlane(SUSectionPlaneRef sectionPlane,
                                  struct SUPlane3D* plane);
 
 /**
-@brief Retrieves the a boolean indicating whether or not the section plane is
+@brief Retrieves a boolean indicating whether or not the section plane is
        active.
 @param[in]  sectionPlane  The sectionPlane object.
 @param[out] is_active     Returns true if the section plane is active. 
@@ -129,6 +130,73 @@ SU_RESULT SUSectionPlaneGetPlane(SUSectionPlaneRef sectionPlane,
 */
 SU_RESULT SUSectionPlaneIsActive(SUSectionPlaneRef sectionPlane,
                                  bool* is_active);
+
+/**
+@brief Retrieves the name of a section plane object. 
+@since SketchUp 2018, API 6.0
+@param[in]  sectionPlane  The section plane object.
+@param[out] name          The name retrieved.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if sectionPlane is not a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if name is NULL
+- \ref SU_ERROR_INVALID_OUTPUT if name does not point to a valid \ref
+SUStringRef object
+*/
+SU_RESULT SUSectionPlaneGetName(SUSectionPlaneRef sectionPlane,
+    SUStringRef* name);
+
+/**
+@brief Sets the name of a section plane object.
+@since SketchUp 2018, API 6.0
+@param[in] sectionPlane The section plane object.
+@param[in] name         The string to set as the section plane name.
+                        Assumed to be UTF-8 encoded. An example of a name would
+                        be "South West Section" for the section on the south
+                        west side of a building.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if sectionPlane is not a valid object
+- \ref SU_ERROR_NULL_POINTER_INPUT if name is NULL
+*/
+SU_RESULT SUSectionPlaneSetName(SUSectionPlaneRef sectionPlane,
+    const char* name);
+
+
+/**
+@brief Retrieves the symbol of a section plane object. The symbol is used in
+       the Outliner and in the section display in the model. For example, you
+       might have several sections on the same area of a building all named
+       "South West Section" and use symbols to differenciate each section,
+       "01", "02", "03".
+@since SketchUp 2018, API 6.0
+@param[in]  sectionPlane  The section plane object.
+@param[out] symbol        The symbol retrieved.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if sectionPlane is not a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if symbol is NULL
+- \ref SU_ERROR_INVALID_OUTPUT if symbol does not point to a valid \ref
+SUStringRef object
+*/
+SU_RESULT SUSectionPlaneGetSymbol(SUSectionPlaneRef sectionPlane,
+                                  SUStringRef* symbol);
+
+/**
+@brief Sets the symbol of a section plane object.
+@since SketchUp 2018, API 6.0
+@param[in] sectionPlane The section plane object.
+@param[in] symbol       The string to set as the section plane symbol.
+                        Assumed to be UTF-8 encoded.  The maximum number of
+                        characters is 3.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if sectionPlane is not a valid object
+- \ref SU_ERROR_INVALID_INPUT if symbol is greater than three characters long
+- \ref SU_ERROR_NULL_POINTER_INPUT if symbol is NULL
+*/
+SU_RESULT SUSectionPlaneSetSymbol(SUSectionPlaneRef sectionPlane,
+                                  const char* symbol);
 
 #ifdef __cplusplus
 }  // extern "C"

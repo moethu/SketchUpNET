@@ -60,13 +60,15 @@ struct SUComponentBehavior {
   size_t component_no_scale_mask; ///< Bitmask where set bits indicate which
                                   ///< scale tool handles are hidden on a given
                                   ///< component:
-                                  ///< 0: X,
-                                  ///< 1: Y
-                                  ///< 2: Z
-                                  ///< 3: X + Z plane
-                                  ///< 4: Y + Z plane
-                                  ///< 5: X + Y plane
-                                  ///< 6: disable scale uniform (XYZ)
+                                  ///< Bit0: disable scale along X axis,
+                                  ///< Bit1: disable scale along Y axis,
+                                  ///< Bit2: disable scale along Z axis,
+                                  ///< Bit3: disable scale in X + Z plane,
+                                  ///< Bit4: disable scale in Y + Z plane,
+                                  ///< Bit5: disable scale in X + Y plane,
+                                  ///< Bit6: disable scale uniform (XYZ)
+                                  ///< Prior to SketchUp 2018, API 6.0 this
+                                  ///< variable existed but was never used.
 };
 
 /**
@@ -235,6 +237,13 @@ SU_RESULT SUComponentDefinitionSetDescription(
 
 /**
 @brief Create an instance of a component definition.
+@warning *** Breaking Change: The behavior of this method was changed in
+         SketchUp 2018, API 6.0. In previous releases there was a
+         recommendation to not release an instance created with this method if
+         it was associated with a parent using \ref SUEntitiesAddInstance. The 
+         limitation was removed by generalizing \ref SUComponentInstanceRelease
+         to correctly release instances whether or not they are contained in a
+         parent component.
 @param[in]  comp_def The component definition object.
 @param[out] instance The instance created.
 return
@@ -454,15 +463,20 @@ SU_RESULT SUComponentDefinitionOrientFacesConsistently(
 /**
 @brief Sets the insertion point for the component definition.
 @since SketchUp 2016, API 4.0
+@warning *** Breaking Change: The behavior of this method was changed in
+         SketchUp 2018, API 6.0. In previous releases if the second argument was
+         null this method returned \ref SU_ERROR_NULL_POINTER_OUTPUT, but this
+         was changed to \ref SU_ERROR_NULL_POINTER_INPUT for consistency with
+         other API methods.
 @param[in] comp_def  The component definition object.
 @param[in] point     The \ref SUPoint3D to use.
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if comp_def is invalid
-- \ref SU_ERROR_NULL_POINTER_OUTPUT if point is NULL
+- \ref SU_ERROR_NULL_POINTER_INPUT if point is NULL
 */
 SU_RESULT SUComponentDefinitionSetInsertPoint(SUComponentDefinitionRef comp_def,
-    struct SUPoint3D* point);
+    const struct SUPoint3D* point);
 
 /**
 @brief Sets the axes of the component definition.

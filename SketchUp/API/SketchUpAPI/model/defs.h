@@ -1,9 +1,9 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013 Trimble Inc. All Rights Reserved.
 
 #ifndef SKETCHUP_MODEL_DEFS_H_
 #define SKETCHUP_MODEL_DEFS_H_
 
-#include <SketchUpAPI/common.h>
+#include <SketchUpAPI/defs.h>
 
 #pragma pack(push, 8)
 
@@ -27,6 +27,8 @@ DEFINE_SU_TYPE(SUDynamicComponentAttributeRef)
 DEFINE_SU_TYPE(SUEdgeRef)
 DEFINE_SU_TYPE(SUEdgeUseRef)
 DEFINE_SU_TYPE(SUEntitiesRef)
+DEFINE_SU_TYPE(SUEntityListRef)
+DEFINE_SU_TYPE(SUEntityListIteratorRef)
 DEFINE_SU_TYPE(SUEntityRef)
 DEFINE_SU_TYPE(SUFaceRef)
 DEFINE_SU_TYPE(SUFontRef)
@@ -39,6 +41,7 @@ DEFINE_SU_TYPE(SUImageRepRef)
 DEFINE_SU_TYPE(SUInstancePathRef)
 DEFINE_SU_TYPE(SULayerRef)
 DEFINE_SU_TYPE(SULocationRef)
+DEFINE_SU_TYPE(SULoopInputRef)
 DEFINE_SU_TYPE(SULoopRef)
 DEFINE_SU_TYPE(SUMaterialRef)
 DEFINE_SU_TYPE(SUMeshHelperRef)
@@ -55,6 +58,7 @@ DEFINE_SU_TYPE(SUSectionPlaneRef)
 DEFINE_SU_TYPE(SUShadowInfoRef)
 DEFINE_SU_TYPE(SUStyleRef)
 DEFINE_SU_TYPE(SUStylesRef)
+DEFINE_SU_TYPE(SUTextRef)
 DEFINE_SU_TYPE(SUTextureRef)
 DEFINE_SU_TYPE(SUTextureWriterRef)
 DEFINE_SU_TYPE(SUTypedValueRef)
@@ -110,7 +114,13 @@ enum SURefType {
   SURefType_Dimension,
   SURefType_DimensionLinear,
   SURefType_DimensionRadial,
-  SURefType_DimensionStyle
+  SURefType_DimensionStyle,
+  SURefType_Text,
+  SURefType_EntityList,
+  SURefType_EntityListIterator,
+  SURefType_DrawingElement,
+  SURefType_Entity,
+  SURefType_LengthFormatter
 };
 
 #pragma pack(pop)

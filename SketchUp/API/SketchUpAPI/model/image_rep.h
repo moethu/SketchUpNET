@@ -10,11 +10,44 @@ extern "C" {
 #endif
 
 /**
+@struct SUColorOrder
+@brief A simple struct with four indices indicating the ordering of color data
+       within 32-bit bitmap images. 32-bit bitmap images have 4 channels per
+       pixel: red, green, blue, and alpha where the alpha channel indicates the
+       transparency of the pixel. SketchUpAPI expects the channels to be in
+       different orders on Windows vs. Mac OS. Bitmap data is exposed in BGRA
+       and RGBA byte orders on Windows and Mac OS, respectively. The color
+       order indices facilitate platform independent code when it is necessary
+       to manipulate image pixel data. The struct's data also applies to 24-bit
+       bitmap images except that such images don't have an alpha channel so the
+       \ref alpha_index varaible can be ignored.
+@since SketchUp 2017, API 5.2
+*/
+struct SUColorOrder {
+  // Indicates the position of the red byte within a single pixel's data.
+  short red_index;
+  // Indicates the position of the green byte within a single pixel's data.
+  short green_index;
+  // Indicates the position of the blue byte within a single pixel's data.
+  short blue_index;
+  // Indicates the position of the alpha byte within a single pixel's data.
+  short alpha_index;
+};
+
+/**
+@brief Retrieves a \ref SUColorOrder indicating the order of color bytes within
+       32-bit images' pixel data.
+@since SketchUp 2017, API 5.2
+@return a \ref SUColorOrder indicating the pixel color ordering of 32bit images.
+*/
+SU_EXPORT struct SUColorOrder SUGetColorOrder();
+
+/**
 @struct SUImageRepRef
 @brief References an image representation object.
 @since SketchUp 2017, API 5.0
 */
-  
+
 /**
 @brief Creates a new image object with no image data. Image data can be set
        using any of SUImageRepCopy, SUImageRepSetData, SUImageRepLoadFile.
@@ -68,7 +101,8 @@ SU_RESULT SUImageRepCopy(SUImageRepRef image, SUImageRepRef copy_image);
 - \ref SU_ERROR_OUT_OF_RANGE if bits per pixel is not 8, 24, or 32
 */
 SU_RESULT SUImageRepSetData(SUImageRepRef image, size_t width, size_t height,
-    size_t bits_per_pixel, size_t row_padding, const SUByte pixel_data[]);
+                            size_t bits_per_pixel, size_t row_padding,
+                            const SUByte pixel_data[]);
 
 /**
 @brief Loads image data from the specified file into the provided image.
@@ -95,7 +129,7 @@ SU_RESULT SUImageRepLoadFile(SUImageRepRef image, const char* file_path);
 - \ref SU_ERROR_INVALID_INPUT if image is not a valid object
 - \ref SU_ERROR_NULL_POINTER_INPUT if file_path is NULL
 - \ref SU_ERROR_NO_DATA if image contains no data
-- \ref SU_ERROR_SERIALIZATION if the save operation fails 
+- \ref SU_ERROR_SERIALIZATION if the save operation fails
 */
 SU_RESULT SUImageRepSaveToFile(SUImageRepRef image, const char* file_path);
 
@@ -111,7 +145,7 @@ SU_RESULT SUImageRepSaveToFile(SUImageRepRef image, const char* file_path);
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if width or height is NULL
 */
 SU_RESULT SUImageRepGetPixelDimensions(SUImageRepRef image, size_t* width,
-    size_t* height);
+                                       size_t* height);
 
 /**
 @brief Retrieves the size of the row padding of an image, in bytes.
@@ -166,7 +200,7 @@ SU_RESULT SUImageRepConvertTo32BitsPerPixel(SUImageRepRef image);
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if data_size or bits_per_pixel is NULL
 */
 SU_RESULT SUImageRepGetDataSize(SUImageRepRef image, size_t* data_size,
-    size_t* bits_per_pixel);
+                                size_t* bits_per_pixel);
 
 /**
 @brief Returns the pixel data for an image. The given array must be large
@@ -184,7 +218,38 @@ SU_RESULT SUImageRepGetDataSize(SUImageRepRef image, size_t* data_size,
 data
 */
 SU_RESULT SUImageRepGetData(SUImageRepRef image, size_t data_size,
-    SUByte pixel_data[]);
+                            SUByte pixel_data[]);
+
+/**
+@brief Returns the color data of an image in a \ref SUColor array.
+@since SketchUp 2018, API 6.0
+@param[in]  image      The image object.
+@param[out] color_data The SUColor data retrieved.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if image is an invalid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if color_data is NULL
+- \ref SU_ERROR_UNSUPPORTED if the bytes per pixel of the image is invalid
+*/
+SU_RESULT SUImageRepGetDataAsColors(SUImageRepRef image, SUColor color_data[]);
+
+/**
+@brief Returns the color data given by the UV texture coordinates.
+@since SketchUp 2018, API 6.0
+@param[in]  image    The image object.
+@param[in]  u        The U texture coordinate.
+@param[in]  v        The V texture coordinate.
+@param[in]  bilinear The flag to set bilinear texture filtering. This
+                     interpolates the colors instead of picking the nearest
+                     neighbor.
+@param[out] color    The returned color.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if image is an invalid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if color is NULL
+*/
+SU_RESULT SUImageRepGetColorAtUV(SUImageRepRef image, double u, double v,
+                                 bool bilinear, SUColor* color);
 
 #ifdef __cplusplus
 }  // extern "C"

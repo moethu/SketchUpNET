@@ -57,7 +57,9 @@ enum SUResult {
 
   SU_ERROR_UNSUPPORTED, ///< The requested operation is not supported
 
-  SU_ERROR_INVALID_ARGUMENT ///< An argument contains invalid information
+  SU_ERROR_INVALID_ARGUMENT, ///< An argument contains invalid information
+  
+  SU_ERROR_ENTITY_LOCKED ///< The entity being modified is locked
 };
 
 // Define a platform-independent UTF16 type.
@@ -146,8 +148,8 @@ typedef unsigned __int32 uint32_t;
 
 /**
 @brief This macro is used to indicate if functions are intended to be
-       deprecated.  If you would like to hide the deprication warnings simply
-       define SU_NO_DEPRICATE_WARNINGS 
+       deprecated.  If you would like to hide the deprecation warnings simply
+       define SU_SUPPRESS_DEPRECATION_WARNINGS 
 */
 #ifndef SU_SUPPRESS_DEPRECATION_WARNINGS
   #ifdef WIN32

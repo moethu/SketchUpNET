@@ -1,4 +1,4 @@
-// Copyright 2015 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2017 Trimble Inc. All Rights Reserved.
 
 #ifndef SKETCHUP_GEOMETRY_VECTOR2D_H_
 #define SKETCHUP_GEOMETRY_VECTOR2D_H_
@@ -11,126 +11,196 @@
 extern "C" {
 #endif
 
-  /**
-  * @brief        Determines if a vector is valid.
-  * @param vector The vector object.
-  * @param valid  Whether the vector is valid.
-  * @return       Returns SU_ERROR_NONE on success.
-  */
-SU_RESULT SUVector2DIsValid(const struct SUVector2D* vector,
-                            bool* valid);
+/**
+@brief Creates a vector between two point objects.
+@since SketchUp 2018 M0, API 6.0
+@param[in]  from   The first point object.
+@param[in]  to     The second point object.
+@param[out] vector The vector from from to to.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_NULL_POINTER_INPUT if from or to is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if vector is NULL
+*/
+SU_RESULT SUVector2DCreate(struct SUVector2D* vector,
+                           const struct SUPoint2D* from,
+                           const struct SUPoint2D* to);
 
 /**
-* @brief          Determines if two vectors are parallel.
-* @param vector1  The first vector object.
-* @param vector2  The second vector object.
-* @param parallel Whether the vectors are parallel.
-* @return         Returns SU_ERROR_NONE on success.
+@brief Determines if a vector is valid. A vector is invalid if its length is
+       zero.
+@since SketchUp 2017, API 5.0
+@param[in]  vector The vector object.
+@param[out] valid  Whether the vector is valid.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_NULL_POINTER_INPUT if vector is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if valid is NULL
+*/
+SU_RESULT SUVector2DIsValid(const struct SUVector2D* vector, bool* valid);
+
+/**
+@brief Determines if two vectors are parallel.
+@since SketchUp 2017, API 5.0
+@param[in]  vector1  The first vector object.
+@param[in]  vector2  The second vector object.
+@param[out] parallel Whether the vectors are parallel.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_NULL_POINTER_INPUT if vector1 or vector2 is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if parallel is NULL
+- \ref SU_ERROR_INVALID_ARGUMENT if vector1 or vector2 is not a valid vector
 */
 SU_RESULT SUVector2DIsParallelTo(const struct SUVector2D* vector1,
                                  const struct SUVector2D* vector2,
                                  bool* parallel);
 
 /**
-* @brief               Determines if two vectors are perpendicular.
-* @param vector1       The first vector object.
-* @param vector2       The second vector object.
-* @param perpendicular Whether the vectors are perpendicular.
-* @return              Returns SU_ERROR_NONE on success.
+@brief Determines if two vectors are perpendicular.
+@since SketchUp 2017, API 5.0
+@param[in]  vector1       The first vector object.
+@param[in]  vector2       The second vector object.
+@param[out] perpendicular Whether the vectors are perpendicular.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_NULL_POINTER_INPUT if vector1 or vector2 is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if perpendicular is NULL
+- \ref SU_ERROR_INVALID_ARGUMENT if vector1 or vector2 is not a valid vector
 */
 SU_RESULT SUVector2DIsPerpendicularTo(const struct SUVector2D* vector1,
                                       const struct SUVector2D* vector2,
                                       bool* perpendicular);
 
 /**
-* @brief                Determines if two vectors are pointing the same direction.
-* @param vector1        The first vector object.
-* @param vector2        The second vector object.
-* @param same_direction Whether the vectors are pointing in the same direction.
-* @return               Returns SU_ERROR_NONE on success.
+@brief Determines if two vectors are parallel and pointing the same direction.
+@since SketchUp 2017, API 5.0
+@param[in]  vector1        The first vector object.
+@param[in]  vector2        The second vector object.
+@param[out] same_direction Whether the vectors are pointing in the same direction.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_NULL_POINTER_INPUT if vector1 or vector2 is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if same_direction is NULL
+- \ref SU_ERROR_INVALID_ARGUMENT if vector1 or vector2 is not a valid vector
 */
 SU_RESULT SUVector2DIsSameDirectionAs(const struct SUVector2D* vector1,
                                       const struct SUVector2D* vector2,
                                       bool* same_direction);
 
 /**
-* @brief         Determines if two vectors are equal.
-* @param vector1 The first vector object.
-* @param vector2 The second vector object.
-* @param equal   Whether the vectors are equal.
-* @return        Returns SU_ERROR_NONE on success.
+@brief Determines if two vectors are equal.
+@since SketchUp 2018, API 6.0
+@param[in]  vector1 The first vector object.
+@param[in]  vector2 The second vector object.
+@param[out] equal   Whether the vectors are equal.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_NULL_POINTER_INPUT if vector1 or vector2 is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if equal is NULL
 */
 SU_RESULT SUVector2DIsEqual(const struct SUVector2D* vector1,
                             const struct SUVector2D* vector2,
                             bool* equal);
 
 /**
- * @brief        Normalizes a vector.
- * @param vector The vector object.
- * @return       Returns SU_ERROR_NONE on success.
- */
+@brief Normalizes a vector.
+@since SketchUp 2017, API 5.0
+@param[in,out] vector The vector object.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_NULL_POINTER_INPUT if vector is NULL
+- \ref SU_ERROR_INVALID_ARGUMENT if vector is not a valid vector
+*/
 SU_RESULT SUVector2DNormalize(struct SUVector2D* vector);
 
 /**
- * @brief        Reverses a vector.
- * @param vector The vector object.
- * @return       Returns SU_ERROR_NONE on success.
- */
+@brief Reverses a vector.
+@since SketchUp 2017, API 5.0
+@param[in] vector The vector object.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_NULL_POINTER_INPUT if vector is NULL
+*/
 SU_RESULT SUVector2DReverse(struct SUVector2D* vector);
 
 /**
- * @brief         Computes the dot product of two vectors.
- * @param vector1 The first vector object.
- * @param vector2 The second vector object.
- * @param dot     The value of vector1.Dot(vector2).
- * @return        Returns SU_ERROR_NONE on success.
- */
+@brief Computes the dot product of two vectors.
+@since SketchUp 2017, API 5.0
+@param[in]  vector1 The first vector object.
+@param[in]  vector2 The second vector object.
+@param[out] dot     The value of the dot product.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_NULL_POINTER_INPUT if vector1 or vector2 is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if dot is NULL
+*/
 SU_RESULT SUVector2DDot(const struct SUVector2D* vector1,
                         const struct SUVector2D* vector2,
                         double* dot);
 
 /**
- * @brief         Computes the cross product of two vectors.
- * @param vector1 The first vector object.
- * @param vector2 The second vector object.
- * @param cross   The value of vector1.Cross(vector2).
- * @return        Returns SU_ERROR_NONE on success.
- */
+@brief Computes the cross product of two vectors.
+@since SketchUp 2017, API 5.0
+@param[in]  vector1 The first vector object.
+@param[in]  vector2 The second vector object.
+@param[out] cross   The value of the cross product.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_NULL_POINTER_INPUT if vector1 or vector2 is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if cross is NULL
+*/
 SU_RESULT SUVector2DCross(const struct SUVector2D* vector1,
                           const struct SUVector2D* vector2,
                           double* cross);
 
 /**
-* @brief                Determines if a vector has a length of one.
-* @param vector         The vector object.
-* @param is_unit_vector Whether the vector has a length of one.
-* @return               Returns SU_ERROR_NONE on success.
+@brief Determines if a vector has a length of one.
+@since SketchUp 2017, API 5.0
+@param[in]  vector         The vector object.
+@param[out] is_unit_vector Whether the vector has a length of one.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_NULL_POINTER_INPUT if vector is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if is_unit_vector is NULL
 */
 SU_RESULT SUVector2DIsUnitVector(const struct SUVector2D* vector,
                                  bool* is_unit_vector);
 
 /**
-* @brief        Gets the length of a vector.
-* @param vector The vector object.
-* @param length The length of the vector.
-* @return       Returns SU_ERROR_NONE on success.
+@brief Gets the length of a vector.
+@since SketchUp 2017, API 5.0
+@param[in]  vector The vector object.
+@param[out] length The length of the vector.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_NULL_POINTER_INPUT if vector is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if length is NULL
 */
 SU_RESULT SUVector2DGetLength(const struct SUVector2D* vector, double* length);
-  
+
 /**
- * @brief        Sets the length of a vector.
- * @param vector The vector object.
- * @param length The new length the vector should be.
- * @return       Returns SU_ERROR_NONE on success.
- */
+@brief Sets the length of a vector.
+@since SketchUp 2017, API 5.0
+@param[in,out] vector The vector object.
+@param[in]     length The new length the vector should be.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_NULL_POINTER_INPUT if vector is NULL
+- \ref SU_ERROR_OUT_OF_RANGE if length is zero
+- \ref SU_ERROR_INVALID_ARGUMENT if vector is not a valid vector
+*/
 SU_RESULT SUVector2DSetLength(struct SUVector2D* vector, double length);
 
 /**
-* @brief         Gets the angle between two vectors.
-* @param vector1 The first vector object.
-* @param vector2 The second vector object.
-* @param angle   The angle between the vectors.
-* @return        Returns SU_ERROR_NONE on success.
+@brief Gets the angle between two vectors.
+@since SketchUp 2017, API 5.0
+@param[in]  vector1 The first vector object.
+@param[in]  vector2 The second vector object.
+@param[out] angle   The angle between the vectors.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_NULL_POINTER_INPUT if vector1 or vector2 is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if angle is NULL
 */
 SU_RESULT SUVector2DAngleBetween(const struct SUVector2D* vector1,
                                  const struct SUVector2D* vector2,

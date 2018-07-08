@@ -188,7 +188,10 @@ SU_RESULT SUTextureGetImageData(SUTextureRef texture,
 /**
 @brief Retrieves a texture's image.  The given image object must have been
        constructed using one of the SUImageRepCreate*  functions. It must be
-       released using \ref SUImageRepRelease.
+       released using \ref SUImageRepRelease. The difference between this 
+       function and \ref SUTextureGetColorizedImageRep is that 
+       \ref SUTextureGetColorizedImageRep will retrieve the colorized image rep,
+       if the material has been colorized.
 @since SketchUp 2017, API 5.0
 @param[in]  texture The texture object.
 @param[out] image The image object retrieved.
@@ -261,6 +264,37 @@ SU_RESULT SUTextureGetFileName(SUTextureRef texture,
 */
 SU_RESULT SUTextureGetUseAlphaChannel(SUTextureRef texture,
                                       bool* alpha_channel_used);
+
+/**
+@brief  Retrieves the average color for the texture.
+@param[in]  texture     The texture object
+@param[out] color_val   The color object
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if texture is not a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if color_val is NULL
+*/
+SU_RESULT SUTextureGetAverageColor(SUTextureRef texture,
+                                   SUColor* color_val);
+
+/**
+@brief  Retrieves the image rep object of a colorized texture. If a
+        non-colorized texture is used, then the original image rep will be
+        retrieved. The difference between this function and 
+        \ref SUTextureGetImageRep is that \ref SUTextureGetImageRep will always
+        retrieve the original image rep.
+@since SketchUp 2018, API 6.0
+@param[in]  texture   The texture object.
+@param[out] image_rep The retrieved image rep.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if texture is not a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if image_rep is NULL
+- \ref SU_ERROR_NO_DATA if no data was retrieved from the texture
+- \ref SU_ERROR_OUT_OF_RANGE if the pixel data is out of range
+*/
+SU_RESULT SUTextureGetColorizedImageRep(SUTextureRef texture,
+                                        SUImageRepRef* image_rep);
 
 #ifdef __cplusplus
 }   // extern "C"

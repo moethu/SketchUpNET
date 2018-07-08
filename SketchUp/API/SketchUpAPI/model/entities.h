@@ -59,6 +59,28 @@ SU_RESULT SUEntitiesGetBoundingBox(SUEntitiesRef entities,
                                    struct SUBoundingBox3D* bbox);
 
 /**
+@brief Retrieves the LLA coordinates (Latidue, Longitude and Altitude) bounding 
+       box of the given entities object. 
+       Note that the altitude is calculated based on the model origin, Example: 
+       If an entities object has a bounding box with the following values
+       {{100,100,100}, {200,200,200}} the result will be something like the 
+       following: {{Latitude, Longitude, 100/METERS_TO_INCHES}, 
+       {Latitude, Longitude, 200/METERS_TO_INCHES}} where Latitude and Longitude 
+       are the geographical coordinates and altitude is just a conversion from
+       inches to meters.
+@since SketchUp 2018 M0, API 6.0
+@param[in]  entities The entities object.
+@param[out] bbox     The latidue longitude and altitude bounding box retrieved.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if entities is not a valid object
+- \ref SU_ERROR_NO_DATA if entities doesn't belong to a valid model.
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if bbox is NULL
+*/
+SU_RESULT SUEntitiesGetBoundingBoxLLA(SUEntitiesRef entities,
+                                      struct SUBoundingBox3D* bbox);
+
+/**
 @brief Retrieves the number of faces in the entities object.
 @param[in] entities The entities object.
 @param[out] count   The number of faces.
@@ -423,6 +445,20 @@ SU_RESULT SUEntitiesAddSectionPlanes(SUEntitiesRef entities,
                                      const SUSectionPlaneRef section_planes[]);
 
 /**
+@brief Adds text objects to an entities object.
+@since SketchUp 2018, API 6.0
+@param[in] entities The entities object.
+@param[in] len      The length of the array of text objects.
+@param[in] texts    The array of text objects to add.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if entities is not a valid object
+- \ref SU_ERROR_NULL_POINTER_INPUT if texts is NULL
+*/
+SU_RESULT SUEntitiesAddTexts(SUEntitiesRef entities, size_t len,
+                             const SUTextRef texts[]);
+
+/**
 @brief Retrieves the number of groups in the entities.
 @param[in]  entities The entities object.
 @param[out] count    The number of groups.
@@ -516,6 +552,18 @@ SU_RESULT SUEntitiesGetInstances(SUEntitiesRef entities,
 SU_RESULT SUEntitiesGetNumSectionPlanes(SUEntitiesRef entities, size_t* count);
 
 /**
+@brief Retrieves the number of texts in the entities object.
+@since SketchUp 2018, API 6.0
+@param[in]  entities The entities object.
+@param[out] count    The number of texts.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if entities is not a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if count is NULL
+*/
+SU_RESULT SUEntitiesGetNumTexts(SUEntitiesRef entities, size_t* count);
+
+/**
 @brief Retrieves the section planes in the entities.
 @since SketchUp 2016, API 4.0
 @param[in]  entities       The entities object.
@@ -558,6 +606,21 @@ SU_RESULT SUEntitiesGetNumDimensions(SUEntitiesRef entities, size_t* count);
 */
 SU_RESULT SUEntitiesGetDimensions(SUEntitiesRef entities, size_t len,
     SUDimensionRef* dimensions, size_t* count);
+
+/**
+@brief Retrieves the texts in the entities.
+@since SketchUp 2018, API 6.0
+@param[in]  entities The entities object.
+@param[in]  len      The number of section planes to retrieve.
+@param[out] texts    The texts retrieved.
+@param[out] count    The number of texts retrieved.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if entities is not a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if texts or count is NULL
+*/
+SU_RESULT SUEntitiesGetTexts(SUEntitiesRef entities, size_t len,
+                             SUTextRef texts[], size_t* count);
 
 /**
 @brief Applies a 3D transformation to the elements of the provided entity array.
@@ -629,6 +692,36 @@ SU_RESULT SUEntitiesErase(SUEntitiesRef entities, size_t len,
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if is_empty is NULL
 */
 SU_RESULT SUEntitiesIsRecursivelyEmpty(SUEntitiesRef entities, bool* is_empty);
+
+/**
+@brief Retrieves a boolean by recursively searching through the entities
+       determining whether the entities has an active section plane or any
+       of its nested components have an active section plane.
+@since SketchUp 2018, API 6.0
+@param[in]  entities          The entities object.
+@param[out] has_section_cuts  The bool value retrieved.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if entities is invalid
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if has_section_cuts is NULL
+*/
+SU_RESULT SUEntitiesHasSectionCuts(SUEntitiesRef entities,
+                                   bool* has_section_cuts);
+
+/**
+@brief Fills the list with all entities of the specified type in the instance.
+       The list is not in any specific order.
+@since SketchUp 2018, API 6.0
+@param[in]  entities The entities object to be queried.
+@param[in]  type     The type of entities to be collected.
+@param[out] list     The list object to be filled.
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if entities is not a valid object
+- \ref SU_ERROR_INVALID_OUTPUT if list is not a valid object
+*/
+SU_RESULT SUEntitiesEntityListFill(SUEntitiesRef entities,
+    enum SURefType type, SUEntityListRef list);
 
 #ifdef __cplusplus
 }  // extern "C"
