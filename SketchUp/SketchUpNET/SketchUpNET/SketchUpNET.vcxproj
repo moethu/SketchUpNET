@@ -156,6 +156,7 @@
     <ClCompile Include="MeshFace.cpp" />
     <ClCompile Include="SketchUpNET.cpp" />
     <ClCompile Include="Surface.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Utilities.cpp" />
     <ClCompile Include="Vector.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="MeshFace.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Surface.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Utilities.h" />
     <ClInclude Include="Vector.h" />

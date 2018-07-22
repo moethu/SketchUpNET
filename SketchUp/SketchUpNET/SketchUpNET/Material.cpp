@@ -38,6 +38,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include "vector.h"
 #include "utilities.h"
 #include "Color.h"
+#include "Texture.h"
 
 
 #pragma once
@@ -58,8 +59,9 @@ namespace SketchUpNET
 		bool UseOpacity;
 		bool UsesColor;
 		bool UsesTexture;
+		Texture^ MaterialTexture;
 
-		Material( System::String^ name, Color^ color, bool useOpacity, double opacity, bool usesColor, bool usesTexture)
+		Material( System::String^ name, Color^ color, bool useOpacity, double opacity, bool usesColor, bool usesTexture, Texture^ texture)
 		{
 			this->Colour = color;
 			this->Name = name;
@@ -67,6 +69,7 @@ namespace SketchUpNET
 			this->UseOpacity = useOpacity;
 			this->UsesColor = usesColor;
 			this->UsesTexture = usesTexture;
+			this->MaterialTexture = texture;
 		};
 
 		Material() { 
@@ -76,6 +79,7 @@ namespace SketchUpNET
 			this->UseOpacity = false;
 			this->UsesColor = true;
 			this->UsesTexture = false;
+			this->MaterialTexture = gcnew Texture();
 		};
 
 		
@@ -99,6 +103,10 @@ namespace SketchUpNET
 			SUMaterialType type = SUMaterialType::SUMaterialType_Colored;
 			SUMaterialGetType(material, &type);
 			
+			SUTextureRef texture = SU_INVALID;
+			SUMaterialGetTexture(material, &texture);
+			Texture^ txtr = Texture::FromSU(texture);
+
 			bool usesColor = false;
 			bool usesTexture = false;
 
@@ -119,13 +127,13 @@ namespace SketchUpNET
 				usesColor = false;
 				usesTexture = true;
 			}
-
+			
 			double opacity = 0;
 			SUMaterialGetOpacity(material, &opacity);
 
 			Color^ c = Color::FromSU(color);
 
-			Material^ v = gcnew Material(n, c, useopacity, opacity, usesColor, usesTexture);
+			Material^ v = gcnew Material(n, c, useopacity, opacity, usesColor, usesTexture, txtr);
 
 			return v;
 		}

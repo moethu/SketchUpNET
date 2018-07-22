@@ -136,13 +136,15 @@ namespace SketchUpForDynamo
         /// SketchUp Component Instance Data
         /// </summary>
         /// <param name="instance">SketchUp Component Instance</param>
-        [MultiReturn(new[] { "Surfaces","Curves","Instances","Meshes","Edges", "Position", "Scale", "Name", "Parent Name", "Groups" })]
+        [MultiReturn(new[] { "Surfaces","Curves","Instances","Meshes","Edges", "Position", "Scale", "Name", "Parent Name", "Groups", "MaterialsFront", "MaterialsBack" })]
         public static Dictionary<string, object> GetInstance(Instance instance)
         {
             List<Autodesk.DesignScript.Geometry.Surface> surfaces = new List<Autodesk.DesignScript.Geometry.Surface>();
             List<List<Autodesk.DesignScript.Geometry.Line>> curves = new List<List<Autodesk.DesignScript.Geometry.Line>>();
             List<Autodesk.DesignScript.Geometry.Line> edges = new List<Autodesk.DesignScript.Geometry.Line>();
             List<Autodesk.DesignScript.Geometry.Mesh> meshes = new List<Autodesk.DesignScript.Geometry.Mesh>();
+            List<Material> matsBack = new List<Material>();
+            List<Material> matsFront = new List<Material>();
 
             Autodesk.DesignScript.Geometry.Point p = Autodesk.DesignScript.Geometry.Point.ByCoordinates(instance.Transformation.X, instance.Transformation.Y, instance.Transformation.Z);
 
@@ -153,6 +155,8 @@ namespace SketchUpForDynamo
                 surfaces.Add(srf.ToDSGeo(instance.Transformation));
                 if (srf.FaceMesh != null)
                     meshes.Add(srf.FaceMesh.ToDSGeo(instance.Transformation));
+                matsBack.Add(new Material(srf.BackMaterial));
+                matsFront.Add(new Material(srf.FrontMaterial));
             }
             foreach (Curve c in parent.Curves)
                 curves.Add(c.ToDSGeo(instance.Transformation));
@@ -175,7 +179,9 @@ namespace SketchUpForDynamo
                 { "Scale", instance.Transformation.Scale },
                 { "Name", instance.Name },
                 { "Parent Name", parent.Name },
-                { "Groups", parent.Groups }
+                { "Groups", parent.Groups },
+                { "MaterialsFront", matsFront },
+                { "MaterialsBack", matsBack }
 
             };
         }
@@ -352,6 +358,12 @@ namespace SketchUpForDynamo
         public static Autodesk.DesignScript.Geometry.Vector ToDSGeo(this SketchUpNET.Vector v)
         {
             return Autodesk.DesignScript.Geometry.Vector.ByCoordinates(v.X, v.Y, v.Z);
+        }
+
+        [IsVisibleInDynamoLibrary(false)]
+        public static DSCore.Color ToDSColour(this SketchUpNET.Color c)
+        {
+            return DSCore.Color.ByARGB(c.A, c.R, c.G, c.B);
         }
 
         [IsVisibleInDynamoLibrary(false)]
