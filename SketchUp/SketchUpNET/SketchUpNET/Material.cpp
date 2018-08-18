@@ -82,7 +82,11 @@ namespace SketchUpNET
 			this->MaterialTexture = gcnew Texture();
 		};
 
-		
+		virtual String^ ToString() override
+		{
+			return this->Name;
+		}
+
 	internal:
 
 

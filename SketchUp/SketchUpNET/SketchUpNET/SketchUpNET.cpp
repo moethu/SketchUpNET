@@ -53,7 +53,8 @@ namespace SketchUpNET
 		V2014,
 		V2015,
 		V2016,
-		V2017
+		V2017,
+		V2018
 	};
 
 	/// <summary>
@@ -138,7 +139,6 @@ namespace SketchUpNET
 			Groups = gcnew System::Collections::Generic::List<Group^>();
 			Components = gcnew System::Collections::Generic::Dictionary<String^,Component^>();
 			Materials = gcnew System::Collections::Generic::Dictionary<String^, Material^>();
-			Materials->Add("", gcnew Material());
 
 			SUEntitiesRef entities = SU_INVALID;
 			SUModelGetEntities(model, &entities);
@@ -245,7 +245,7 @@ namespace SketchUpNET
 			if (res != SU_ERROR_NONE)
 				return false;
 
-			SUModelVersion saveversion = SUModelVersion::SUModelVersion_SU2017;
+			SUModelVersion saveversion = SUModelVersion::SUModelVersion_SU2018;
 
 			if (version == SKPVersion::V2013)
 				saveversion = SUModelVersion::SUModelVersion_SU2013;
@@ -257,6 +257,8 @@ namespace SketchUpNET
 				saveversion = SUModelVersion::SUModelVersion_SU2016;
 			else if (version == SKPVersion::V2017)
 				saveversion = SUModelVersion::SUModelVersion_SU2017;
+			else if (version == SKPVersion::V2018)
+				saveversion = SUModelVersion::SUModelVersion_SU2018;
 
 			SUModelSaveToFileWithVersion(model, Utilities::ToString(newFilename), saveversion);
 

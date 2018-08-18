@@ -32,12 +32,37 @@ namespace SketchUpForDynamo
 
     public static class SketchUp
     {
-        public static int T(int a, int b) { return a + b; }
         /// <summary>
-        /// Load SketchUp Model
+        /// Reformats an existing SketchUp Model to another Version
+        /// </summary>
+        /// <param name="filepath">Original Model</param>
+        /// <param name="version">Target Version like 2015 or 2018</param>
+        /// <param name="newfilepath">Target Model Path</param>
+        /// <returns></returns>
+        public static bool ReformatModel(string filepath, string version, string newfilepath)
+        {
+            SketchUpNET.SketchUp skp = new SketchUpNET.SketchUp();
+            SKPVersion v = SKPVersion.V2013;
+            switch (version)
+            {
+                case "2014": v = SKPVersion.V2014; break;
+                case "2015": v = SKPVersion.V2015; break;
+                case "2016": v = SKPVersion.V2016; break;
+                case "2017": v = SKPVersion.V2017; break;
+                case "2018": v = SKPVersion.V2018; break;
+            }
+            return skp.SaveAs(filepath, v, newfilepath);
+        }
+
+        /// <summary>
+        /// Load SketchUp Model by Path. 
+        /// This node will load all SketchUp content into Dynamo. 
+        /// By default it will include meshes.
+        /// Turn meshes off if you are experiencing performance issues. 
         /// </summary>
         /// <param name="path">Path to SketchUp file</param>
-        [MultiReturn(new[] { "Surfaces", "Layers", "Instances", "Curves", "Edges", "Meshes", "Groups" })]
+        /// <param name="includeMeshes">Include Meshes (might be faster to turn it off)</param>
+        [MultiReturn(new[] { "Surfaces", "Layers", "Instances", "Curves", "Edges", "Meshes", "Groups", "Materials" })]
         public static Dictionary<string, object> LoadModel(string path, bool includeMeshes = true)
         {
             List<Autodesk.DesignScript.Geometry.Surface> surfaces = new List<Autodesk.DesignScript.Geometry.Surface>();
@@ -47,6 +72,7 @@ namespace SketchUpForDynamo
             List<List<Autodesk.DesignScript.Geometry.Line>> curves = new List<List<Autodesk.DesignScript.Geometry.Line>>();
             List<Autodesk.DesignScript.Geometry.Line> edges = new List<Autodesk.DesignScript.Geometry.Line>();
             List<Group> grp = new List<Group>();
+            List<Material> mats = new List<Material>();
 
             SketchUpNET.SketchUp skp = new SketchUpNET.SketchUp();
             if (skp.LoadModel(path, includeMeshes))
@@ -74,6 +100,9 @@ namespace SketchUpForDynamo
                 foreach (Group gr in skp.Groups)
                     grp.Add(gr);
 
+                foreach (var mat in skp.Materials)
+                    mats.Add(new Material(mat.Value));
+
             }
 
             return new Dictionary<string, object>
@@ -84,12 +113,22 @@ namespace SketchUpForDynamo
                 { "Curves", curves },
                 { "Edges", edges },
                 { "Meshes", meshes},
-                { "Groups", grp }
+                { "Groups", grp },
+                { "Materials", mats }
             };
         }
 
-
-        [MultiReturn(new[] { "Surfaces", "Instances", "Edges", "Meshes", "Groups" })]
+        /// <summary>
+        /// Load SketchUp Model by Path and Layername. 
+        /// This node loads only contents of the specified layer into Dynamo.
+        /// By default it will include meshes.
+        /// Turn meshes off if you are experiencing performance issues. 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="layername"></param>
+        /// <param name="includeMeshes"></param>
+        /// <returns></returns>
+        [MultiReturn(new[] { "Surfaces", "Instances", "Edges", "Meshes", "Groups", "Materials" })]
         public static Dictionary<string, object> LoadModelByLayer(string path, string layername, bool includeMeshes = true)
         {
             List<Autodesk.DesignScript.Geometry.Surface> surfaces = new List<Autodesk.DesignScript.Geometry.Surface>();
@@ -97,6 +136,7 @@ namespace SketchUpForDynamo
             List<Instance> Instances = new List<Instance>();
             List<Autodesk.DesignScript.Geometry.Line> edges = new List<Autodesk.DesignScript.Geometry.Line>();
             List<Group> grp = new List<Group>();
+            List<Material> mats = new List<Material>();
 
             SketchUpNET.SketchUp skp = new SketchUpNET.SketchUp();
             if (skp.LoadModel(path, includeMeshes))
@@ -118,6 +158,9 @@ namespace SketchUpForDynamo
                 foreach (Group gr in skp.Groups.Where(s => s.Layer == layername))
                     grp.Add(gr);
 
+                foreach (var mat in skp.Materials)
+                    mats.Add(new Material(mat.Value));
+
             }
 
             return new Dictionary<string, object>
@@ -126,14 +169,16 @@ namespace SketchUpForDynamo
                 { "Instances", Instances },
                 { "Edges", edges },
                 { "Meshes", meshes},
-                { "Groups", grp }
+                { "Groups", grp },
+                { "Materials", mats }
             };
         }
 
 
 
         /// <summary>
-        /// SketchUp Component Instance Data
+        /// SketchUp Component Instance Data. 
+        /// This node extracts all components from an instance. 
         /// </summary>
         /// <param name="instance">SketchUp Component Instance</param>
         [MultiReturn(new[] { "Surfaces","Curves","Instances","Meshes","Edges", "Position", "Scale", "Name", "Parent Name", "Groups", "MaterialsFront", "MaterialsBack" })]
@@ -187,7 +232,8 @@ namespace SketchUpForDynamo
         }
 
         /// <summary>
-        /// SketchUp Component Instance Data
+        /// SketchUp Group Data. 
+        /// This node extracts all contents from a group. 
         /// </summary>
         /// <param name="group">SketchUp Component Instance</param>
         [MultiReturn(new[] { "Surfaces", "Curves", "Instances", "Meshes", "Edges",  "Name", "Groups" })]
@@ -226,7 +272,8 @@ namespace SketchUpForDynamo
 
 
         /// <summary>
-        /// Flatten Instances
+        /// Flatten Instances.
+        /// This node returns a list of all geometries from a list of instances. 
         /// </summary>
         /// <param name="instances"></param>
         /// <returns>All Geometries</returns>
@@ -261,9 +308,12 @@ namespace SketchUpForDynamo
         }
 
         /// <summary>
-        /// Write SketchUp Model
+        /// Write SketchUp Model.
+        /// This node writes surfaces and cures into a SketchUp model. 
         /// </summary>
         /// <param name="path">Path to SketchUp file</param>
+        /// <param name="surfaces">Surface Geometries</param>
+        /// <param name="curves">Curve Geometries</param>
         public static void WriteModel(string path, List<Autodesk.DesignScript.Geometry.Surface> surfaces = null, List<Autodesk.DesignScript.Geometry.Curve> curves = null)
         {
             SketchUpNET.SketchUp skp = new SketchUpNET.SketchUp();
