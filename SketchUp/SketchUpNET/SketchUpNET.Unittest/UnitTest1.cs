@@ -10,7 +10,7 @@ namespace SketchUpNET.Unittest
         public void Initialize()
         {
             Type t = typeof(UnitTests);
-            TestFile = System.IO.Path.GetDirectoryName(t.Assembly.Location) + @"\..\..\..\..\Testfiles\11491939.skp";
+            TestFile = System.IO.Path.GetDirectoryName(t.Assembly.Location) + @"\..\..\..\..\Testfiles\TestModel.skp";
         }
 
         public static string TestFile;
@@ -42,8 +42,6 @@ namespace SketchUpNET.Unittest
         [TestMethod]
         public void DoNotGetMesh()
         {
-            int x = SketchUpForDynamo.SketchUp.T(1, 1);
-
             SketchUpNET.SketchUp skp = new SketchUp();
             skp.LoadModel(TestFile, false);
             foreach (var srf in skp.Surfaces)
