@@ -1,7 +1,7 @@
 // Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
 
-#ifndef SKETCHUP_MODEL_UVHELPER_H_
-#define SKETCHUP_MODEL_UVHELPER_H_
+#ifndef SKETCHUP_MODEL_UV_HELPER_H_
+#define SKETCHUP_MODEL_UV_HELPER_H_
 
 #include <SketchUpAPI/common.h>
 #include <SketchUpAPI/model/defs.h>
@@ -29,6 +29,7 @@ struct SUUVQ {
 /**
 @brief  Releases a UVHelper object that was obtained from a face.
 @param[in] uvhelper The UV helper object.
+@related SUUVHelperRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if uvhelper is NULL
@@ -41,6 +42,7 @@ SU_RESULT SUUVHelperRelease(SUUVHelperRef* uvhelper);
 @param[in]  uvhelper The UV helper object.
 @param[in]  point    The point where the coordinates are to be computed.
 @param[out] uvq      The coordinates retrieved.
+@related SUUVHelperRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if uvhelper is an invalid object
@@ -56,6 +58,7 @@ SU_RESULT SUUVHelperGetFrontUVQ(SUUVHelperRef uvhelper,
 @param[in]  uvhelper The UVHelper object.
 @param[in]  point    The point where the coordinates are to be computed.
 @param[out] uvq      The coordinates retrieved.
+@related SUUVHelperRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if uvhelper is an invalid object
@@ -71,4 +74,4 @@ SU_RESULT SUUVHelperGetBackUVQ(SUUVHelperRef uvhelper,
 #endif
 #pragma pack(pop)
 
-#endif  // SKETCHUP_MODEL_UVHELPER_H_
+#endif  // SKETCHUP_MODEL_UV_HELPER_H_

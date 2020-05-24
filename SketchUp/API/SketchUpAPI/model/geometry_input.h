@@ -48,6 +48,7 @@ struct SUMaterialInput {
                        \ref SUEntitiesFill to populate an entities object.
                        It should be released subsequently by calling
                        \ref SUGeometryInputRelease.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if geom_input is NULL
@@ -58,6 +59,7 @@ SU_RESULT SUGeometryInputCreate(SUGeometryInputRef* geom_input);
 /**
 @brief Deallocates a geometry input object.
 @param[in] geom_input The object to deallocate.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if geom_input is NULL
@@ -69,6 +71,7 @@ SU_RESULT SUGeometryInputRelease(SUGeometryInputRef* geom_input);
 @brief Adds a vertex to a geometry input object.
 @param[in] geom_input The geometry input object.
 @param[in] point      The location of the vertex to be added.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if geom_input is not valid
@@ -83,6 +86,7 @@ SU_RESULT SUGeometryInputAddVertex(SUGeometryInputRef geom_input,
 @param[in] geom_input   The geometry input object.
 @param[in] num_vertices The number of vertices in the given point array.
 @param[in] points       The points array containing the location of vertices.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if geom_input is not valid
@@ -102,6 +106,7 @@ SU_RESULT SUGeometryInputSetVertices(SUGeometryInputRef geom_input,
 @param[in]  vertex1_index    The vertex index of the edge's last vertex.
 @param[out] added_edge_index (optional) If not NULL, returns the index of the
                              added edge.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if geom_input is not valid
@@ -122,6 +127,7 @@ SU_RESULT SUGeometryInputAddEdge(SUGeometryInputRef geom_input,
 @param[in] edge_index The zero-based index of the edge which is not associated
                       with a loop input.
 @param[in] hidden     The flag to set.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if geom_input is not valid
@@ -140,6 +146,7 @@ SU_RESULT SUGeometryInputEdgeSetHidden(SUGeometryInputRef geom_input,
 @param[in] edge_index The zero-based index of the edge which is not associated
                       with a loop input.
 @param[in] soft       The flag to set.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if geom_input is not valid
@@ -158,6 +165,7 @@ SU_RESULT SUGeometryInputEdgeSetSoft(SUGeometryInputRef geom_input,
 @param[in] edge_index The zero-based index of the edge which is not associated
                       with a loop input.
 @param[in] smooth     The flag to set.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if geom_input is not valid
@@ -174,10 +182,12 @@ SU_RESULT SUGeometryInputEdgeSetSmooth(SUGeometryInputRef geom_input,
 @param[in] geom_input The geometry input object.
 @param[in] edge_index Index of the edge to set the material.
 @param[in] material   The material to be set.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if geom_input or material is not valid
 - \ref SU_ERROR_OUT_OF_RANGE if edge_index references an edge beyond the total
+- \ref SU_ERROR_INVALID_ARGUMENT is the material is owned by a layer or image
 edge count of geom_input
 */
 SU_RESULT SUGeometryInputEdgeSetMaterial(SUGeometryInputRef geom_input,
@@ -190,6 +200,7 @@ SU_RESULT SUGeometryInputEdgeSetMaterial(SUGeometryInputRef geom_input,
 @param[in] geom_input The geometry input object.
 @param[in] edge_index Index of the edge to set the layer.
 @param[in] layer      The layer to be set.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if geom_input or layer is not valid
@@ -210,6 +221,7 @@ SU_RESULT SUGeometryInputEdgeSetLayer(SUGeometryInputRef geom_input,
 @param[in]  edge_indices      The edge indices to be used in defining the curve.
 @param[out] added_curve_index (optional) If not NULL, returns the index of the
                                added curve.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if geom_input is not valid
@@ -242,6 +254,7 @@ SU_RESULT SUGeometryInputAddCurve(SUGeometryInputRef geom_input,
 @param[out] control_edge_index (optional) If not NULL, returns the index of the
                                the arc's control edge which can be used to set
                                the arc's edge properties.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if geom_input is not valid
@@ -262,6 +275,7 @@ SU_RESULT SUGeometryInputAddArcCurve(SUGeometryInputRef geom_input,
 /**
 @brief Creates a loop input object.
 @param[out] loop_input The object created.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if loop_input is NULL
@@ -272,6 +286,7 @@ SU_RESULT SULoopInputCreate(SULoopInputRef* loop_input);
 /**
 @brief Deallocates a loop input object.
 @param[in] loop_input The object to deallocate.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if loop_input is NULL
@@ -299,6 +314,7 @@ SU_RESULT SULoopInputRelease(SULoopInputRef* loop_input);
 @param[in] vertex_index The vertex index to add. This references a vertex within
                         the parent geometry input's vertex collection (as a
                         zero- based index).
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if loop_input is not valid
@@ -314,6 +330,7 @@ SU_RESULT SULoopInputAddVertexIndex(SULoopInputRef loop_input,
 @param[in] loop_input The loop input object.
 @param[in] edge_index The zero-based index of the edge within the loop.
 @param[in] hidden     The flag to set.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if loop_input is not valid
@@ -329,6 +346,7 @@ SU_RESULT SULoopInputEdgeSetHidden(SULoopInputRef loop_input,
 @param[in] loop_input The loop input object.
 @param[in] edge_index The zero-based index of the edge within the loop.
 @param[in] soft       The flag to set.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if loop_input is not valid
@@ -344,6 +362,7 @@ SU_RESULT SULoopInputEdgeSetSoft(SULoopInputRef loop_input,
 @param[in] loop_input The loop input object.
 @param[in] edge_index The zero-based index of the edge within the loop.
 @param[in] smooth     The flag to set.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if loop_input is not valid
@@ -360,10 +379,12 @@ SU_RESULT SULoopInputEdgeSetSmooth(SULoopInputRef loop_input,
 @param[in] loop_input The loop input object.
 @param[in] edge_index Index of the edge to set the material.
 @param[in] material   The material to be set.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if loop_input or material is not valid
 - \ref SU_ERROR_OUT_OF_RANGE if edge_index references an edge beyond the total
+- \ref SU_ERROR_INVALID_ARGUMENT is the material is owned by a layer or image
 edge count of loop_input
 */
 SU_RESULT SULoopInputEdgeSetMaterial(SULoopInputRef loop_input,
@@ -376,6 +397,7 @@ SU_RESULT SULoopInputEdgeSetMaterial(SULoopInputRef loop_input,
 @param[in] loop_input The loop input object.
 @param[in] edge_index Index of the edge to set the layer.
 @param[in] layer      The layer to be set.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if loop_input or layer is not valid
@@ -391,6 +413,7 @@ SU_RESULT SULoopInputEdgeSetLayer(SULoopInputRef loop_input,
 @param[in] loop_input       The loop input object.
 @param[in] first_edge_index First edge index to be associated with the curve.
 @param[in] last_edge_index  Last edge index to be associated with the curve.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if loop_input is not valid
@@ -409,6 +432,7 @@ SU_RESULT SULoopInputAddCurve(SULoopInputRef loop_input,
 @since SketchUp 2017 M2, API 5.2
 @param[in]  loop_input The loop input object.
 @param[out] is_closed  The flag retrieved (true if the loop is closed).
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if loop_input is not valid
@@ -430,6 +454,7 @@ SU_RESULT SULoopInputIsClosed(SULoopInputRef loop_input, bool* is_closed);
                              this loop will be deallocated.
 @param[out] added_face_index (optional) If not NULL, returns the index of the
                               added face.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if geom_input is not valid
@@ -446,6 +471,7 @@ SU_RESULT SUGeometryInputAddFace(SUGeometryInputRef geom_input,
 @param[in] geom_input The geometry input object.
 @param[in] face_index Index of the face to be reversed.
 @param[in] reverse    The given reverse flag.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if geom_input is not valid
@@ -461,6 +487,7 @@ SU_RESULT SUGeometryInputFaceSetReverse(SUGeometryInputRef geom_input,
 @param[in] geom_input The geometry input object.
 @param[in] face_index Index of the face to be reversed.
 @param[in] layer      The layer to be set.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if geom_input or layer is not valid
@@ -482,6 +509,7 @@ SU_RESULT SUGeometryInputFaceSetLayer(SUGeometryInputRef geom_input,
 @param[in] loop_input The inner loop to be added. If the function succeeds
                       (i.e. returns SU_ERROR_NONE), this loop will be
                       deallocated.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if geom_input or *loop_input are not valid
@@ -499,12 +527,14 @@ SU_RESULT SUGeometryInputFaceAddInnerLoop(SUGeometryInputRef geom_input,
 @param[in] geom_input     The geometry input object.
 @param[in] face_index     Index of the face to receive the material.
 @param[in] material_input The material input to set.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if geom_input is not valid
 - \ref SU_ERROR_OUT_OF_RANGE if face_index references a face beyond the total
   face count of geom_input
 - \ref SU_ERROR_NULL_POINTER_INPUT if material_input is NULL
+- \ref SU_ERROR_INVALID_ARGUMENT is the material is owned by a layer or image
 */
 SU_RESULT SUGeometryInputFaceSetFrontMaterial(
     SUGeometryInputRef geom_input,
@@ -516,12 +546,14 @@ SU_RESULT SUGeometryInputFaceSetFrontMaterial(
 @param[in] geom_input     The geometry input object.
 @param[in] face_index     Index of the face to receive the material.
 @param[in] material_input The material input to set.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if geom_input is not valid
 - \ref SU_ERROR_OUT_OF_RANGE if face_index references a face beyond the total
   face count of geom_input
 - \ref SU_ERROR_NULL_POINTER_INPUT if material_input is NULL
+- \ref SU_ERROR_INVALID_ARGUMENT is the material is owned by a layer or image
 */
 SU_RESULT SUGeometryInputFaceSetBackMaterial(
     SUGeometryInputRef geom_input,
@@ -535,6 +567,7 @@ SU_RESULT SUGeometryInputFaceSetBackMaterial(
 @param[in] geom_input The geometry input object.
 @param[in] face_index Index of the face to be hidden.
 @param[in] hidden     The given hidden flag.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if geom_input is not valid
@@ -553,6 +586,7 @@ SU_RESULT SUGeometryInputFaceSetHidden(SUGeometryInputRef geom_input,
 @param[out] edge_count      The total count of edges.
 @param[out] curve_count     The total count of curves.
 @param[out] arc_count       The total count of arcs.
+@related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if vertices_count, faces_count,

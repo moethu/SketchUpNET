@@ -22,6 +22,7 @@ extern "C" {
        essentially an upcast operation.
 @since SketchUp 2016, API 4.0
 @param[in] guide_line The guide line object.
+@related SUGuideLineRef
 @return
 - The converted \ref SUEntityRef if guide_line is a valid object
 - If not, the returned reference will be invalid
@@ -34,6 +35,7 @@ SU_EXPORT SUEntityRef SUGuideLineToEntity(SUGuideLineRef guide_line);
        must be convertible to an \ref SUGuideLineRef.
 @since SketchUp 2016, API 4.0
 @param[in] entity The entity object.
+@related SUGuideLineRef
 @return
 - The converted \ref SUGuideLineRef if the downcast operation succeeds
 - If the downcast operation fails, the returned reference will be invalid
@@ -45,6 +47,7 @@ SU_EXPORT SUGuideLineRef SUGuideLineFromEntity(SUEntityRef entity);
        This is essentially an upcast operation.
 @since SketchUp 2016, API 4.0
 @param[in] guide_line The given guide line reference.
+@related SUGuideLineRef
 @return
 - The converted \ref SUEntityRef if guide_line is a valid guide line
 - If not, the returned reference will be invalid
@@ -58,6 +61,7 @@ SU_EXPORT SUDrawingElementRef SUGuideLineToDrawingElement(SUGuideLineRef
        convertible to an \ref SUGuideLineRef.
 @since SketchUp 2016, API 4.0
 @param[in] drawing_elem The given element reference.
+@related SUGuideLineRef
 @return
 - The converted \ref SUGuideLineRef if the downcast operation succeeds
 - If not, the returned reference will be invalid.
@@ -75,6 +79,7 @@ SU_EXPORT SUGuideLineRef SUGuideLineFromDrawingElement(SUDrawingElementRef
 @param[in]  guide_line The guide line object.
 @param[out] start      The guide line start position.
 @param[out] end        The guide line end position.
+@related SUGuideLineRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if guide_line is NULL
@@ -94,6 +99,7 @@ SU_RESULT SUGuideLineCreateFinite(SUGuideLineRef* guide_line,
 @param[in]  guide_line The guide line object.
 @param[out] point      A point on the guide line.
 @param[out] direction  The guide line direction vector.
+@related SUGuideLineRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if guide_line is NULL
@@ -111,6 +117,7 @@ SU_RESULT SUGuideLineCreateInfinite(SUGuideLineRef* guide_line,
        object (e.g. \ref SUEntitiesRef).
 @since SketchUp 2016, API 4.0
 @param[in] guide_line The guide line object.
+@related SUGuideLineRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if guide_line is NULL
@@ -130,6 +137,7 @@ SU_RESULT SUGuideLineRelease(SUGuideLineRef* guide_line);
 @param[out] start      A point on the guide line.
 @param[out] direction  The guide line direction.
 @param[out] isinfinite returns true if infinite otherwise returns false
+@related SUGuideLineRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if guide line is an invalid object

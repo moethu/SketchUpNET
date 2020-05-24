@@ -1,4 +1,4 @@
-// Copyright 2013 Trimble Navigation Ltd.  All Rights Reserved
+// Copyright 2013-2019 Trimble Inc.  All Rights Reserved
 
 #ifndef SKETCHUP_MODEL_OPTIONS_PROVIDER_H_
 #define SKETCHUP_MODEL_OPTIONS_PROVIDER_H_
@@ -22,6 +22,7 @@ extern "C" {
 @brief  Gets the number of available option keys.
 @param[in]  options_provider The options provider object.
 @param[out] count            The number of keys available.
+@related SUOptionsProviderRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if options_provider is not valid
@@ -36,6 +37,7 @@ SU_RESULT SUOptionsProviderGetNumKeys(SUOptionsProviderRef options_provider,
 @param[in]  len              The number of keys to retrieve.
 @param[out] keys             The keys retrieved.
 @param[out] count            The number of keys retrieved.
+@related SUOptionsProviderRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if options_provider is not a valid object
@@ -53,6 +55,7 @@ SU_RESULT SUOptionsProviderGetKeys(SUOptionsProviderRef options_provider,
 @param[in]  options_provider The options provider object.
 @param[in]  key              The key that indicates which option to get.
 @param[out] value            The value to get the current option setting.
+@related SUOptionsProviderRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if options_provider is not valid
@@ -78,6 +81,10 @@ UnitsOptions     | &nbsp;               | &nbsp;                  | Options for 
 &nbsp;           | LengthUnit           | SUTypedValueType_Int32  | Units format for the model
 &nbsp;           | LengthSnapEnabled    | SUTypedValueType_Bool   | Indicates whether length snapping is enabled
 &nbsp;           | LengthSnapLength     | SUTypedValueType_Double | Controls the snapping length size increment
+&nbsp;           | AreaPrecision        | SUTypedValueType_Int32  | (SketchUp 2020.0, API Version 8.0) Number of decimal places of precision shown for area units
+&nbsp;           | AreaUnit             | SUTypedValueType_Int32  | (SketchUp 2019.2, API Version 7.1) Area units format for the model
+&nbsp;           | VolumePrecision      | SUTypedValueType_Int32  | (SketchUp 2020.0, API Version 8.0) Number of decimal places of precision shown for volume units
+&nbsp;           | VolumeUnit           | SUTypedValueType_Int32  | (SketchUp 2019.2, API Version 7.1) Volume units format for the model
 &nbsp;           | AnglePrecision       | SUTypedValueType_Int32  | Number of decimal places of precision shown for angles
 &nbsp;           | AngleSnapEnabled     | SUTypedValueType_Bool   | Indicates whether angle snapping is enabled
 &nbsp;           | SnapAngle            | SUTypedValueType_Double | Controls the angle snapping size increment
@@ -97,6 +104,21 @@ LengthUnit   | 0:    | Inches
 &nbsp;       | 2:    | Millimeter
 &nbsp;       | 3:    | Centimeter
 &nbsp;       | 4:    | Meter
+&nbsp;       | 5:    | Yard
+AreaUnit     | 0:    | Square Inches
+&nbsp;       | 1:    | Square Feet
+&nbsp;       | 2:    | Square Millimeter
+&nbsp;       | 3:    | Square Centimeter
+&nbsp;       | 4:    | Square Meter
+&nbsp;       | 5:    | Square Yard
+VolumeUnit   | 0:    | Cubic Inches
+&nbsp;       | 1:    | Cubic Feet
+&nbsp;       | 2:    | Cubic Millimeter
+&nbsp;       | 3:    | Cubic Centimeter
+&nbsp;       | 4:    | Cubic Meter
+&nbsp;       | 5:    | Cubic Yard
+&nbsp;       | 6:    | Liter
+&nbsp;       | 7:    | US Gallon
 
 Note that LengthUnit will be overridden by LengthFormat if LengthFormat is not
 set to Decimal. Architectural defaults to inches, Engineering defaults to feet,
@@ -111,6 +133,7 @@ SU_RESULT SUOptionsProviderGetValue(SUOptionsProviderRef options_provider,
 @param[in] options_provider The options provider object.
 @param[in] key              The key that indicates which option to set.
 @param[in] value            The value to set the option to.
+@related SUOptionsProviderRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if options_provider or value is not valid
@@ -125,6 +148,7 @@ SU_RESULT SUOptionsProviderSetValue(SUOptionsProviderRef options_provider,
 @since SketchUp 2016, API 4.0
 @param[in] options_provider The options provider object.
 @param[out] name            The name retrieved.
+@related SUOptionsProviderRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if options_provider or value is not valid

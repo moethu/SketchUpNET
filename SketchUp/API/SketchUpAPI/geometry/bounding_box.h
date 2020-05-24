@@ -14,6 +14,7 @@ extern "C" {
 @since SketchUp 2018 M0, API 6.0
 @param[in]  bounding_box The bounding box to calculate the mid point from.
 @param[out] mid_point    The mid point to be returned.
+@related SUBoundingBox3D
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if bounding_box is NULL

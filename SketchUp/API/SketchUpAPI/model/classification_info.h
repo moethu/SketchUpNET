@@ -27,6 +27,7 @@ extern "C" {
        SUClassificationInfoRef.
 @since SketchUp 2017, API 5.0
 @param[in,out]  classification_info The classification info object.
+@related SUClassificationInfoRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if classification_info is NULL
@@ -41,6 +42,7 @@ SU_RESULT SUClassificationInfoRelease(
 @since SketchUp 2017, API 5.0
 @param[in]  classification_info The classification info object.
 @param[out] count               The number of classifications.
+@related SUClassificationInfoRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if classification_info is not a valid object
@@ -55,6 +57,7 @@ SU_RESULT SUClassificationInfoGetNumSchemas(
 @param[in]  classification_info The classification info object.
 @param[in]  index               The classification index.
 @param[out] schema_name         The name of the schema.
+@related SUClassificationInfoRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if classification_info is an invalid object
@@ -72,6 +75,7 @@ SU_RESULT SUClassificationInfoGetSchemaName(
 @param[in]  classification_info The classification info object.
 @param[in]  index               The classification index.
 @param[out] schema_type         The applied type from the schema.
+@related SUClassificationInfoRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if classification_info is an invalid object
@@ -90,6 +94,7 @@ SU_RESULT SUClassificationInfoGetSchemaType(
 @param[in]  classification_info The classification info object.
 @param[in]  index               The classification index.
 @param[out] attribute           The attribute retrieved.
+@related SUClassificationInfoRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if classification_info is an invalid object
@@ -106,6 +111,7 @@ SU_RESULT SUClassificationInfoGetSchemaAttribute(
 @param[in]  classification_info The classification info object.
 @param[in]  path                The path of the classification attribute to get.
 @param[out] attribute           The attribute retrieved.
+@related SUClassificationInfoRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if classification_info is an invalid object

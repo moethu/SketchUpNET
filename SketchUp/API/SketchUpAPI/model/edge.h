@@ -22,6 +22,7 @@ extern "C" {
 @brief Converts from an \ref SUEdgeRef to an \ref SUEntityRef.
        This is essentially an upcast operation.
 @param[in] edge The given edge reference.
+@related SUEdgeRef
 @return
 - The converted \ref SUEntityRef if edge is a valid edge
 - If not, the returned reference will be invalid
@@ -33,6 +34,7 @@ SU_EXPORT SUEntityRef SUEdgeToEntity(SUEdgeRef edge);
        This is essentially a downcast operation so the given entity must be
        convertible to an \ref SUEdgeRef.
 @param[in] entity The given entity reference.
+@related SUEdgeRef
 @return
 - The converted \ref SUEdgeRef if the downcast operation succeeds
 - If not, the returned reference will be invalid
@@ -43,6 +45,7 @@ SU_EXPORT SUEdgeRef SUEdgeFromEntity(SUEntityRef entity);
 @brief Converts from an \ref SUEdgeRef to an \ref SUDrawingElementRef.
        This is essentially an upcast operation.
 @param[in] edge The given edge reference.
+@related SUEdgeRef
 @return
 - The converted \ref SUEntityRef if edge is a valid edge
 - If not, the returned reference will be invalid
@@ -54,6 +57,7 @@ SU_EXPORT SUDrawingElementRef SUEdgeToDrawingElement(SUEdgeRef edge);
        This is essentially a downcast operation so the given element must be
        convertible to an \ref SUEdgeRef.
 @param[in] drawing_elem The given element reference.
+@related SUEdgeRef
 @return
 - The converted \ref SUEdgeRef if the downcast operation succeeds
 - If not, the returned reference will be invalid.
@@ -69,6 +73,7 @@ the edge object is associated with a parent object.
 @param[out] edge  The edge object.
 @param[in]  start The start position of the edge object.
 @param[in]  end   The end position of the edge object.
+@related SUEdgeRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if start or end is NULL
@@ -85,6 +90,7 @@ SU_RESULT SUEdgeCreate(SUEdgeRef* edge,
 The edge object must have been created with \ref SUEdgeCreate and not
 subsequently associated with a parent object (e.g. \ref SUEntitiesAddEdges).
 @param[in] edge The edge object.
+@related SUEdgeRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edge does not reference a valid object
@@ -96,6 +102,7 @@ SU_RESULT SUEdgeRelease(SUEdgeRef* edge);
 @brief Retrieves the associated curve object of an edge object.
 @param[in]  edge  The edge object.
 @param[out] curve The curve object retrieved.
+@related SUEdgeRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if curve is NULL
@@ -108,6 +115,7 @@ SU_RESULT SUEdgeGetCurve(SUEdgeRef edge, SUCurveRef* curve);
 @brief Retrieves the starting vertex of an edge object.
 @param[in]  edge   The edge object.
 @param[out] vertex The vertex object retrieved.
+@related SUEdgeRef
 @return
 - \ref SU_ERROR_NONE on success.
 - \ref SU_ERROR_INVALID_INPUT if edge is an invalid edge object
@@ -119,6 +127,7 @@ SU_RESULT SUEdgeGetStartVertex(SUEdgeRef edge, SUVertexRef* vertex);
 @brief Retrieves the end vertex of an edge object.
 @param[in]  edge   The edge object.
 @param[out] vertex The vertex object retrieved.
+@related SUEdgeRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edge is an invalid object
@@ -130,6 +139,7 @@ SU_RESULT SUEdgeGetEndVertex(SUEdgeRef edge, SUVertexRef* vertex);
 @brief Sets the soft flag of an edge object.
 @param[in] edge      The edge object.
 @param[in] soft_flag The soft flag to set.
+@related SUEdgeRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edge is an invalid object
@@ -140,6 +150,7 @@ SU_RESULT SUEdgeSetSoft(SUEdgeRef edge, bool soft_flag);
 @brief Retrieves the soft flag of an edge object.
 @param[in]  edge      The edge object.
 @param[out] soft_flag The soft flag retrieved.
+@related SUEdgeRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edge is an invalid object.
@@ -151,6 +162,7 @@ SU_RESULT SUEdgeGetSoft(SUEdgeRef edge, bool* soft_flag);
 @brief Sets the smooth flag of an edge object.
 @param[in] edge        The edge object.
 @param[in] smooth_flag The smooth flag to set.
+@related SUEdgeRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edge is an invalid object
@@ -161,6 +173,7 @@ SU_RESULT SUEdgeSetSmooth(SUEdgeRef edge, bool smooth_flag);
 @brief Retrieves the smooth flag of an edge object.
 @param[in]  edge        The edge object.
 @param[out] smooth_flag The smooth flag retrieved.
+@related SUEdgeRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edge is an invalid object
@@ -172,6 +185,7 @@ SU_RESULT SUEdgeGetSmooth(SUEdgeRef edge, bool* smooth_flag);
 @brief Retrieves the number of faces that the edge is associated with.
 @param[in]  edge  The edge object.
 @param[out] count The number of faces.
+@related SUEdgeRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edge is an invalid object
@@ -185,6 +199,7 @@ SU_RESULT SUEdgeGetNumFaces(SUEdgeRef edge, size_t* count);
 @param[in]  len   The number of faces to retrieve.
 @param[out] faces The faces retrieved.
 @param[out] count The number of face objects retrieved.
+@related SUEdgeRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edge is an invalid object
@@ -197,6 +212,7 @@ SU_RESULT SUEdgeGetFaces(SUEdgeRef edge, size_t len, SUFaceRef faces[],
 @brief Retrieves the color of an edge object.
 @param[in]  edge  The edge object.
 @param[out] color The color retrieved.
+@related SUEdgeRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edge is not a valid object
@@ -210,6 +226,7 @@ SU_RESULT SUEdgeGetColor(SUEdgeRef edge, SUColor* color);
 @param[in]  edge      The edge object.
 @param[in]  transform A transformation to be appllied to the edge.
 @param[out] length    The length retrieved.
+@related SUEdgeRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edge is not a valid object
@@ -223,6 +240,7 @@ SU_RESULT SUEdgeGetLengthWithTransform(SUEdgeRef edge,
 @brief Sets the color of an edge object.
 @param[in] edge  The edge object.
 @param[in] color The color object to set.
+@related SUEdgeRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edge is an invalid object.

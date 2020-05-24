@@ -13,6 +13,7 @@
 #include <SketchUpAPI/geometry/point3d.h>
 #include <SketchUpAPI/geometry/ray3d.h>
 #include <SketchUpAPI/geometry/transformation.h>
+#include <SketchUpAPI/geometry/transformation2d.h>
 #include <SketchUpAPI/geometry/vector2d.h>
 #include <SketchUpAPI/geometry/vector3d.h>
 #include <SketchUpAPI/length_formatter.h>
@@ -20,6 +21,7 @@
 #include <SketchUpAPI/unicodestring.h>
 #include <SketchUpAPI/utils/math_helpers.h>
 #include <SketchUpAPI/initialize.h>
+#include <SketchUpAPI/application/application.h>
 #include <SketchUpAPI/model/arccurve.h>
 #include <SketchUpAPI/model/attribute_dictionary.h>
 #include <SketchUpAPI/model/axes.h>
@@ -54,6 +56,8 @@
 #include <SketchUpAPI/model/image_rep.h>
 #include <SketchUpAPI/model/instancepath.h>
 #include <SketchUpAPI/model/layer.h>
+#include <SketchUpAPI/model/line_style.h>
+#include <SketchUpAPI/model/line_styles.h>
 #include <SketchUpAPI/model/location.h>
 #include <SketchUpAPI/model/loop.h>
 #include <SketchUpAPI/model/material.h>

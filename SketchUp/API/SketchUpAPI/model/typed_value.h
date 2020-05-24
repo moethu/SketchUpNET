@@ -41,6 +41,7 @@ enum SUTypedValueType {
 @brief  Creates a typed value object.  The created object must be released
         with \ref SUTypedValueRelease.
 @param[out] typed_value The created typed value object.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if typed_value is NULL
@@ -52,6 +53,7 @@ SU_RESULT SUTypedValueCreate(SUTypedValueRef* typed_value);
 @brief  Releases a typed value object that was previously created with
         \ref SUTypedValueCreate.
 @param[in] typed_value The typed value object.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if typed_value is NULL
@@ -63,6 +65,7 @@ SU_RESULT SUTypedValueRelease(SUTypedValueRef* typed_value);
 @brief  Retrieves the type information of a typed value object.
 @param[in]  typed_value The typed value object.
 @param[out] type        The type information retrieved.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if type_value is not a valid object
@@ -75,6 +78,7 @@ SU_RESULT SUTypedValueGetType(SUTypedValueRef typed_value,
 @brief  Retrieves the byte value of a typed value object.
 @param[in]  typed_value The typed value object.
 @param[out] byte_value  The byte value retrieved.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -87,6 +91,7 @@ SU_RESULT SUTypedValueGetByte(SUTypedValueRef typed_value, char* byte_value);
 @brief  Sets the byte value of a typed value object.
 @param[in] typed_value The typed value object.
 @param[in] byte_value  The byte value that is assigned.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -97,6 +102,7 @@ SU_RESULT SUTypedValueSetByte(SUTypedValueRef typed_value, char byte_value);
 @brief  Retrieves the int16 value of a typed value object.
 @param[in]  typed_value The typed value object.
 @param[out] int16_value The int16 value retrieved.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -110,6 +116,7 @@ SU_RESULT SUTypedValueGetInt16(SUTypedValueRef typed_value,
 @brief  Sets the int16 value of a typed value object.
 @param[in] typed_value The typed value object.
 @param[in] int16_value The int16 value to set.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -121,6 +128,7 @@ SU_RESULT SUTypedValueSetInt16(SUTypedValueRef typed_value,
 @brief  Retrieves the int32 value of a typed value object.
 @param[in]  typed_value The typed value object.
 @param[out] int32_value The int32 value retrieved.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -134,6 +142,7 @@ SU_RESULT SUTypedValueGetInt32(SUTypedValueRef typed_value,
 @brief  Sets the int32 value of a typed value object.
 @param[in] typed_value The typed value object.
 @param[in] int32_value The int32 value to set.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -145,6 +154,7 @@ SU_RESULT SUTypedValueSetInt32(SUTypedValueRef typed_value,
 @brief Retrieves the float value of a typed value object.
 @param[in]  typed_value The typed value object.
 @param[out] float_value The float value retrieved.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -158,6 +168,7 @@ SU_RESULT SUTypedValueGetFloat(SUTypedValueRef typed_value,
 @brief  Sets the float value of a typed value object.
 @param[in] typed_value The typed value object.
 @param[in] float_value The float value to set.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -168,6 +179,7 @@ SU_RESULT SUTypedValueSetFloat(SUTypedValueRef typed_value, float float_value);
 @brief  Retrieves the double value of a typed value object.
 @param[in]  typed_value  The typed value object.
 @param[out] double_value  The double value retrieved.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -181,6 +193,7 @@ SU_RESULT SUTypedValueGetDouble(SUTypedValueRef typed_value,
 @brief  Sets the double value of a typed value object.
 @param[in] typed_value  The typed value object.
 @param[in] double_value The double value to set.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -192,6 +205,7 @@ SU_RESULT SUTypedValueSetDouble(SUTypedValueRef typed_value,
 @brief  Retrieves the boolean value of a typed value object.
 @param[in]  typed_value The typed value object.
 @param[out] bool_value  The boolean value retrieved.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -204,6 +218,7 @@ SU_RESULT SUTypedValueGetBool(SUTypedValueRef typed_value, bool* bool_value);
 @brief  Sets the boolean value of a typed value object.
 @param[in] typed_value The typed value object.
 @param[in] bool_value  The boolean value to set.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -214,6 +229,7 @@ SU_RESULT SUTypedValueSetBool(SUTypedValueRef typed_value, bool bool_value);
 @brief  Retrieves the color value of a typed value object.
 @param[in]  typed_value The typed value object.
 @param[out] color       The color value retrieved.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -226,6 +242,7 @@ SU_RESULT SUTypedValueGetColor(SUTypedValueRef typed_value, SUColor* color);
 @brief  Sets the color value of a typed value object.
 @param[in] typed_value The typed value object.
 @param[in] color       The color value to set.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -239,6 +256,7 @@ SU_RESULT SUTypedValueSetColor(SUTypedValueRef typed_value,
         seconds since January 1, 1970.
 @param[in]  typed_value The typed value object.
 @param[out] time_value  The time value retrieved.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -253,6 +271,7 @@ SU_RESULT SUTypedValueGetTime(SUTypedValueRef typed_value,
         seconds since January 1, 1970.
 @param[in] typed_value The typed value object.
 @param[in] time_value  The time value that is set.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -264,6 +283,7 @@ SU_RESULT SUTypedValueSetTime(SUTypedValueRef typed_value,
 @brief  Retrieves the string value of a typed value object.
 @param[in]  typed_value  The typed value object.
 @param[out] string_value The string value retrieved.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -279,6 +299,7 @@ SU_RESULT SUTypedValueGetString(SUTypedValueRef typed_value,
 @brief  Sets the string value of a typed value object.
 @param[in] typed_value The typed value object.
 @param[in] string_value  The string value to set. Assumed to be UTF-8 encoded.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -291,6 +312,7 @@ SU_RESULT SUTypedValueSetString(SUTypedValueRef typed_value,
 @brief  Retrieves the 3-element vector value of a typed value object
 @param[in] typed_value     The typed value object.
 @param[out] vector3d_value The 3-element vector value retrieved.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -304,6 +326,7 @@ SU_RESULT SUTypedValueGetVector3d(SUTypedValueRef typed_value,
 @brief  Sets the 3-element vector value of a typed value object.
 @param[in] typed_value The typed value object.
 @param[in] vector3d_value  The 3-element vector value to set.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -315,6 +338,7 @@ SU_RESULT SUTypedValueSetVector3d(SUTypedValueRef typed_value,
 @brief  Sets the 3D unit vector value of a typed value object.
 @param[in] typed_value    The typed value object.
 @param[in] vector3d_value The 3 vector components. Magnitude is ignored.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -323,11 +347,15 @@ SU_RESULT SUTypedValueSetUnitVector3d(SUTypedValueRef typed_value,
                                       const double vector3d_value[3]);
 
 /**
-@brief  Retrieve the array of typed value objects of a type value object.
+@brief  Retrieves the array of typed value objects from a typed value of type
+    \ref SUTypedValueType_Array. Note that the returned \ref SUTypedValueRef
+    objects will still be owned by their parent typed value array and therefore
+    they must not be released by the caller.
 @param[in]  typed_value The typed value object.
 @param[in]  len         The length of the array to retrieve.
 @param[out] values      The typed value objects retrieved.
 @param[out] count       The actual number of typed value objects retrieved.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -343,6 +371,7 @@ SU_RESULT SUTypedValueGetArrayItems(SUTypedValueRef typed_value, size_t len,
 @param[in] typed_value The typed value object.
 @param[in] len         The number of typed value objects to set.
 @param[in] values      The array of typed value objects to set.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
@@ -352,14 +381,17 @@ SU_RESULT SUTypedValueSetArrayItems(SUTypedValueRef typed_value, size_t len,
                                     SUTypedValueRef values[]);
 
 /**
-@brief  Retrieves the number of typed value objects of a typed value object.
+@brief  Retrieves the number of typed value objects from a typed value of type
+    \ref SUTypedValueType_Array.
 @param[in]  typed_value The typed value object.
 @param[out] count       The number of typed value objects in the array.
+@related SUTypedValueRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if typed_value is not a valid object
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if count is NULL
-- \ref SU_ERROR_NO_DATA if typed_value is not of the requested type
+- \ref SU_ERROR_NO_DATA if typed_value is not of type
+  \ref SUTypedValueType_Array.
 */
 SU_RESULT SUTypedValueGetNumArrayItems(SUTypedValueRef typed_value,
                                        size_t* count);

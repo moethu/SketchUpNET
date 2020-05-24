@@ -59,7 +59,9 @@ enum SUResult {
 
   SU_ERROR_INVALID_ARGUMENT, ///< An argument contains invalid information
   
-  SU_ERROR_ENTITY_LOCKED ///< The entity being modified is locked
+  SU_ERROR_ENTITY_LOCKED, ///< The entity being modified is locked
+
+  SU_ERROR_INVALID_OPERATION ///< The requested operation is invalid.
 };
 
 // Define a platform-independent UTF16 type.
