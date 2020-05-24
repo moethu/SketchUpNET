@@ -28,9 +28,32 @@ enum SUMaterialType {
 };
 
 /**
+@enum SUMaterialOwnerType
+@brief Indicates material owner type.
+@since SketchUp 2019.2, API 7.1
+*/
+enum SUMaterialOwnerType {
+  SUMaterialOwnerType_None = 0,       ///< Not owned
+  SUMaterialOwnerType_DrawingElement, ///< Can be applied to SUDrawingElements
+  SUMaterialOwnerType_Image,          ///< Owned exclusively by an Image
+  SUMaterialOwnerType_Layer           ///< Owned exclusively by a Layer
+};
+
+/**
+@enum SUMaterialColorizeType
+@brief Indicates material type.
+@since SketchUp 2019.2, API 7.1
+*/
+enum SUMaterialColorizeType {
+  SUMaterialColorizeType_Shift = 0,   ///< Shifts the texture's Hue
+  SUMaterialColorizeType_Tint,        ///< Colorize the texture
+};
+
+/**
 @brief Converts from an \ref SUMaterialRef to an \ref SUEntityRef.
        This is essentially an upcast operation.
 @param[in] material The given material reference.
+@related SUMaterialRef
 @return
 - The converted \ref SUEntityRef if material is a valid object
 - If not, the returned reference will be invalid
@@ -42,6 +65,7 @@ SU_EXPORT SUEntityRef SUMaterialToEntity(SUMaterialRef material);
        This is essentially a downcast operation so the given SUEntityRef must be
        convertible to an \ref SUMaterialRef.
 @param[in] entity The given entity reference.
+@related SUMaterialRef
 @return
 - The converted \ref SUMaterialRef if the downcast operation succeeds
 - If not, the returned reference will be invalid
@@ -54,6 +78,7 @@ SU_EXPORT SUMaterialRef SUMaterialFromEntity(SUEntityRef entity);
 If the material is not associated with any face, it must be deallocated with
 \ref SUMaterialRelease.
 @param[out] material The material created.
+@related SUMaterialRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_OUTPUT if the input parameter is NULL
@@ -65,6 +90,7 @@ SU_RESULT SUMaterialCreate(SUMaterialRef* material);
 
 The material must not be associated with a parent object such as a face.
 @param[in] material The material to be released.
+@related SUMaterialRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT material is not a valid object
@@ -81,6 +107,7 @@ SU_RESULT SUMaterialRelease(SUMaterialRef* material);
 @param[in] material The material object.
 @param[in] name     The name to set the material name. Assumed to be UTF-8
                     encoded.
+@related SUMaterialRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if material is not a valid object
@@ -99,6 +126,7 @@ SU_RESULT SUMaterialSetName(SUMaterialRef material, const char* name);
          SUMaterialGetNameLegacyBehavior.
 @param[in]  material The material object.
 @param[out] name     The name retrieved.
+@related SUMaterialRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if material is not a valid object
@@ -118,6 +146,7 @@ SU_RESULT SUMaterialGetName(SUMaterialRef material, SUStringRef* name);
 @since SketchUp 2017, API 5.0
 @param[in]  material The material object.
 @param[out] name     The name retrieved.
+@related SUMaterialRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if material is not a valid object
@@ -132,6 +161,7 @@ SU_RESULT SUMaterialGetNameLegacyBehavior(SUMaterialRef material,
 @brief Sets the color of a material object.
 @param[in] material The material object.
 @param[in] color    The color value to set the material color.
+@related SUMaterialRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if material is not a valid object
@@ -143,6 +173,7 @@ SU_RESULT SUMaterialSetColor(SUMaterialRef material, const SUColor* color);
 @brief Retrieves the color value of a material object.
 @param[in]  material The material object.
 @param[out] color    The color value retrieved.
+@related SUMaterialRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if color is NULL
@@ -156,6 +187,7 @@ SU_RESULT SUMaterialGetColor(SUMaterialRef material, SUColor* color);
        materials.
 @param[in] material The material object.
 @param[in] texture  The texture object to set the material texture.
+@related SUMaterialRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if material or texture is not a valid object
@@ -168,6 +200,7 @@ SU_RESULT SUMaterialSetTexture(SUMaterialRef material,
 @brief Retrieves the texture of a material object.
 @param[in]  material The material object.
 @param[out] texture  The texture object retrieved.
+@related SUMaterialRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if material is not a valid object
@@ -182,6 +215,7 @@ SU_RESULT SUMaterialGetTexture(SUMaterialRef material,
 @brief Retrieves the alpha value (0.0 - 1.0) of a material object.
 @param[in]  material The material object.
 @param[out] alpha    The alpha value retrieved.
+@related SUMaterialRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if material is not a valid object
@@ -193,6 +227,7 @@ SU_RESULT SUMaterialGetOpacity(SUMaterialRef material, double* alpha);
 @brief Sets the alpha value of a material object.
 @param[in] material The material object.
 @param[in] alpha    The alpha value to set. Must be within range [0.0, 1.0].
+@related SUMaterialRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if material is not a valid object
@@ -205,6 +240,7 @@ SU_RESULT SUMaterialSetOpacity(SUMaterialRef material, double alpha);
        material object.
 @param[in]  material    The material object.
 @param[out] use_opacity The flag retrieved.
+@related SUMaterialRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if material is not a valid object
@@ -218,6 +254,7 @@ SU_RESULT SUMaterialGetUseOpacity(SUMaterialRef material,
        object.
 @param[in] material    The material object.
 @param[in] use_opacity The flag boolean value to set.
+@related SUMaterialRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if material is not a valid object
@@ -229,6 +266,7 @@ SU_RESULT SUMaterialSetUseOpacity(SUMaterialRef material,
 @brief Sets the type of a material object.
 @param[in] material The material object.
 @param[in] type     The type to set.
+@related SUMaterialRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if material is not a valid object
@@ -240,6 +278,7 @@ SU_RESULT SUMaterialSetType(SUMaterialRef material,
 @brief Retrieves the type of a material object.
 @param[in]  material The material object.
 @param[out] type     The type retrieved.
+@related SUMaterialRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if material is not a valid object
@@ -254,6 +293,7 @@ SU_RESULT SUMaterialGetType(SUMaterialRef material,
 @since SketchUp 2018, API 6.0
 @param[in]  material     The material object.
 @param[out] transparency The flag retrieved.
+@related SUMaterialRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if material is not a valid object
@@ -261,6 +301,71 @@ SU_RESULT SUMaterialGetType(SUMaterialRef material,
 */
 SU_RESULT SUMaterialIsDrawnTransparent(SUMaterialRef material,
                                        bool* transparency);
+
+/**
+@brief Retrieves the owner type of a material object.
+@warning *** Materials owned by SUImageRef and SULayerRef may not be applied
+             to any other entity in the model.
+@since SketchUp 2019.2, API 7.1
+@param[in]  material The material object.
+@param[out] type     The type retrieved.
+@related SUMaterialRef
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if material is not a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if type is NULL
+*/
+SU_RESULT SUMaterialGetOwnerType(SUMaterialRef material,
+                                 enum SUMaterialOwnerType* type);
+
+/**
+@brief Sets the colorization type of a material object. This is used when the
+       material's color is set to a custom value. Call this function after
+       calling SUMaterialSetColor as otherwise the colorize type will be reset.
+@since SketchUp 2019.2, API 7.1
+@param[in] material The material object.
+@param[in] type     The type to set.
+@related SUMaterialRef
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if material is not a valid object
+- \ref SU_ERROR_INVALID_ARGUMENT if type is not a valid value
+*/
+SU_RESULT SUMaterialSetColorizeType(SUMaterialRef material,
+                                    enum SUMaterialColorizeType type);
+
+/**
+@brief Retrieves the colorization type of a material object.
+@since SketchUp 2019.2, API 7.1
+@param[in]  material The material object.
+@param[out] type     The type retrieved.
+@related SUMaterialRef
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if material is not a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if type is NULL
+*/
+SU_RESULT SUMaterialGetColorizeType(SUMaterialRef material,
+                                    enum SUMaterialColorizeType* type);
+
+/**
+@brief The colorize_deltas method retrieves the HLS deltas for colorized
+       materials.
+@since SketchUp 2019.2, API 7.1
+@param[in]  material   The material object.
+@param[out] hue        The Hue delta.
+@param[out] saturation The Saturation delta.
+@param[out] lightness  The Lightness delta.
+@related SUMaterialRef
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if material is not a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if either hue, saturation or lightness
+                                    is NULL
+*/
+SU_RESULT SUMaterialGetColorizeDeltas(SUMaterialRef material,
+                                      double* hue, double* saturation,
+                                      double* lightness);
 
 #ifdef __cplusplus
 }  // extern "C"

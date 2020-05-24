@@ -1,4 +1,4 @@
-// Copyright 2012 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2012-2019  Trimble, Inc. All Rights Reserved.
 
 #ifndef MODELIMPORTERPLUGIN_H_
 #define MODELIMPORTERPLUGIN_H_
@@ -6,6 +6,13 @@
 #include <string>
 
 #include <SketchUpAPI/import_export/pluginprogresscallback.h>
+
+// DoOptions return status
+enum SketchUpOptionsDialogResponse {
+  IMPORTER_OPTIONS_UNAVAILABLE = 0,
+  IMPORTER_OPTIONS_CANCELLED = 1,
+  IMPORTER_OPTIONS_ACCEPTED = 2
+};
 
 enum SketchUpModelImporterBehavior {
   IMPORT_MODEL_AT_ORIGIN = 0, ///< Preserves coordinates of the imported
@@ -79,8 +86,15 @@ class SketchUpModelImporterInterface {
           importer. Implementing this is required if SupportOptions is true.
           Options should be saved someplace which persists between this method
           and ConvertToSkp as well as between sessions.
+  @return SketchUpOptionsDialogResponse
+          IMPORTER_OPTIONS_UNAVAILABLE if unable to display options,
+          IMPORTER_OPTIONS_CANCELLED if options were cancelled,
+          IMPORTER_OPTIONS_ACCEPTED if options were accepted
+
   */
-  virtual void ShowOptionsDialog() {}
+  virtual SketchUpOptionsDialogResponse ShowOptionsDialog() {
+      return IMPORTER_OPTIONS_UNAVAILABLE;
+  }
 
   /**
   @brief Indicates whether the plugin supports the progress callback.

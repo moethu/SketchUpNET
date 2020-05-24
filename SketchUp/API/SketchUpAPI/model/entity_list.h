@@ -19,6 +19,7 @@ extern "C" {
 @brief Creates an entity list object.
 @since SketchUp 2018, API 6.0
 @param[in,out] list The entity list object to be created.
+@related SUEntityListRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if list is NULL
@@ -30,6 +31,7 @@ SU_RESULT SUEntityListCreate(SUEntityListRef* list);
 @brief Releases a list object.
 @since SketchUp 2018, API 6.0
 @param[in,out] list The list object to be released.
+@related SUEntityListRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if list is NULL
@@ -45,6 +47,7 @@ SU_RESULT SUEntityListRelease(SUEntityListRef* list);
 @since SketchUp 2018, API 6.0
 @param[in]  list     The list.
 @param[out] iterator An iterator Ref reference the beginning of the list.
+@related SUEntityListRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if list is not a valid object
@@ -59,6 +62,7 @@ SU_RESULT SUEntityListBegin(SUEntityListRef list,
 @since SketchUp 2018, API 6.0
 @param[in]  list  The list object.
 @param[out] count The list size.
+@related SUEntityListRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if list is not a valid object

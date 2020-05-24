@@ -27,6 +27,7 @@ enum SUCurveType {
 @brief Converts from an \ref SUCurveRef to an \ref SUEntityRef.
        This is essentially an upcast operation.
 @param[in] curve The given curve reference.
+@related SUCurveRef
 @return
 - The converted \ref SUEntityRef if curve is a valid object
 - If not, the returned reference will be invalid
@@ -38,6 +39,7 @@ SU_EXPORT SUEntityRef SUCurveToEntity(SUCurveRef curve);
        This is essentially a downcast operation so the given \ref SUEntityRef
        must be convertible to an \ref SUCurveRef.
 @param[in] entity The given entity reference.
+@related SUCurveRef
 @return
 - The converted \ref SUCurveRef if the downcast operation succeeds
 - If not, the returned reference will be invalid
@@ -54,6 +56,7 @@ SU_EXPORT SUCurveRef SUCurveFromEntity(SUEntityRef entity);
 @param curve The curve object created.
 @param edges The array of edge objects.
 @param len   The number of edge objects in the array.
+@related SUCurveRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if edges is NULL
@@ -70,6 +73,7 @@ SU_RESULT SUCurveCreateWithEdges(SUCurveRef* curve, const SUEdgeRef edges[],
 /**
 @brief  Releases a curve object and its associated edge objects.
 @param curve The curve object.
+@related SUCurveRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if curve is NULL
@@ -81,6 +85,7 @@ SU_RESULT SUCurveRelease(SUCurveRef* curve);
 @brief Retrieves the curve type of a curve object.
 @param[in]  curve The curve object.
 @param[out] type  The curve type retrieved.
+@related SUCurveRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if curve is not a valid curve object
@@ -92,6 +97,7 @@ SU_RESULT SUCurveGetType(SUCurveRef curve, enum SUCurveType* type);
 @brief Retrieves the number of edges that belong to a curve object.
 @param[in]  curve The curve object.
 @param[out] count The number of edges.
+@related SUCurveRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if curve is not a valid curve object
@@ -107,6 +113,7 @@ SU_RESULT SUCurveGetNumEdges(SUCurveRef curve, size_t* count);
 @param[in]  len   The number of edges to retrieve.
 @param[out] edges The edges retrieved.
 @param[out] count The number of edges retrieved.
+@related SUCurveRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if curve is not a valid curve object

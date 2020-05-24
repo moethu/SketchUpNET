@@ -22,6 +22,7 @@ extern "C" {
 @brief Converts from an \ref SUComponentInstanceRef to an \ref SUEntityRef.
        This is essentially an upcast operation.
 @param[in] instance The given component instance reference.
+@related SUComponentInstanceRef
 @return
 - The converted \ref SUEntityRef if instance is a valid component instance
 - If not, the returned reference will be invalid
@@ -34,6 +35,7 @@ SU_EXPORT SUEntityRef SUComponentInstanceToEntity(
        This is essentially a downcast operation so the given entity must be
        convertible to a component instance.
 @param[in] entity The given entity reference.
+@related SUComponentInstanceRef
 @return
 - The converted \ref SUComponentInstanceRef if the downcast operation succeeds
 - If not, the returned reference will be invalid
@@ -45,6 +47,7 @@ SU_EXPORT SUComponentInstanceRef SUComponentInstanceFromEntity(
 @brief Converts from an \ref SUComponentInstanceRef to an \ref
        SUDrawingElementRef. This is essentially an upcast operation.
 @param[in] instance The given component instance reference.
+@related SUComponentInstanceRef
 @return
 - The converted \ref SUEntityRef if instance is a valid component instance
 - If not, the returned reference will be invalid
@@ -57,6 +60,7 @@ SU_EXPORT SUDrawingElementRef SUComponentInstanceToDrawingElement(
        SUComponentInstanceRef. This is essentially a downcast operation so the
        given element must be convertible to a component instance.
 @param[in] drawing_elem The given drawing element reference.
+@related SUComponentInstanceRef
 @return
 - The converted \ref SUComponentInstanceRef if the downcast operation succeeds
 - If not, the returned reference will be invalid
@@ -69,6 +73,7 @@ SU_EXPORT SUComponentInstanceRef SUComponentInstanceFromDrawingElement(
 @param[in] instance The component instance object.
 @param[in] name     The name string to set the component instance object.
                     Assumed to be UTF-8 encoded.
+@related SUComponentInstanceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if instance is not a valid object
@@ -81,6 +86,7 @@ SU_RESULT SUComponentInstanceSetName(SUComponentInstanceRef instance,
 @brief Deallocates a component instance object created with \ref
        SUComponentDefinitionCreateInstance.
 @param[in] instance The component instance object.
+@related SUComponentInstanceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if instance is NULL
@@ -91,6 +97,7 @@ SU_RESULT SUComponentInstanceRelease(SUComponentInstanceRef* instance);
 @brief Retrieves the name of a component instance object.
 @param[in]  instance The component instance object.
 @param[out] name     The name retrieved.
+@related SUComponentInstanceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if instance is not a valid object
@@ -106,6 +113,7 @@ SU_RESULT SUComponentInstanceGetName(SUComponentInstanceRef instance,
 @since SketchUp 2015, API 3.0
 @param[in]  instance The component instance object.
 @param[in]  guid     The utf-8 formatted guid string.
+@related SUComponentInstanceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if instance is not a valid object
@@ -118,6 +126,7 @@ SU_RESULT SUComponentInstanceSetGuid(SUComponentInstanceRef instance,
 @brief Retrieves the globally unique identifier (guid) string of a instance object.
 @param[in]  instance The component instance object.
 @param[out] guid     The guid retrieved.
+@related SUComponentInstanceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if instance is not a valid object
@@ -136,6 +145,7 @@ the root component of a model, then the transform is relative to absolute
 coordinates.
 @param[in] instance  The component instance object.
 @param[in] transform The affine transform to set.
+@related SUComponentInstanceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if instance is not a valid object
@@ -152,6 +162,7 @@ See description of \ref SUComponentInstanceSetTransform for a discussion of
 component instance transforms.
 @param[in]  instance  The component instance object.
 @param[out] transform The transform retrieved.
+@related SUComponentInstanceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if instance is not a valid object
@@ -164,6 +175,7 @@ SU_RESULT SUComponentInstanceGetTransform(SUComponentInstanceRef instance,
 @brief Retrieves the component definition of a component instance object.
 @param[in]  instance  The component instance object.
 @param[out] component The component definition retrieved.
+@related SUComponentInstanceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if instance is not a valid object
@@ -177,6 +189,7 @@ SU_RESULT SUComponentInstanceGetDefinition(SUComponentInstanceRef instance,
 @since SketchUp 2016, API 4.0
 @param[in] instance The instance object.
 @param[in] lock     if true lock the instance, otherwise unlock it.
+@related SUComponentInstanceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if instance is invalid
@@ -190,6 +203,7 @@ SU_RESULT SUComponentInstanceSetLocked(SUComponentInstanceRef instance,
 @since SketchUp 2016, API 4.0
 @param[in]  instance  The instance object.
 @param[out] is_locked returns true if the instance is locked
+@related SUComponentInstanceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if instance is invalid
@@ -203,6 +217,7 @@ SU_RESULT SUComponentInstanceIsLocked(SUComponentInstanceRef instance,
 @param[in] instance  The component instance object.
 @param[in] file_path The file path destination of the serialization operation.
                      Assumed to be UTF-8 encoded.
+@related SUComponentInstanceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if instance is not a valid object
@@ -222,6 +237,7 @@ SU_RESULT SUComponentInstanceSaveAs(SUComponentInstanceRef instance,
                       instance is contained within another instance or group,
                       the parent transformation is not factored in.
 @param[out] volume    The volume of the component instance in cubic inches.
+@related SUComponentInstanceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if component instance is not a valid object
@@ -238,6 +254,7 @@ SU_RESULT SUComponentInstanceComputeVolume(
 @since SketchUp 2016, API 4.0
 @param[in]  instance The component instance object.
 @param[out] dc_info  The dynamic component info object.
+@related SUComponentInstanceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if instance is not a valid object
@@ -253,6 +270,7 @@ SU_RESULT SUComponentInstanceCreateDCInfo(SUComponentInstanceRef instance,
 @since SketchUp 2017, API 5.0
 @param[in]  instance            The component instance object.
 @param[out] classification_info The classification info object.
+@related SUComponentInstanceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if instance is not a valid object
@@ -267,6 +285,7 @@ SU_RESULT SUComponentInstanceCreateClassificationInfo(
 @brief Retrieves the number of attached component instances.
 @param[in]  instance The component instance object.
 @param[out] count    The number of attached instances.
+@related SUComponentInstanceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if instance is an invalid object
@@ -282,6 +301,7 @@ SU_RESULT SUComponentInstanceGetNumAttachedInstances(
 @param[out] instances The attached instances retrieved. These may be instances
                       or groups.
 @param[out] count     The number of instances retrieved.
+@related SUComponentInstanceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if instance is an invalid object
@@ -297,6 +317,7 @@ SU_RESULT SUComponentInstanceGetAttachedInstances(
 @param[in]  instance The component instance object.
 @param[out] count    The number of drawing elements this component instance is
                      attached to.
+@related SUComponentInstanceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if instance is an invalid object
@@ -313,6 +334,7 @@ SU_RESULT SUComponentInstanceGetNumAttachedToDrawingElements(
 @param[out] elements The drawing elements retrieved. These may be instances,
                      groups or faces.
 @param[out] count    The number of drawing elements retrieved.
+@related SUComponentInstanceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if instance is an invalid object

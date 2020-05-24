@@ -24,6 +24,7 @@ extern "C" {
 @since SketchUp 2014, API 2.0
 @param[in]  opening The opening object.
 @param[out] count   The number of points.
+@related SUOpeningRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if opening is not a valid object
@@ -38,6 +39,7 @@ SU_RESULT SUOpeningGetNumPoints(SUOpeningRef opening, size_t* count);
 @param[in]  len      The number of points to retrieve.
 @param[out] points   The points retrieved.
 @param[out] count    The number of points retrieved.
+@related SUOpeningRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if opening is not a valid object
@@ -50,6 +52,7 @@ SU_RESULT SUOpeningGetPoints(SUOpeningRef opening, size_t len,
 @brief Release an opening object.
 @since SketchUp 2014, API 2.0
 @param[in]  opening  The opening object.
+@related SUOpeningRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if opening is not a valid object

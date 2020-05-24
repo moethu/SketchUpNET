@@ -17,6 +17,7 @@ extern "C" {
 /**
 @brief Returns the concrete type of the given entity.
 @param[in] entity The entity.
+@related SUEntityRef
 @return
 - The concrete type of the given entity reference.
 - \ref SURefType_Unknown if entity is not valid.
@@ -27,6 +28,7 @@ SU_EXPORT enum SURefType SUEntityGetType(SUEntityRef entity);
 @brief Retrieves the id of the entity.
 @param[in]  entity    The entity.
 @param[out] entity_id The id retrieved.
+@related SUEntityRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if entity is not a valid object
@@ -40,11 +42,18 @@ SU_RESULT SUEntityGetID(SUEntityRef entity, int32_t* entity_id);
 @note Only a subset of entity types support PIDs. Refer to the list
       below for which and when support was added.
 
+SketchUp 2020.1
+  - SUComponentDefinitionRef
+  - SUFontRef
+  - SUStyleRef
+  - SUMaterialRef
+SketchUp 2020.0
+  - SULayerRef
+  - SULineStyleRef
 SketchUp 2018
   - SUSceneRef
 SketchUp 2017
   - SUAxesRef
-  - SUComponentDefinitionRef
   - SUComponentInstanceRef
   - SUGuideLineRef
   - SUGuidePointRef
@@ -59,6 +68,7 @@ SketchUp 2017
 
 @param[in]  entity      The entity.
 @param[out] entity_pid  The persistent id retrieved.
+@related SUEntityRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if entity is not a valid object
@@ -70,6 +80,7 @@ SU_RESULT SUEntityGetPersistentID(SUEntityRef entity, int64_t* entity_pid);
 @brief Retrieves the number of attribute dictionaries of an entity.
 @param[in]  entity The entity.
 @param[out] count  The number of attribute dictionaries.
+@related SUEntityRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if entity is not a valid entity
@@ -84,6 +95,7 @@ SU_RESULT SUEntityGetNumAttributeDictionaries(SUEntityRef entity,
 @param[in]  len          The number of attribute dictionaries to retrieve.
 @param[out] dictionaries The dictionaries retrieved.
 @param[out] count        The number of dictionaries retrieved.
+@related SUEntityRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if entity is not a valid entity
@@ -102,6 +114,7 @@ SU_RESULT SUEntityGetAttributeDictionaries(
 @param[in] dictionary The dictionary object to be added. If the function is 
                       successful, don't call SUAttributeDictionaryRelease on the
                       dictionary because the new entity will take ownership.
+@related SUEntityRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if entity or dictionary are not valid entities
@@ -121,6 +134,7 @@ If a dictionary with the given name does not exist, one is added to the entity.
 @param[in]  name   The name of the retrieved attribute dictionary.
                    Assumed to be UTF-8 encoded.
 @param[out] dictionary The destination of the retrieved dictionary object.
+@related SUEntityRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if entity is not a valid entity
@@ -137,6 +151,7 @@ SU_RESULT SUEntityGetAttributeDictionary(
 @since SketchUp 2018 M0, API 6.0
 @param[in]  entity The entity.
 @param[out] model  The model object retrieved.
+@related SUEntityRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if entity is not a valid object
@@ -150,6 +165,7 @@ SU_RESULT SUEntityGetModel(SUEntityRef entity, SUModelRef* model);
 @since SketchUp 2018 M0, API 6.0
 @param[in]  entity   The entity.
 @param[out] entities The entities object retrieved.
+@related SUEntityRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if entity is not a valid object

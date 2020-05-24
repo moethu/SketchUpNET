@@ -24,6 +24,7 @@ extern "C" {
        This is essentially an upcast operation.
 @since SketchUp 2016, API 4.0
 @param[in] arccurve The given arccurve reference.
+@related SUArcCurveRef
 @return
 - The converted \ref SUEntityRef if curve is a valid object
 - If not, the returned reference will be invalid
@@ -36,6 +37,7 @@ SU_EXPORT SUEntityRef SUArcCurveToEntity(SUArcCurveRef arccurve);
        must be convertible to an \ref SUArcCurveRef.
 @since SketchUp 2016, API 4.0
 @param[in] entity The given entity reference.
+@related SUArcCurveRef
 @return
 - The converted \ref SUArcCurveRef if the downcast operation succeeds
 - If not, the returned reference will be invalid
@@ -47,6 +49,7 @@ SU_EXPORT SUArcCurveRef SUArcCurveFromEntity(SUEntityRef entity);
        This is essentially an upcast operation.
 @since SketchUp 2016, API 4.0
 @param[in] arccurve The given arccurve reference.
+@related SUArcCurveRef
 @return
 - The converted SUCurveRef if arccurve is a valid arccurve object
 - If not, the returned reference will be invalid
@@ -59,6 +62,7 @@ SU_EXPORT SUCurveRef SUArcCurveToCurve(SUArcCurveRef arccurve);
        must be convertible to an \ref SUArcCurveRef.
 @since SketchUp 2016, API 4.0
 @param[in] curve The given curve reference.
+@related SUArcCurveRef
 @return
 - The converted \ref SUArcCurveRef if the downcast operation succeeds
 - If not, the returned reference will be invalid
@@ -76,6 +80,7 @@ SU_EXPORT SUArcCurveRef SUArcCurveFromCurve(SUCurveRef curve);
 @param[in]  end_point   The point at the end of the arc.
 @param[in]  normal      The vector normal to the arc plane.
 @param[in]  num_edges   The number of edges for the arc.
+@related SUArcCurveRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if arccurve is NULL
@@ -94,6 +99,7 @@ SU_RESULT SUArcCurveCreate(SUArcCurveRef* arccurve,
 @brief  Releases an arccurve object and its associated edge objects.
 @since SketchUp 2016, API 4.0
 @param[in,out] arccurve The arccurve object.
+@related SUArcCurveRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if arccurve is NULL
@@ -106,6 +112,7 @@ SU_RESULT SUArcCurveRelease(SUArcCurveRef* arccurve);
 @since SketchUp 2016, API 4.0
 @param[in]  arccurve The arccurve object.
 @param[out] radius   The arccurve radius.
+@related SUArcCurveRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if arccurve is not a valid object
@@ -118,6 +125,7 @@ SU_RESULT SUArcCurveGetRadius(SUArcCurveRef arccurve, double* radius);
 @since SketchUp 2016, API 4.0
 @param[in]  arccurve The arccurve object.
 @param[out] point    The arccurve starting point.
+@related SUArcCurveRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if arccurve is not a valid object
@@ -131,6 +139,7 @@ SU_RESULT SUArcCurveGetStartPoint(SUArcCurveRef arccurve,
 @since SketchUp 2016, API 4.0
 @param[in]  arccurve The arccurve object.
 @param[out] point    The arccurve ending point.
+@related SUArcCurveRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if arccurve is not a valid object
@@ -144,6 +153,7 @@ SU_RESULT SUArcCurveGetEndPoint(SUArcCurveRef arccurve,
 @since SketchUp 2016, API 4.0
 @param[in]  arccurve The arccurve object.
 @param[out] axis     The arccurve x-axis.
+@related SUArcCurveRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if arccurve is not a valid object
@@ -157,6 +167,7 @@ SU_RESULT SUArcCurveGetXAxis(SUArcCurveRef arccurve,
 @since SketchUp 2016, API 4.0
 @param[in]  arccurve The arccurve object.
 @param[out] axis     The arccurve y-axis.
+@related SUArcCurveRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if arccurve is not a valid object
@@ -170,6 +181,7 @@ SU_RESULT SUArcCurveGetYAxis(SUArcCurveRef arccurve,
 @since SketchUp 2016, API 4.0
 @param[in]  arccurve The arccurve object.
 @param[out] point    The arccurve center point.
+@related SUArcCurveRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if arccurve is not a valid object
@@ -183,6 +195,7 @@ SU_RESULT SUArcCurveGetCenter(SUArcCurveRef arccurve,
 @since SketchUp 2016, API 4.0
 @param[in]  arccurve The arccurve object.
 @param[out] normal   The arccurve normal vector.
+@related SUArcCurveRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if arccurve is not a valid object
@@ -196,6 +209,7 @@ SU_RESULT SUArcCurveGetNormal(SUArcCurveRef arccurve,
 @since SketchUp 2016, API 4.0
 @param[in]  arccurve The arccurve object.
 @param[out] angle    The arccurve start angle.
+@related SUArcCurveRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if arccurve is not a valid object
@@ -208,6 +222,7 @@ SU_RESULT SUArcCurveGetStartAngle(SUArcCurveRef arccurve, double* angle);
 @since SketchUp 2016, API 4.0
 @param[in]  arccurve The arccurve object.
 @param[out] angle    The arccurve end angle.
+@related SUArcCurveRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if arccurve is not a valid object
@@ -219,6 +234,7 @@ SU_RESULT SUArcCurveGetEndAngle(SUArcCurveRef arccurve, double* angle);
 @since SketchUp 2016, API 4.0
 @param[in]  arccurve The arccurve object.
 @param[out] is_full  Returns true if the arccurve is a full corcle.
+@related SUArcCurveRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if arccurve is not a valid object

@@ -17,6 +17,7 @@ extern "C" {
 @param[out] dictionary The attributes dictionary object created.
 @param[in]  name       The name of the attribute dictionary. Assumed to be UTF-8
                        encoded.
+@related SUAttributeDictionaryRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if name is NULL
@@ -31,6 +32,7 @@ SU_RESULT SUAttributeDictionaryCreate(SUAttributeDictionaryRef* dictionary,
        If this dictionary has a parent, it will be removed from it.
 @since SketchUp 2018 M0, API 6.0
 @param[in,out] dictionary The attributes dictionary object.
+@related SUAttributeDictionaryRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if dictionary is NULL
@@ -43,6 +45,7 @@ SU_RESULT SUAttributeDictionaryRelease(SUAttributeDictionaryRef* dictionary);
        This is essentially an upcast operation.
 @since SketchUp 2014, API 2.0
 @param[in] dictionary The attribute dictionary object.
+@related SUAttributeDictionaryRef
 @return
 - The converted \ref SUEntityRef if dictionary is a valid object
 - If not, the returned reference will be invalid
@@ -56,6 +59,7 @@ SU_EXPORT SUEntityRef SUAttributeDictionaryToEntity(SUAttributeDictionaryRef
        must be convertible to an \ref SUAttributeDictionaryRef.
 @since SketchUp 2014, API 2.0
 @param[in] entity The given entity reference.
+@related SUAttributeDictionaryRef
 @return
 - The converted \ref SUAttributeDictionaryRef if the downcast operation succeeds
 - If not, the returned reference will be invalid
@@ -73,6 +77,7 @@ SU_EXPORT SUAttributeDictionaryRef SUAttributeDictionaryFromEntity(SUEntityRef
 @brief Retrieves the name of an attribute dictionary object.
 @param[in]  dictionary The attribute dictionary object.
 @param[out] name       The name retrieved.
+@related SUAttributeDictionaryRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dictionary is an invalid object
@@ -89,6 +94,7 @@ SU_RESULT SUAttributeDictionaryGetName(SUAttributeDictionaryRef dictionary,
 @param[in] key        The key of the key-value pair. Assumed to be UTF-8
                       encoded.
 @param[in] value_in   The value of the key-value pair.
+@related SUAttributeDictionaryRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dictionary or value_in is an invalid object.
@@ -106,6 +112,7 @@ SU_RESULT SUAttributeDictionarySetValue(SUAttributeDictionaryRef dictionary,
                       encoded.
 @param[out] value_out The value retrieved. Must be a valid object, i.e.
                       must have been allocated via \ref SUTypedValueCreate.
+@related SUAttributeDictionaryRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dictionary is an invalid object
@@ -123,6 +130,7 @@ SU_RESULT SUAttributeDictionaryGetValue(SUAttributeDictionaryRef dictionary,
 @brief Retrieves the number of keys in an attribute dictionary object.
 @param[in]  dictionary The attribute dictionary object.
 @param[out] count      The number of keys.
+@related SUAttributeDictionaryRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dictionary is an invalid object
@@ -137,6 +145,7 @@ SU_RESULT SUAttributeDictionaryGetNumKeys(SUAttributeDictionaryRef dictionary,
 @param[in]  len        The number of keys to retrieve.
 @param[out] keys       The keys retrieved.
 @param[out] count      The number of keys retrieved.
+@related SUAttributeDictionaryRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dictionary is an invalid object

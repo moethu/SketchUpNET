@@ -1,7 +1,7 @@
 // Copyright 2014 Trimble Navigation Ltd.  All rights reserved.
 
-#ifndef SKETCHUP_SHADOW_INFO_H_
-#define SKETCHUP_SHADOW_INFO_H_
+#ifndef SKETCHUP_MODEL_SHADOW_INFO_H_
+#define SKETCHUP_MODEL_SHADOW_INFO_H_
 
 #include <SketchUpAPI/common.h>
 #include <SketchUpAPI/unicodestring.h>
@@ -22,6 +22,7 @@ extern "C" {
 @since SketchUp 2015, API 3.0
 @param[in]  shadow_info The shadow info object.
 @param[out] count       The number of keys available.
+@related SUShadowInfoRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if shadow_info is not valid
@@ -36,6 +37,7 @@ SU_RESULT SUShadowInfoGetNumKeys(SUShadowInfoRef shadow_info, size_t* count);
 @param[in]  len         The number of keys to retrieve.
 @param[out] keys        The keys retrieved.
 @param[out] count       The number of keys retrieved.
+@related SUShadowInfoRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if shadow_info is not a valid object
@@ -54,6 +56,7 @@ SU_RESULT SUShadowInfoGetKeys(SUShadowInfoRef shadow_info,
 @param[in]  shadow_info The shadow info object.
 @param[in]  key         The key. Assumed to be UTF-8 encoded.
 @param[out] value_out   The value retrieved.
+@related SUShadowInfoRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if shadow_info is an invalid object
@@ -97,6 +100,7 @@ SU_RESULT SUShadowInfoGetValue(SUShadowInfoRef shadow_info,
 @param[in]  shadow_info The shadow info object.
 @param[in]  key         The key. Assumed to be UTF-8 encoded.
 @param[in]  value_in    The value used to set the shadow info option is set to.
+@related SUShadowInfoRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if shadow_info or value_in is an invalid object
@@ -136,4 +140,4 @@ SU_RESULT SUShadowInfoSetValue(SUShadowInfoRef shadow_info,
 }
 #endif
 
-#endif  // SKETCHUP_SHADOW_INFO_H_
+#endif  // SKETCHUP_MODEL_SHADOW_INFO_H_

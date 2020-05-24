@@ -20,6 +20,7 @@ extern "C" {
 @param[in]  point1 The first point object.
 @param[in]  point2 The second point object.
 @param[out] equal  Whether the two points are the same.
+@related SUPoint3D
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if point1 or point2 is NULL
@@ -35,6 +36,7 @@ SU_RESULT SUPoint3DGetEqual(const struct SUPoint3D* point1,
 @param[in]  point1    The first point object.
 @param[in]  point2    The second point object.
 @param[out] less_than Whether point1 is less than point2.
+@related SUPoint3D
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if point1 or point2 is NULL
@@ -50,6 +52,7 @@ SU_RESULT SUPoint3DLessThan(const struct SUPoint3D* point1,
 @param[in]  point1 The point object.
 @param[in]  vector The offset vector object.
 @param[out] point2 The new point.
+@related SUPoint3D
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if point1 or vector is NULL
@@ -65,6 +68,7 @@ SU_RESULT SUPoint3DOffset(const struct SUPoint3D* point1,
 @param[in]  point1   The first point object.
 @param[in]  point2   The second point object.
 @param[out] distance The distance between the two points.
+@related SUPoint3D
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if point1 or point2 is NULL
@@ -80,6 +84,7 @@ SU_RESULT SUPoint3DDistanceToSUPoint3D(const struct SUPoint3D* point1,
 @since SketchUp 2016, API 4.0
 @param[in]     transform The transformation to be applied.
 @param[in,out] point     The point to be transformed.
+@related SUPoint3D
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if transform is NULL

@@ -15,6 +15,7 @@ extern "C" {
 @param[in]  ray   The ray.
 @param[in]  point The 3D point.
 @param[out] is_on Whether or not the point is on the ray.
+@related SURay3D
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if ray or point are NULL
@@ -30,6 +31,7 @@ SU_RESULT SURay3DIsOn(const struct SURay3D* ray,
 @param[in]  ray      The ray.
 @param[in]  point    The 3D point.
 @param[out] distance The distance between the ray and point.
+@related SURay3D
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if ray or point are NULL
@@ -45,6 +47,7 @@ SU_RESULT SURay3DDistanceTo(const struct SURay3D* ray,
 @param[in]  ray             The ray.
 @param[in]  point           The 3D point to project onto the ray.
 @param[out] projected_point The point resulting from the projection.
+@related SURay3D
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if ray or point are NULL

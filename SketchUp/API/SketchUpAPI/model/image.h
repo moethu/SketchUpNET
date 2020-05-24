@@ -20,6 +20,7 @@ extern "C" {
 @brief Converts from an \ref SUImageRef to an \ref SUEntityRef.
        This is essentially an upcast operation.
 @param[in] image The given image reference.
+@related SUImageRef
 @return
 - The converted \ref SUEntityRef if image is a valid image.
 - If not, the returned reference will be invalid.
@@ -31,6 +32,7 @@ SU_EXPORT SUEntityRef SUImageToEntity(SUImageRef image);
        This is essentially a downcast operation so the given entity must be
        convertible to an \ref SUImageRef.
 @param[in] entity The given entity reference.
+@related SUImageRef
 @return
 - The converted \ref SUImageRef if the downcast operation succeeds. If not, the
 returned reference will be invalid
@@ -41,6 +43,7 @@ SU_EXPORT SUImageRef SUImageFromEntity(SUEntityRef entity);
 @brief Converts from an \ref SUImageRef to an \ref SUDrawingElementRef.
        This is essentially an upcast operation.
 @param[in] image The given image reference.
+@related SUImageRef
 @return
 - The converted \ref SUEntityRef if image is a valid image
 - If not, the returned reference will be invalid
@@ -52,6 +55,7 @@ SU_EXPORT SUDrawingElementRef SUImageToDrawingElement(SUImageRef image);
        This is essentially a downcast operation so the given element must be
        convertible to an \ref SUImageRef.
 @param[in] drawing_elem The given element reference.
+@related SUImageRef
 @return
 - The converted \ref SUImageRef if the downcast operation succeeds
 - If not, the returned reference will be invalid
@@ -62,10 +66,12 @@ SU_EXPORT SUImageRef SUImageFromDrawingElement(SUDrawingElementRef
 /**
 @brief Creates a new image object from an image file specified by a path.
        The created image must be subsequently added to the Entities of a model,
-       component definition or a group.
+       component definition or a group. Use \ref SUModelRemoveComponentDefinitions
+       to remove the image from a model.
 @param[out] image     The image object created.
 @param[in]  file_path The file path of the source image file.
                       Assumed to be UTF-8 encoded.
+@related SUImageRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if file_path is NULL
@@ -77,10 +83,12 @@ SU_RESULT SUImageCreateFromFile(SUImageRef* image, const char* file_path);
 /**
 @brief Creates a new SketchUp model image object from an image representation
        object. The created image must be subsequently added to the Entities of
-       a model, component definition or a group.
+       a model, component definition or a group. Use
+       \ref SUModelRemoveComponentDefinitions to remove the image from a model.
 @since SketchUp 2017, API 5.0
 @param[out] image     The image object created.
 @param[in]  image_rep The basic image object retrieved.
+@related SUImageRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if image is NULL
@@ -99,6 +107,7 @@ afterwards.
 @since SketchUp 2017, API 5.0
 @param[in]  image        The texture object.
 @param[out] image_rep The basic image object retrieved.
+@related SUImageRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if image is not a valid object
@@ -113,6 +122,7 @@ SU_RESULT SUImageGetImageRep(SUImageRef image, SUImageRepRef* image_rep);
 @brief Retrieves the name of an image object.
 @param[in]  image The image object.
 @param[out] name  The name retrieved.
+@related SUImageRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if image is not a valid object
@@ -126,6 +136,7 @@ SU_RESULT SUImageGetName(SUImageRef image, SUStringRef* name);
 @brief Sets the name of an image object.
 @param[in] image The image object.
 @param[in] name  The name to set. Assumed to be UTF-8 encoded.
+@related SUImageRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if image is not a valid object
@@ -137,6 +148,7 @@ SU_RESULT SUImageSetName(SUImageRef image, const char* name);
 @brief Retrieves the 3-dimensional homogeneous transform of an image object.
 @param[in]  image     The image object.
 @param[out] transform The transform retrieved.
+@related SUImageRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if image is not a valid object
@@ -149,6 +161,7 @@ SU_RESULT SUImageGetTransform(SUImageRef image,
 @brief Sets the 3-dimensional homogeneous transform of an image object.
 @param[in] image     The image object.
 @param[in] transform The affine transform to set.
+@related SUImageRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if image is not a valid object
@@ -161,6 +174,7 @@ SU_RESULT SUImageSetTransform(SUImageRef image,
 @brief Retrieves the image file name of an image object.
 @param[in]  image     The image object.
 @param[out] file_name The image file name retrieved.
+@related SUImageRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if image is not a valid object
@@ -175,6 +189,7 @@ SU_RESULT SUImageGetFileName(SUImageRef image, SUStringRef* file_name);
 @param[in]  image  The image object.
 @param[out] width  The width dimension retrieved.
 @param[out] height The height dimension retrieved.
+@related SUImageRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if image is not a valid object
@@ -190,6 +205,7 @@ SU_RESULT SUImageGetDimensions(SUImageRef image, double* width, double* height);
 @param[in]  image  The image object.
 @param[out] width  The width dimension retrieved.
 @param[out] height The height dimension retrieved.
+@related SUImageRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if image is not a valid object
@@ -211,6 +227,7 @@ SU_RESULT SUImageGetPixelDimensions(SUImageRef image, size_t* width,
 @param[in]  image          The image object.
 @param[out] data_size      The total size of the image data in bytes.
 @param[out] bits_per_pixel The number of bits per pixel of the image data.
+@related SUImageRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if image is an invalid object
@@ -230,6 +247,7 @@ SU_RESULT SUImageGetDataSize(SUImageRef image, size_t* data_size,
 @param[in]  image      The image object.
 @param[in]  data_size  The size of the byte array.
 @param[out] pixel_data The image data retrieved.
+@related SUImageRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if image is an invalid object

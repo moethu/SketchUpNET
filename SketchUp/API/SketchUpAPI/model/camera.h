@@ -20,6 +20,7 @@ extern "C" {
 @brief  Creates a default camera object.
 @since SketchUp 2015, API 3.0
 @param[out] camera The camera object created.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if camera is NULL
@@ -31,6 +32,7 @@ SU_RESULT SUCameraCreate(SUCameraRef* camera);
 @brief  Releases a camera object created by SUCameraCreate.
 @since SketchUp 2015, API 3.0
 @param[in] camera The camera object.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is an invalid object
@@ -44,6 +46,7 @@ SU_RESULT SUCameraRelease(SUCameraRef* camera);
 @param[out] position  The position retrieved.
 @param[out] target    The target retrieved.
 @param[out] up_vector The up direction retrieved.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -60,6 +63,7 @@ SU_RESULT SUCameraGetOrientation(SUCameraRef camera,
 @param[in] position  The new eye position.
 @param[in] target    The new target position.
 @param[in] up_vector The new up direction.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -75,6 +79,7 @@ SU_RESULT SUCameraSetOrientation(SUCameraRef camera,
 @since SketchUp 2017, API 5.0
 @param[in]  camera         The camera object.
 @param[out] transformation The look at matrix retrieved.
+@related SUCameraRef
 @return 
 - \ref SU_ERROR_NONE on success.
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -90,6 +95,7 @@ SU_RESULT SUCameraGetViewTransformation(SUCameraRef camera,
        direction of the camera.
 @param[in] camera The camera object.
 @param[in] fov    The field of view angle in degrees.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -101,6 +107,7 @@ SU_RESULT SUCameraSetPerspectiveFrustumFOV(SUCameraRef camera, double fov);
        view is measured along the vertical direction of the camera.
 @param[in] camera The camera object.
 @param[out] fov   The field of view retrieved.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -115,6 +122,7 @@ SU_RESULT SUCameraGetPerspectiveFrustumFOV(SUCameraRef camera, double* fov);
 @since SketchUp 2017, API 5.0
 @param[in]  camera       The camera object.
 @param[out] aspect_ratio The aspect ratio to be set.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -126,6 +134,7 @@ SU_RESULT SUCameraSetAspectRatio(SUCameraRef camera, double aspect_ratio);
 @brief Retrieves the aspect ratio of a camera object.
 @param[in]  camera       The camera object.
 @param[out] aspect_ratio The aspect ratio retrieved.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -141,6 +150,7 @@ SU_RESULT SUCameraGetAspectRatio(SUCameraRef camera, double* aspect_ratio);
        camera.
 @param[in] camera The camera object.
 @param[in] height The height of the camera view.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -152,6 +162,7 @@ SU_RESULT SUCameraSetOrthographicFrustumHeight(SUCameraRef camera,
 @brief Retrieves the height of an orthographic camera object.
 @param[in]  camera The camera object.
 @param[out] height The height retrieved.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -166,6 +177,7 @@ SU_RESULT SUCameraGetOrthographicFrustumHeight(SUCameraRef camera,
 @brief Sets a camera object perspective or orthographic.
 @param[in] camera      The camera object.
 @param[in] perspective The perspective flag.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -177,6 +189,7 @@ SU_RESULT SUCameraSetPerspective(SUCameraRef camera, bool perspective);
        (i.e. orthographic).
 @param[in]  camera      The camera object.
 @param[out] perspective The perspective flag retrieved.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is an invalid object
@@ -190,6 +203,7 @@ SU_RESULT SUCameraGetPerspective(SUCameraRef camera, bool* perspective);
 @param[in]  camera The camera object.
 @param[out] znear  The near clipping distance.
 @param[out] zfar   The far clipping distance.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is an invalid object
@@ -204,6 +218,7 @@ SU_RESULT SUCameraGetClippingDistances(SUCameraRef camera,
 @since SketchUp 2017, API 5.0
 @param[in] camera        The camera object.
 @param[in] is_fov_height The field of view flag set.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -216,6 +231,7 @@ SU_RESULT SUCameraSetFOVIsHeight(SUCameraRef camera, bool is_fov_height);
 @since SketchUp 2017, API 5.0
 @param[in]  camera        The camera object.
 @param[out] is_fov_height The field of view flag retrieved.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -230,6 +246,7 @@ SU_RESULT SUCameraGetFOVIsHeight(SUCameraRef camera, bool* is_fov_height);
 @since SketchUp 2017, API 5.0
 @param[in] camera The camera object.
 @param[in] width  The width set in millimeters.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -245,6 +262,7 @@ SU_RESULT SUCameraSetImageWidth(SUCameraRef camera, double width);
 @since SketchUp 2017, API 5.0
 @param[in]  camera The camera object.
 @param[out] width  The image width retrieved.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -259,6 +277,7 @@ SU_RESULT SUCameraGetImageWidth(SUCameraRef camera, double* width);
 @param[in] camera The camera object.
 @param[in] desc   The description to be set.
 Assumed to be UTF-8 encoded.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -271,6 +290,7 @@ SU_RESULT SUCameraSetDescription(SUCameraRef camera, const char* desc);
 @since SketchUp 2017, API 5.0
 @param[in]  camera The camera object.
 @param[out] desc   The description retrieved.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -285,6 +305,7 @@ SU_RESULT SUCameraGetDescription(SUCameraRef camera, SUStringRef* desc);
 @since SketchUp 2017, API 5.0
 @param[in]  camera    The camera object.
 @param[out] direction The direction vector retrieved.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -299,6 +320,7 @@ SU_RESULT SUCameraGetDirection(SUCameraRef camera,
 @since SketchUp 2017, API 5.0
 @param[in] camera  The camera object.
 @param[in] make_2d The flag for specifying if the camera should be 2D.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -310,6 +332,7 @@ SU_RESULT SUCameraSet2D(SUCameraRef camera, bool make_2d);
 @since SketchUp 2017, API 5.0
 @param[in]  camera The camera object.
 @param[out] is_2d  The 2D flag retrieved.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is an invalid object
@@ -322,6 +345,7 @@ SU_RESULT SUCameraGet2D(SUCameraRef camera, bool* is_2d);
 @since SketchUp 2017, API 5.0
 @param[in] camera The camera object.
 @param[in] scale  The scale to be set.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -333,6 +357,7 @@ SU_RESULT SUCameraSetScale2D(SUCameraRef camera, double scale);
 @since SketchUp 2017, API 5.0
 @param[in]  camera The camera object.
 @param[out] scale  The scale factor retrieved.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -347,6 +372,7 @@ SU_RESULT SUCameraGetScale2D(SUCameraRef camera, double* scale);
 @since SketchUp 2017, API 5.0
 @param[in] camera The camera object.
 @param[in] center The center to be set.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
@@ -361,6 +387,7 @@ SU_RESULT SUCameraSetCenter2D(SUCameraRef camera,
 @since SketchUp 2017, API 5.0
 @param[in]  camera The camera object.
 @param[out] center The center point retrieved.
+@related SUCameraRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object

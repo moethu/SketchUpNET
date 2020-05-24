@@ -22,6 +22,7 @@ extern "C" {
 @brief  Converts from an \ref SUTextureRef to an \ref SUEntityRef. This is
         essentially an upcast operation.
 @param[in] texture The texture reference.
+@related SUTextureRef
 @return
 - The converted \ref SUEntityRef if texture is a valid object. If not, the
   returned reference will be invalid.
@@ -33,6 +34,7 @@ SU_EXPORT SUEntityRef SUTextureToEntity(SUTextureRef texture);
         essentially a downcast operation so the given \ref SUEntityRef must be
         convertible to an \ref SUTextureRef.
 @param[in] entity The entity reference.
+@related SUTextureRef
 @return
 - The converted \ref SUTextureRef if the downcast operation succeeds. If
   not, the returned reference will be invalid.
@@ -52,6 +54,7 @@ SU_EXPORT SUTextureRef SUTextureFromEntity(SUEntityRef entity);
 @param[in]  height         The height in pixels of the texture data.
 @param[in]  bits_per_pixel The number of bits per pixel of the image data.
 @param[in]  pixel_data     The source of the pixel data.
+@related SUTextureRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if pixels is NULL
@@ -69,6 +72,7 @@ SU_RESULT SUTextureCreateFromImageData(SUTextureRef* texture,
 @since SketchUp 2017, API 5.0
 @param[out] texture The texture object created.
 @param[in]  image   The image retrieved.
+@related SUTextureRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if texture is NULL
@@ -89,6 +93,7 @@ SU_RESULT SUTextureCreateFromImageRep(SUTextureRef* texture,
                       UTF-8 encoded.
 @param[in]  s_scale   The scale factor for s coordinate value.
 @param[in]  t_scale   The scale factor for t coordinate value.
+@related SUTextureRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if file_path is NULL
@@ -107,6 +112,7 @@ SU_RESULT SUTextureCreateFromFile(SUTextureRef* texture,
         handles the deallocation of the resources of the texture object and the
         texture object must not be explicitly deallocated.
 @param[in] texture The texture object to deallocate.
+@related SUTextureRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if texture is NULL
@@ -129,6 +135,7 @@ SU_RESULT SUTextureRelease(SUTextureRef* texture);
                     coordinates.
 @param[out] t_scale The t coordinate scale factor to map a pixel into model
                     coordinates.
+@related SUTextureRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if texture is an invalid object
@@ -152,6 +159,7 @@ SU_RESULT SUTextureGetDimensions(SUTextureRef texture,
 @param[in]  texture        The texture object.
 @param[out] data_size      The total size of the image data in bytes.
 @param[out] bits_per_pixel The number of bits per pixel of the image data.
+@related SUTextureRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if texture is an invalid object
@@ -172,6 +180,7 @@ SU_RESULT SUTextureGetImageDataSize(SUTextureRef texture,
 @param[in] texture     The texture object.
 @param[in] data_size   The size of the byte array.
 @param[out] pixel_data The image data retrieved.
+@related SUTextureRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if texture is an invalid object
@@ -195,6 +204,7 @@ SU_RESULT SUTextureGetImageData(SUTextureRef texture,
 @since SketchUp 2017, API 5.0
 @param[in]  texture The texture object.
 @param[out] image The image object retrieved.
+@related SUTextureRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if texture is not a valid object
@@ -206,10 +216,14 @@ SU_RESULT SUTextureGetImageData(SUTextureRef texture,
 SU_RESULT SUTextureGetImageRep(SUTextureRef texture, SUImageRepRef* image);
 
 /**
-@brief  Writes a texture object as an image to disk.
+@brief  Writes a texture object as an image to disk. If the material has been
+        colorized this will write out a colorized texture.
+        Use \ref SUTextureWriteOriginalToFile to obtain the original texture
+        without colorization.
 @param[in] texture   The texture object.
 @param[in] file_path The file path destination of the texture image. Assumed to
                      be UTF-8 encoded.
+@related SUTextureRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if texture is not a valid object
@@ -227,6 +241,7 @@ SU_RESULT SUTextureWriteToFile(SUTextureRef texture, const char* file_path);
 @param[in] texture The texture object.
 @param[in] name    The name string to set as the file name.
 Assumed to be UTF-8 encoded.
+@related SUTextureRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if texture is not a valid object
@@ -237,9 +252,13 @@ SU_RESULT SUTextureSetFileName(SUTextureRef texture, const char* name);
 /**
 @brief Retrieves the image file name of a texture object. A full path may be
        stored with the texture, but this method will always return a file name
-       string with no path.
+       string with no path. If the texture was created from an
+       \ref SUImageRepRef created with \ref SUImageRepLoadFile then this will
+       return only the file extension representing the file format of the image
+       data (e.g. ".png").
 @param[in]  texture   The texture object.
 @param[out] file_name The file name retrieved.
+@related SUTextureRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if texture is not a valid object
@@ -256,6 +275,7 @@ SU_RESULT SUTextureGetFileName(SUTextureRef texture,
         uses the alpha channel.
 @param[in] texture             The texture object.
 @param[out] alpha_channel_used The destination of the retrieved value.
+@related SUTextureRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if texture is not a valid object
@@ -269,6 +289,7 @@ SU_RESULT SUTextureGetUseAlphaChannel(SUTextureRef texture,
 @brief  Retrieves the average color for the texture.
 @param[in]  texture     The texture object
 @param[out] color_val   The color object
+@related SUTextureRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if texture is not a valid object
@@ -286,6 +307,7 @@ SU_RESULT SUTextureGetAverageColor(SUTextureRef texture,
 @since SketchUp 2018, API 6.0
 @param[in]  texture   The texture object.
 @param[out] image_rep The retrieved image rep.
+@related SUTextureRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if texture is not a valid object
@@ -295,6 +317,26 @@ SU_RESULT SUTextureGetAverageColor(SUTextureRef texture,
 */
 SU_RESULT SUTextureGetColorizedImageRep(SUTextureRef texture,
                                         SUImageRepRef* image_rep);
+
+/**
+@brief  Writes a texture object as an image to disk without any colorization.
+        If the texture was created from a file on disk this will write out the
+        original file data if the provided file extension matches. This will be
+        the fastest way to extract the original texture from the model.
+        Use \ref SUTextureGetFilename to obtain the original file format.
+@since SketchUp 2019.2, API 7.1
+@param[in] texture   The texture object.
+@param[in] file_path The file path destination of the texture image. Assumed to
+                     be UTF-8 encoded.
+@related SUTextureRef
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if texture is not a valid object
+- \ref SU_ERROR_NULL_POINTER_INPUT if file_path is NULL
+- \ref SU_ERROR_SERIALIZATION if image file could not be written to disk
+*/
+SU_RESULT SUTextureWriteOriginalToFile(SUTextureRef texture,
+                                       const char* file_path);
 
 #ifdef __cplusplus
 }   // extern "C"
