@@ -34,6 +34,7 @@ enum SUTextLeaderType {
        essentially an upcast operation.
 @since SketchUp 2018, API 6.0
 @param[in] text The given text reference.
+@related SUTextRef
 @return
 - The converted \ref SUEntityRef if text is a valid object
 - If not, the returned reference will be invalid
@@ -46,6 +47,7 @@ SU_EXPORT SUEntityRef SUTextToEntity(SUTextRef text);
        convertible to an \ref SUTextRef.
 @since SketchUp 2018, API 6.0
 @param[in] entity The given entity reference.
+@related SUTextRef
 @return
 - The converted \ref SUTextRef if the downcast operation succeeds
 - If not, the returned reference will be invalid
@@ -57,6 +59,7 @@ SU_EXPORT SUTextRef SUTextFromEntity(SUEntityRef entity);
        This is essentially an upcast operation.
 @since SketchUp 2018, API 6.0
 @param[in] text The given dimension reference.
+@related SUTextRef
 @return
 - The converted \ref SUDrawingElementRef if text is a valid object
 - If not, the returned reference will be invalid
@@ -69,6 +72,7 @@ SU_EXPORT SUDrawingElementRef SUTextToDrawingElement(SUTextRef text);
        be convertible to an \ref SUTextRef.
 @since SketchUp 2018, API 6.0
 @param[in] element The given drawing element reference.
+@related SUTextRef
 @return
 - The converted \ref SUTextRef if the downcast operation succeeds
 - If not, the returned reference will be invalid
@@ -81,6 +85,7 @@ SU_EXPORT SUTextRef SUTextFromDrawingElement(SUDrawingElementRef element);
        unless the text object is associated with a parent object.
 @since SketchUp 2018, API 6.0
 @param[out] text The text object.
+@related SUTextRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_OVERWRITE_VALID if text input object reference already 
@@ -95,6 +100,7 @@ SU_RESULT SUTextCreate(SUTextRef* text);
        SUEntitiesAddTexts).
 @since SketchUp 2018, API 6.0
 @param[in] text The text object.
+@related SUTextRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if text does not reference a valid object
@@ -107,6 +113,7 @@ SU_RESULT SUTextRelease(SUTextRef* text);
 @since SketchUp 2018, API 6.0
 @param[in] text   The text object.
 @param[in] string The string to set.
+@related SUTextRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if text is not a valid object
@@ -120,6 +127,7 @@ SU_RESULT SUTextSetString(SUTextRef text, const char* string);
 @since SketchUp 2018, API 6.0
 @param[in]  text   The text object.
 @param[out] string The string retrieved.
+@related SUTextRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if text is not a valid object
@@ -134,6 +142,7 @@ SU_RESULT SUTextGetString(SUTextRef text, SUStringRef* string);
 @since SketchUp 2018, API 6.0
 @param[in] text The text object.
 @param[in] font The font to set.
+@related SUTextRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if text is not a valid object
@@ -146,6 +155,7 @@ SU_RESULT SUTextSetFont(SUTextRef text, SUFontRef font);
 @since SketchUp 2018, API 6.0
 @param[in]  text The text object.
 @param[out] font The font retrieved.
+@related SUTextRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if text is not a valid object
@@ -158,6 +168,7 @@ SU_RESULT SUTextGetFont(SUTextRef text, SUFontRef* font);
 @since SketchUp 2018, API 6.0
 @param[in] text   The text object.
 @param[in] leader The leader type to set.
+@related SUTextRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if text is not a valid object
@@ -170,6 +181,7 @@ SU_RESULT SUTextSetLeaderType(SUTextRef text, enum SUTextLeaderType leader);
 @since SketchUp 2018, API 6.0
 @param[in]  text   The text object.
 @param[out] leader The leader type retrieved.
+@related SUTextRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if text is not a valid object
@@ -182,6 +194,7 @@ SU_RESULT SUTextGetLeaderType(SUTextRef text, enum SUTextLeaderType* leader);
 @since SketchUp 2018, API 6.0
 @param[in] text       The text object.
 @param[in] arrow_type The arrow type to set.
+@related SUTextRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if text is not a valid object
@@ -194,6 +207,7 @@ SU_RESULT SUTextSetArrowType(SUTextRef text, enum SUArrowType arrow_type);
 @since SketchUp 2018, API 6.0
 @param[in]  text       The text object.
 @param[out] arrow_type The arrow type retrieved.
+@related SUTextRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if text is not a valid object
@@ -239,6 +253,7 @@ SU_RESULT SUTextGetArrowType(SUTextRef text, enum SUArrowType* arrow_type);
 @param[in] text  The text object.
 @param[in] point The point to set.
 @param[in] path  The instance path to be set.
+@related SUTextRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if text is not a valid object
@@ -261,6 +276,7 @@ SU_RESULT SUTextSetPoint(SUTextRef text, const struct SUPoint3D* point,
 @param[in]  text  The text object.
 @param[out] point The point retrieved.
 @param[out] path  The path retrieved.
+@related SUTextRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if text is not a valid object
@@ -275,6 +291,7 @@ SU_RESULT SUTextGetPoint(SUTextRef text, struct SUPoint3D* point,
 @since SketchUp 2018, API 6.0
 @param[in] text   The text object.
 @param[in] vector The vector to set.
+@related SUTextRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if text is not a valid object
@@ -287,6 +304,7 @@ SU_RESULT SUTextSetLeaderVector(SUTextRef text, const struct SUVector3D* vector)
 @since SketchUp 2018, API 6.0
 @param[in]  text   The text object.
 @param[out] vector The vector retrieved.
+@related SUTextRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if text is not a valid object
@@ -299,6 +317,7 @@ SU_RESULT SUTextGetLeaderVector(SUTextRef text, struct SUVector3D* vector);
 @since SketchUp 2018, API 6.0
 @param[in] text  The text object.
 @param[in] color The color to set.
+@related SUTextRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if text is not a valid object
@@ -311,12 +330,48 @@ SU_RESULT SUTextSetColor(SUTextRef text, const SUColor* color);
 @since SketchUp 2018, API 6.0
 @param[in]  text  The text object.
 @param[out] color The color retrieved.
+@related SUTextRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if text is not a valid object
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if color is NULL
 */
 SU_RESULT SUTextGetColor(SUTextRef text, SUColor* color);
+
+/**
+@brief Sets the screen position for text with no leader.
+@since SketchUp 2019, API 7.0
+@param[in] text      The text object.
+@param[in] percent_x The x position on screen in a range of 0.0 - 1.0 relative
+                     to the screen width.
+@param[in] percent_y The y position on screen in a range of 0.0 - 1.0 relative
+                     to the screen height.
+@related SUTextRef
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if text is not a valid object
+- \ref SU_ERROR_NO_DATA if the text has a leader to position with.
+- \ref SU_ERROR_OUT_OF_RANGE if a leader exists, or if the percentages are not
+       between 0 and 1 inclusive.
+*/
+SU_RESULT SUTextSetScreenPosition(SUTextRef text, const double percent_x,
+    const double percent_y);
+
+/**
+@brief Retrieves the screen location for text with no leader.
+@since SketchUp 2019, API 7.0
+@param[in]  text      The text object.
+@param[out] percent_x The percent of screen width to the text position.
+@param[out] percent_y The percent of screen height to the text position.
+@related SUTextRef
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if text is not a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if either percent is NULL
+- \ref SU_ERROR_NO_DATA if text has a leader
+*/
+SU_RESULT SUTextGetScreenPosition(SUTextRef text, double* percent_x,
+    double* percent_y);
 
 #ifdef __cplusplus
 }  // extern "C"

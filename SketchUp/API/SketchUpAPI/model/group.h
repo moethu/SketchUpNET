@@ -21,6 +21,7 @@ extern "C" {
 @brief Converts from an \ref SUGroupRef to an \ref SUEntityRef.
        This is essentially an upcast operation.
 @param[in] group The given group reference.
+@related SUGroupRef
 @return
 - The converted \ref SUEntityRef if group is a valid group
 - If not, the returned reference will be invalid
@@ -32,6 +33,7 @@ SU_EXPORT SUEntityRef SUGroupToEntity(SUGroupRef group);
        This is essentially a downcast operation so the given entity must be
        convertible to an SUGroupRef.
 @param[in] entity The given entity reference.
+@related SUGroupRef
 @return
 - The converted \ref SUGroupRef if the downcast operation succeeds
 - If not, the returned reference will be invalid
@@ -42,6 +44,7 @@ SU_EXPORT SUGroupRef SUGroupFromEntity(SUEntityRef entity);
 @brief Converts from an \ref SUGroupRef to an \ref SUDrawingElementRef.
        This is essentially an upcast operation.
 @param[in] group The given group reference.
+@related SUGroupRef
 @return
 - The converted \ref SUDrawingElementRef if group is a valid group
 - If not, the returned reference will be invalid
@@ -53,6 +56,7 @@ SU_EXPORT SUDrawingElementRef SUGroupToDrawingElement(SUGroupRef group);
        This is essentially a downcast operation so the given element must be
        convertible to an SUGroupRef.
 @param[in] drawing_elem The given element reference.
+@related SUGroupRef
 @return
 - The converted \ref SUGroupRef if the downcast operation succeeds
 - If not, the returned reference will be invalid
@@ -65,6 +69,7 @@ SU_EXPORT SUGroupRef SUGroupFromDrawingElement(SUDrawingElementRef
        This is essentially an upcast operation.
 @since SketchUp 2016, API 4.0
 @param[in] group The given group reference.
+@related SUGroupRef
 @return
 - The converted \ref SUComponentInstanceRef if group is a valid group
 - If not, the returned reference will be invalid
@@ -77,6 +82,7 @@ SU_EXPORT SUComponentInstanceRef SUGroupToComponentInstance(SUGroupRef group);
        convertible to an SUGroupRef.
 @since SketchUp 2016, API 4.0
 @param[in] component_inst The given component instance reference.
+@related SUGroupRef
 @return
 - The converted \ref SUGroupRef if the downcast operation succeeds
 - If not, the returned reference will be invalid
@@ -88,8 +94,10 @@ SU_EXPORT SUGroupRef SUGroupFromComponentInstance(SUComponentInstanceRef
 @brief Creates a new group object.
 
 The created group must be subsequently added to the Entities of a model,
-component definition or a group.
+component definition or a group. Use \ref SUModelRemoveComponentDefinitions to
+remove the group from a model.
 @param[out] group The group object created.
+@related SUGroupRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if group is NULL
@@ -101,6 +109,7 @@ SU_RESULT SUGroupCreate(SUGroupRef* group);
 @param[in] group The group object.
 @param[in] name  The name string to set the group object.
                  Assumed to be UTF-8 encoded.
+@related SUGroupRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if group is not a valid object
@@ -112,6 +121,7 @@ SU_RESULT SUGroupSetName(SUGroupRef group, const char* name);
 @brief Retrieves the name of a group object.
 @param[in]  group The group object.
 @param[out] name  The name retrieved.
+@related SUGroupRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if group is not a valid object
@@ -126,6 +136,7 @@ SU_RESULT SUGroupGetName(SUGroupRef group, SUStringRef* name);
 @since SketchUp 2015, API 3.0
 @param[in]  group   The group object.
 @param[out] guid    The guid retrieved.
+@related SUGroupRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if group is not a valid object
@@ -140,6 +151,7 @@ SU_RESULT SUGroupGetGuid(SUGroupRef group, SUStringRef* guid);
 @since SketchUp 2015, API 3.0
 @param[in]  group    The group object.
 @param[in]  guid_str The utf-8 formatted guid string.
+@related SUGroupRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if group is not a valid object
@@ -155,6 +167,7 @@ the root component of a model, then the transform is relative to absolute
 coordinates.
 @param[in] group     The group object.
 @param[in] transform The affine transform to set.
+@related SUGroupRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if group is not a valid object.
@@ -169,6 +182,7 @@ SU_RESULT SUGroupSetTransform(SUGroupRef group,
 See description of SUGroupSetTransform for a discussion of group transforms.
 @param[in]  group     The group object.
 @param[out] transform The transform retrieved.
+@related SUGroupRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if group is not a valid object
@@ -181,6 +195,7 @@ SU_RESULT SUGroupGetTransform(SUGroupRef group,
 @brief Retrieves the entities of the group object.
 @param[in]  group    The group object.
 @param[out] entities The entities retrieved.
+@related SUGroupRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if group is not a valid object
@@ -197,6 +212,7 @@ ignored by the Doxygen parser and will not appear in any documentation */
 @since SketchUp 2014, API 2.0
 @param[in]  group     The group object.
 @param[out] component The component definition retrieved.
+@related SUGroupRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if group is not a valid object
@@ -211,6 +227,7 @@ SU_RESULT SUGroupGetDefinition(SUGroupRef group,
 //@since SketchUp 2016, API 4.0
 //@param[in]  group    The group object.
 //@param[out] entities Array of entity pointers returned
+//@related SUGroupRef
 //@return
 //- \ref SU_ERROR_NONE on success
 //- \ref SU_ERROR_INVALID_INPUT if group is invalid

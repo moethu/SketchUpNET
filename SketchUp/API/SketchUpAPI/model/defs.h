@@ -40,6 +40,8 @@ DEFINE_SU_TYPE(SUImageRef)
 DEFINE_SU_TYPE(SUImageRepRef)
 DEFINE_SU_TYPE(SUInstancePathRef)
 DEFINE_SU_TYPE(SULayerRef)
+DEFINE_SU_TYPE(SULineStyleRef)
+DEFINE_SU_TYPE(SULineStylesRef)
 DEFINE_SU_TYPE(SULocationRef)
 DEFINE_SU_TYPE(SULoopInputRef)
 DEFINE_SU_TYPE(SULoopRef)
@@ -120,7 +122,9 @@ enum SURefType {
   SURefType_EntityListIterator,
   SURefType_DrawingElement,
   SURefType_Entity,
-  SURefType_LengthFormatter
+  SURefType_LengthFormatter,
+  SURefType_LineStyle,
+  SURefType_LineStyleManager
 };
 
 #pragma pack(pop)

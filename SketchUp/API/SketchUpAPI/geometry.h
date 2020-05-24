@@ -118,6 +118,24 @@ struct SUTransformation {
   double values[16]; ///< Matrix values in column-major order.
 };
 
+/**
+@struct SUTransformation2D
+@brief Represents a 2D (2x3) affine transformation matrix. The matrix
+       is stored in column-major format:
+<pre>
+ m11 m21 tx
+ m12 m22 ty
+</pre>
+*/
+struct SUTransformation2D {
+  double m11;
+  double m12;
+  double m21;
+  double m22;
+  double tx;
+  double ty;
+};
+
 #ifdef __cplusplus
 }  // end extern "C"
 #endif  // __cplusplus

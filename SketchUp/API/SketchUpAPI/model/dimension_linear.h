@@ -39,10 +39,22 @@ enum SUVerticalTextPositionType {
 };
 
 /**
+@enum SUDimensionLinearAlignmentType
+@brief Indicates the different supported horizontal text position types
+@since SketchUp 2019, API 7.0
+*/
+enum SUDimensionLinearAlignmentType {
+  SUDimensionLinearAlignmentAligned = 0,
+  SUDimensionLinearAlignmentVertical,
+  SUDimensionLinearAlignmentHorizontal
+};
+
+/**
 @brief Converts from an \ref SUDimensionLinearRef to an \ref SUDimensionRef.
        This is essentially an upcast operation.
 @since SketchUp 2017, API 5.0
 @param[in] dimension The given dimension reference.
+@related SUDimensionLinearRef
 @return
 - The converted \ref SUDimensionRef if dimension is a valid object
 - If not, the returned reference will be invalid
@@ -56,6 +68,7 @@ SU_EXPORT SUDimensionRef SUDimensionLinearToDimension(
        SUDimensionRef must be convertible to an \ref SUDimensionLinearRef.
 @since SketchUp 2017, API 5.0
 @param[in] dimension The given dimension reference.
+@related SUDimensionLinearRef
 @return
 - The converted \ref SUDimensionLinearRef if the downcast operation succeeds
 - If not, the returned reference will be invalid
@@ -78,6 +91,7 @@ SU_EXPORT SUDimensionLinearRef SUDimensionLinearFromDimension(
             to the dimension's end.
 @param[in]  offset      The offset distance from the measured entities to be
             set.
+@related SUDimensionLinearRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if dimension is NULL
@@ -98,6 +112,7 @@ SU_RESULT SUDimensionLinearCreate(SUDimensionLinearRef* dimension,
 @brief Releases a dimension object.
 @since SketchUp 2017, API 5.0
 @param[in] dimension The dimension object.
+@related SUDimensionLinearRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dimension is an invalid object
@@ -115,6 +130,7 @@ SU_RESULT SUDimensionLinearRelease(SUDimensionLinearRef* dimension);
 @param[in]  dimension The dimension object.
 @param[out] point     The 3d point retrieved.
 @param[out] path      The instance path retrieved.
+@related SUDimensionLinearRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dimension is not a valid object
@@ -162,6 +178,7 @@ SU_RESULT SUDimensionLinearGetStartPoint(SUDimensionLinearRef dimension,
 @param[in] dimension The dimension object.
 @param[in] point     The 3d point to be set.
 @param[in] path      The instance path to be set.
+@related SUDimensionLinearRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dimension is not a valid object
@@ -184,6 +201,7 @@ SU_RESULT SUDimensionLinearSetStartPoint(SUDimensionLinearRef dimension,
 @param[in]  dimension The dimension object.
 @param[out] point     The 3d point retrieved.
 @param[out] path      The instance path retrieved.
+@related SUDimensionLinearRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dimension is not a valid object
@@ -200,6 +218,7 @@ SU_RESULT SUDimensionLinearGetEndPoint(SUDimensionLinearRef dimension,
 @param[in] dimension The dimension object.
 @param[in] point     The 3d point to be set.
 @param[in] path      The instance path to be set.
+@related SUDimensionLinearRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dimension is not a valid object
@@ -218,6 +237,7 @@ SU_RESULT SUDimensionLinearSetEndPoint(SUDimensionLinearRef dimension,
 @since SketchUp 2017, API 5.0
 @param[in]  dimension The dimension object.
 @param[out] axis      The 3d vector retrieved.
+@related SUDimensionLinearRef
 @return
 - \ref SU_ERROR_INVALID_INPUT if dimension is not a valid object
 - \ref SU_ERROR_NULL_POINTER_INPUT if path is invalid and point is NULL
@@ -234,6 +254,7 @@ SU_RESULT SUDimensionLinearGetXAxis(SUDimensionLinearRef dimension,
 @since SketchUp 2017, API 5.0
 @param[in] dimension The dimension object.
 @param[in] axis      The 3d vector to be set.
+@related SUDimensionLinearRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dimension is not a valid object
@@ -250,6 +271,7 @@ SU_RESULT SUDimensionLinearSetXAxis(SUDimensionLinearRef dimension,
 @since SketchUp 2017, API 5.0
 @param[in]  dimension The dimension object.
 @param[out] normal    The 3d vector retrieved.
+@related SUDimensionLinearRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dimension is not a valid object
@@ -263,6 +285,7 @@ SU_RESULT SUDimensionLinearGetNormal(SUDimensionLinearRef dimension,
 @since SketchUp 2017, API 5.0
 @param[in] dimension The dimension object.
 @param[in] normal    The 3d vector to be set.
+@related SUDimensionLinearRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dimension is not a valid object
@@ -277,6 +300,7 @@ SU_RESULT SUDimensionLinearSetNormal(SUDimensionLinearRef dimension,
 @since SketchUp 2017, API 5.0
 @param[in]  dimension The dimension object.
 @param[out] position  The position retrieved.
+@related SUDimensionLinearRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dimension is not a valid object
@@ -290,6 +314,7 @@ SU_RESULT SUDimensionLinearGetPosition(SUDimensionLinearRef dimension,
 @since SketchUp 2017, API 5.0
 @param[in] dimension The dimension object.
 @param[in] position  The position to be set.
+@related SUDimensionLinearRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dimension is not a valid object
@@ -304,6 +329,7 @@ SU_RESULT SUDimensionLinearSetPosition(SUDimensionLinearRef dimension,
 @since SketchUp 2017, API 5.0
 @param[in]  dimension The dimension object.
 @param[out] alignment The dimension alignment enum value retrieved.
+@related SUDimensionLinearRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dimension is not a valid object
@@ -317,6 +343,7 @@ SU_RESULT SUDimensionLinearGetVerticalAlignment(SUDimensionLinearRef dimension,
 @since SketchUp 2017, API 5.0
 @param[in] dimension The dimension object.
 @param[in] alignment The dimension alignment type to be set.
+@related SUDimensionLinearRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dimension is not a valid object
@@ -330,6 +357,7 @@ SU_RESULT SUDimensionLinearSetVerticalAlignment(SUDimensionLinearRef dimension,
 @since SketchUp 2017, API 5.0
 @param[in]  dimension The dimension object.
 @param[out] alignment The dimension alignment enum value retrieved.
+@related SUDimensionLinearRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dimension is not a valid object
@@ -344,6 +372,7 @@ SU_RESULT SUDimensionLinearGetHorizontalAlignment(
 @since SketchUp 2017, API 5.0
 @param[in] dimension The dimension object.
 @param[in] alignment The dimension alignment type to be set.
+@related SUDimensionLinearRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dimension is not a valid object
@@ -351,6 +380,38 @@ SU_RESULT SUDimensionLinearGetHorizontalAlignment(
 SU_RESULT SUDimensionLinearSetHorizontalAlignment(
     SUDimensionLinearRef dimension,
     enum SUHorizontalTextPositionType alignment);
+
+/**
+@brief Retrieves an enum value indicating the linear dimension's alignment
+type.
+@since SketchUp 2019, API 7.0
+@param[in]  dimension The dimension object.
+@param[out] alignment The dimension alignment enum value retrieved.
+@related SUDimensionLinearRef
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if dimension is not a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if alignment is NULL
+*/
+SU_RESULT SUDimensionLinearGetAlignment(SUDimensionLinearRef dimension,
+    enum SUDimensionLinearAlignmentType* alignment);
+
+/**
+@brief Retrieves the position of the text location attachment point of the
+       dimension text. Note that depending on the TextPosition enumerator, this
+       can be the center or side of a text element.
+@since SketchUp 2019, API 7.0
+@param[in]  dimension The dimension object.
+@param[out] position The position of the text element.
+@related SUDimensionLinearRef
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_OUT_OF_RANGE if the dimension text relation is invalid
+- \ref SU_ERROR_INVALID_INPUT if dimension is not a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if position is NULL
+*/
+SU_RESULT SUDimensionLinearGetTextPosition(SUDimensionLinearRef dimension,
+    struct SUPoint3D* position);
 
 #ifdef __cplusplus
 }  // extern "C"

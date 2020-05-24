@@ -49,6 +49,7 @@ SU_RESULT SUTransformationSetFromPointAndNormal(
 @param[in]  z_axis    The 3D vector specifying the z-axis for the transformation.
                       This is treated as a unit vector, so any scaling will be
                       ignored.
+@related SUTransformation
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if transform is NULL
@@ -67,6 +68,7 @@ SU_RESULT SUTransformationSetFromPointAndAxes(
 @param[out] transform  The transformation to be set.
 @param[in]  vector     The 3D vector specifying the translation for the
                        transformation.
+@related SUTransformation
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if transform is NULL
@@ -80,6 +82,7 @@ SU_RESULT SUTransformationTranslation(struct SUTransformation* transform,
 @since SketchUp 2018, API 6.0
 @param[out] transform  The transformation to be set.
 @param[in]  scale      The scale value for the transformation.
+@related SUTransformation
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if transform is NULL
@@ -94,6 +97,7 @@ SU_RESULT SUTransformationScale(struct SUTransformation* transform,
 @param[in]  x_scale    The x-axis scale value for the transformation.
 @param[in]  y_scale    The y-axis scale value for the transformation.
 @param[in]  z_scale    The z-axis scale value for the transformation.
+@related SUTransformation
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if transform is NULL
@@ -111,6 +115,7 @@ SU_RESULT SUTransformationNonUniformScale(struct SUTransformation* transform,
 @param[in]  point      The point specifying the translation component of the
                        transformation.
 @param[in]  scale      The scale value for the transformation.
+@related SUTransformation
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if transform is NULL
@@ -129,6 +134,7 @@ SU_RESULT SUTransformationScaleAboutPoint(struct SUTransformation* transform,
 @param[in]  x_scale    The x-axis scale value for the transformation.
 @param[in]  y_scale    The y-axis scale value for the transformation.
 @param[in]  z_scale    The z-axis scale value for the transformation.
+@related SUTransformation
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if transform is NULL
@@ -150,10 +156,11 @@ SU_RESULT SUTransformationNonUniformScaleAboutPoint(
                        transformation.
 @param[in]  vector     The vector about which rotation will occur.
 @param[in]  angle      The rotation in radians for the transformation.
+@related SUTransformation
 @return
 - \ref SU_ERROR_NONE on success
-- \ref SU_ERROR_NULL_POINTER_INPUT if transform is NULL
-- \ref SU_ERROR_NULL_POINTER_OUTPUT if is_identity is NULL
+- \ref SU_ERROR_NULL_POINTER_INPUT if point or vector is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if transform is NULL
 - \ref SU_ERROR_OUT_OF_RANGE if weight is not between 0.0 and 1.0
 */
 SU_RESULT SUTransformationRotation(struct SUTransformation* transform,
@@ -172,10 +179,11 @@ SU_RESULT SUTransformationRotation(struct SUTransformation* transform,
 @param[in]  t2         The second transformation object.
 @param[in]  weight     The weight determines the amount of interpolation from
                        t1 to t2.
+@related SUTransformation
 @return
 - \ref SU_ERROR_NONE on success
-- \ref SU_ERROR_NULL_POINTER_INPUT if transform is NULL
-- \ref SU_ERROR_NULL_POINTER_OUTPUT if is_identity is NULL
+- \ref SU_ERROR_NULL_POINTER_INPUT if t1 or t2 is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if transform is NULL
 - \ref SU_ERROR_OUT_OF_RANGE if weight is not between 0.0 and 1.0
 */
 SU_RESULT SUTransformationInterpolate(struct SUTransformation* transform,
@@ -188,6 +196,7 @@ SU_RESULT SUTransformationInterpolate(struct SUTransformation* transform,
 @since SketchUp 2018, API 6.0
 @param[in]  transform   The transformation object.
 @param[out] is_identity Whether the transformation is identity.
+@related SUTransformation
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if transform is NULL
@@ -201,6 +210,7 @@ SU_RESULT SUTransformationIsIdentity(const struct SUTransformation* transform,
 @since SketchUp 2018, API 6.0
 @param[in]  transform The transformation object.
 @param[out] inverse   The inverse transformation object.
+@related SUTransformation
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if transform is NULL
@@ -215,6 +225,7 @@ SU_RESULT SUTransformationGetInverse(const struct SUTransformation* transform,
 @since SketchUp 2018, API 6.0
 @param[in]  transform   The transformation object.
 @param[out] origin      The origin point to be retrieved.
+@related SUTransformation
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if transform is NULL
@@ -228,6 +239,7 @@ SU_RESULT SUTransformationGetOrigin(const struct SUTransformation* transform,
 @since SketchUp 2018, API 6.0
 @param[in]  transform   The transformation object.
 @param[out] x_axis      The x axis vector to be retrieved.
+@related SUTransformation
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if transform is NULL
@@ -241,6 +253,7 @@ SU_RESULT SUTransformationGetXAxis(const struct SUTransformation* transform,
 @since SketchUp 2018, API 6.0
 @param[in]  transform   The transformation object.
 @param[out] y_axis      The y axis vector to be retrieved.
+@related SUTransformation
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if transform is NULL
@@ -254,6 +267,7 @@ SU_RESULT SUTransformationGetYAxis(const struct SUTransformation* transform,
 @since SketchUp 2018, API 6.0
 @param[in]  transform   The transformation object.
 @param[out] z_axis      The z_axis vector to be retrieved.
+@related SUTransformation
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if transform is NULL
@@ -267,6 +281,7 @@ SU_RESULT SUTransformationGetZAxis(const struct SUTransformation* transform,
 @since SketchUp 2018, API 6.0
 @param[in]  transform   The transformation object.
 @param[out] z_rotation  The rotation to be retrieved.
+@related SUTransformation
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if transform is NULL
@@ -278,18 +293,33 @@ SU_RESULT SUTransformationGetZRotation(const struct SUTransformation* transform,
 /**
 @brief Multiplies a transformation by another transformation.
 @since SketchUp 2018, API 6.0
-@param[in]   transform1  The transformation object to be multiplied.
-@param[in]   transform2  The transformation object to multiply by.
+@param[in]   transform1     The transformation object to be multiplied.
+@param[in]   transform2     The transformation object to multiply by.
 @param[out]  out_transform  The result of the matrix multiplication
                             [transform1 * transform2].
+@related SUTransformation
 @return
 - \ref SU_ERROR_NONE on success
-- \ref SU_ERROR_NULL_POINTER_OUTPUT if transform is NULL
-- \ref SU_ERROR_NULL_POINTER_INPUT if in_transform is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if out_transform is NULL
+- \ref SU_ERROR_NULL_POINTER_INPUT if transform1 or transform2 is NULL
 */
 SU_RESULT SUTransformationMultiply(const struct SUTransformation* transform1,
                                    const struct SUTransformation* transform2,
                                    struct SUTransformation* out_transform);
+  
+/**
+@brief Returns true if transformation has been mirrored.
+@since SketchUp 2019, API 7.0
+@param[in]  transform    The transform object.
+@param[out] is_mirrored  Indicates if mirrored.
+@related SUTransformation
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if is_mirrored is NULL
+- \ref SU_ERROR_NULL_POINTER_INPUT if transform is NULL
+ */
+SU_RESULT SUTransformationIsMirrored(const struct SUTransformation* transform,
+                                     bool* is_mirrored);
 
 #ifdef __cplusplus
 }  // end extern "C"

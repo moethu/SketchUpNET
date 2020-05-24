@@ -54,7 +54,9 @@ namespace SketchUpNET
 		V2015,
 		V2016,
 		V2017,
-		V2018
+		V2018,
+		V2019,
+		V2020
 	};
 
 	/// <summary>
@@ -245,20 +247,37 @@ namespace SketchUpNET
 			if (res != SU_ERROR_NONE)
 				return false;
 
-			SUModelVersion saveversion = SUModelVersion::SUModelVersion_SU2018;
+			SUModelVersion saveversion = SUModelVersion::SUModelVersion_SU2020;
 
-			if (version == SKPVersion::V2013)
+			switch (version)
+			{
+			case SketchUpNET::SKPVersion::V2013:
 				saveversion = SUModelVersion::SUModelVersion_SU2013;
-			else if (version == SKPVersion::V2014)
+				break;
+			case SketchUpNET::SKPVersion::V2014:
 				saveversion = SUModelVersion::SUModelVersion_SU2014;
-			else if (version == SKPVersion::V2015)
+				break;
+			case SketchUpNET::SKPVersion::V2015:
 				saveversion = SUModelVersion::SUModelVersion_SU2015;
-			else if (version == SKPVersion::V2016)
+				break;
+			case SketchUpNET::SKPVersion::V2016:
 				saveversion = SUModelVersion::SUModelVersion_SU2016;
-			else if (version == SKPVersion::V2017)
+				break;
+			case SketchUpNET::SKPVersion::V2017:
 				saveversion = SUModelVersion::SUModelVersion_SU2017;
-			else if (version == SKPVersion::V2018)
+				break;
+			case SketchUpNET::SKPVersion::V2018:
 				saveversion = SUModelVersion::SUModelVersion_SU2018;
+				break;
+			case SketchUpNET::SKPVersion::V2019:
+				saveversion = SUModelVersion::SUModelVersion_SU2019;
+				break;
+			case SketchUpNET::SKPVersion::V2020:
+				saveversion = SUModelVersion::SUModelVersion_SU2020;
+				break;
+			default:
+				break;
+			}
 
 			SUModelSaveToFileWithVersion(model, Utilities::ToString(newFilename), saveversion);
 

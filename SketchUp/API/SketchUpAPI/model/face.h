@@ -23,6 +23,7 @@ extern "C" {
 @brief Converts from an \ref SUFaceRef to an \ref SUEntityRef.
        This is essentially an upcast operation.
 @param[in] face The given face reference.
+@related SUFaceRef
 @return
 - The converted SUEntityRef if face is a valid face.
 - If not, the returned reference will be invalid.
@@ -34,6 +35,7 @@ SU_EXPORT SUEntityRef SUFaceToEntity(SUFaceRef face);
        This is essentially a downcast operation so the given entity must be
        convertible to an \ref SUFaceRef.
 @param[in] entity The given entity reference.
+@related SUFaceRef
 @return
 - The converted SUFaceRef if the downcast operation succeeds
 - If not, the returned reference will be invalid
@@ -44,6 +46,7 @@ SU_EXPORT SUFaceRef SUFaceFromEntity(SUEntityRef entity);
 @brief Converts from an \ref SUFaceRef to an \ref SUDrawingElementRef.
        This is essentially an upcast operation.
 @param[in] face The given face reference.
+@related SUFaceRef
 @return
 - The converted \ref SUEntityRef if face is a valid face.
 - If not, the returned reference will be invalid.
@@ -55,6 +58,7 @@ SU_EXPORT SUDrawingElementRef SUFaceToDrawingElement(SUFaceRef face);
        This is essentially a downcast operation so the given element must be
        convertible to an SUFaceRef.
 @param[in] drawing_elem The given element reference.
+@related SUFaceRef
 @return
 - The converted \ref SUFaceRef if the downcast operation succeeds
 - If not, the returned reference will be invalid
@@ -70,6 +74,7 @@ SU_EXPORT SUFaceRef SUFaceFromDrawingElement(SUDrawingElementRef
                        If the function is successful, the new face will take
                        ownership of the loop and this reference will be
                        invalidated.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if vertices3d or outer_loop is NULL
@@ -88,6 +93,7 @@ SU_RESULT SUFaceCreate(SUFaceRef* face,
 @param[out] face       The face object created.
 @param[in]  vertices3d The array of vertices of the face.
 @param[in]  len        The length of the array of vertices.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if vertices3d is NULL
@@ -104,6 +110,7 @@ SU_RESULT SUFaceCreateSimple(SUFaceRef* face,
 @brief Retrieves the normal vector of a face object.
 @param[in]  face   The face object.
 @param[out] normal The 3d normal vector retrieved.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object
@@ -114,6 +121,7 @@ SU_RESULT SUFaceGetNormal(SUFaceRef face, struct SUVector3D* normal);
 /**
 @brief Releases a face object and its associated resources.
 @param[in] face The face object.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if face points to an NULL
@@ -125,6 +133,7 @@ SU_RESULT SUFaceRelease(SUFaceRef* face);
 @brief Retrieves the number of edges in a face.
 @param[in]  face  The face object.
 @param[out] count The number of edges.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if the face is not a valid object
@@ -138,6 +147,7 @@ SU_RESULT SUFaceGetNumEdges(SUFaceRef face, size_t* count);
 @param[in]  len   The number of edges to retrieve.
 @param[out] edges The edges retrieved.
 @param[out] count The number of edges retrieved.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object
@@ -151,6 +161,7 @@ SU_RESULT SUFaceGetEdges(SUFaceRef face, size_t len, SUEdgeRef edges[],
 @since SketchUp 2016, API 4.0
 @param[in]  face  The face object.
 @param[out] count The number of edge uses.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if the face is not a valid object
@@ -165,6 +176,7 @@ SU_RESULT SUFaceGetNumEdgeUses(SUFaceRef face, size_t* count);
 @param[in]  len   The number of edge uses to retrieve.
 @param[out] edges The edgeuses retrieved.
 @param[out] count The number of edge uses retrieved.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object
@@ -177,6 +189,7 @@ SU_RESULT SUFaceGetEdgeUses(SUFaceRef face, size_t len, SUEdgeUseRef edges[],
 @brief Retrieves the plane of the face.
 @param[in]  face  The face object.
 @param[out] plane The 3d plane retrieved.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object
@@ -188,6 +201,7 @@ SU_RESULT SUFaceGetPlane(SUFaceRef face, struct SUPlane3D* plane);
 @brief Retrieves the number of vertices that the face is associated with.
 @param[in]  face  The face object.
 @param[out] count The number of vertices.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object
@@ -201,6 +215,7 @@ SU_RESULT SUFaceGetNumVertices(SUFaceRef face, size_t* count);
 @param[in]  len      The number of vertices to retrieve.
 @param[out] vertices The vertices retrieved.
 @param[out] count    The number of vertices retrieved.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object
@@ -213,6 +228,7 @@ SU_RESULT SUFaceGetVertices(SUFaceRef face, size_t len,
 @brief Retrieves the outer loop of a face object.
 @param[in]  face The face object.
 @param[out] loop The loop object retrieved.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object
@@ -225,6 +241,7 @@ SU_RESULT SUFaceGetOuterLoop(SUFaceRef face, SULoopRef* loop);
 @brief Retrieves the number of loops in a face.
 @param[in]  face  The face object.
 @param[out] count The number of inner loops.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if the face is not a valid object
@@ -238,6 +255,7 @@ SU_RESULT SUFaceGetNumInnerLoops(SUFaceRef face, size_t* count);
 @param[in]  len   The number of loops to retrieve.
 @param[out] loops The inner loops retrieved.
 @param[out] count The number of inner loops retrieved.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face object is not a valid object
@@ -255,6 +273,7 @@ SU_RESULT SUFaceGetInnerLoops(SUFaceRef face, size_t len, SULoopRef loops[],
                       If the function is successful, the new face will take
                       ownership of the loop and this reference will be
                       invalidated.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if vertices3d or loop is NULL
@@ -271,6 +290,7 @@ SU_RESULT SUFaceAddInnerLoop(SUFaceRef face,
 @since SketchUp 2014, API 2.0
 @param[in]  face  The face object.
 @param[out] count The number of openings.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if the face is not a valid object
@@ -286,6 +306,7 @@ SU_RESULT SUFaceGetNumOpenings(SUFaceRef face, size_t* count);
 @param[in]  len      The number of openings to retrieve.
 @param[out] openings The openings retrieved.
 @param[out] count    The number of openings retrieved.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object
@@ -297,6 +318,7 @@ SU_RESULT SUFaceGetOpenings(SUFaceRef face, size_t len, SUOpeningRef openings[],
 @brief Retrieves the front material associated with a face object.
 @param[in]  face     The face object.
 @param[out] material The material object retrieved.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object
@@ -309,9 +331,11 @@ SU_RESULT SUFaceGetFrontMaterial(SUFaceRef face, SUMaterialRef* material);
 @param[in] face     The face object.
 @param[in] material The material object to set. If invalid, this will set the
                     material to the default material.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object
+- \ref SU_ERROR_INVALID_ARGUMENT is the material is owned by a layer or image
 */
 SU_RESULT SUFaceSetFrontMaterial(SUFaceRef face, SUMaterialRef material);
 
@@ -319,10 +343,12 @@ SU_RESULT SUFaceSetFrontMaterial(SUFaceRef face, SUMaterialRef material);
 @brief Retrieves the back material associate with a face object.
 @param[in]  face     The face object.
 @param[out] material The material object retrieved.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if material is NULL
+- \ref SU_ERROR_INVALID_ARGUMENT is the material is owned by a layer or image
 */
 SU_RESULT SUFaceGetBackMaterial(SUFaceRef face,
                                 SUMaterialRef* material);
@@ -332,6 +358,7 @@ SU_RESULT SUFaceGetBackMaterial(SUFaceRef face,
 @param[in] face     The face object.
 @param[in] material The material object to set. If invalid, this will set the
                     material to the default material.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object
@@ -343,6 +370,7 @@ SU_RESULT SUFaceSetBackMaterial(SUFaceRef face, SUMaterialRef material);
        texture applied to its front.
 @param[in]  face      The face object.
 @param[out] is_affine The flag retrieved.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object
@@ -357,6 +385,7 @@ SU_RESULT SUFaceIsFrontMaterialAffine(SUFaceRef face, bool* is_affine);
        texture applied to its back.
 @param[in]  face      The face object.
 @param[out] is_affine The flag retrieved.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object
@@ -371,6 +400,7 @@ SU_RESULT SUFaceIsBackMaterialAffine(SUFaceRef face, bool* is_affine);
        and cuts from openings.
 @param[in]  face The face object.
 @param[out] area The area retrieved.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object
@@ -384,6 +414,7 @@ SU_RESULT SUFaceGetArea(SUFaceRef face, double* area);
 @param[in]  face      The face object.
 @param[in]  transform A transformation to be appllied to the face.
 @param[out] area      The area retrieved.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object
@@ -400,6 +431,7 @@ SU_RESULT SUFaceGetAreaWithTransform(SUFaceRef face,
        attached groups.
 @param[in]  face       The face object.
 @param[out] is_complex The flag retrieved.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid face object
@@ -418,6 +450,7 @@ SU_RESULT SUFaceIsComplex(SUFaceRef face, bool* is_complex);
                            coordinate calculations for non-affine textures.
 @param[out] uv_helper      The UV helper object created. Must be deallocated
                            via \ref SUUVHelperRelease.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object
@@ -440,6 +473,7 @@ SU_RESULT SUFaceGetUVHelper(SUFaceRef face, bool front, bool back,
                           face.
 @param[out] uv_helper     The UV helper object created.  Must be deallocated
                           via \ref SUUVHelperRelease.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object
@@ -457,6 +491,7 @@ SU_RESULT SUFaceGetUVHelperWithTextureHandle(SUFaceRef face,
 @since SketchUp 2016, API 4.0
 @param[in]  face  The face object.
 @param[out] count The number of attached drawing elements.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if the face is not a valid object
@@ -472,6 +507,7 @@ SU_RESULT SUFaceGetNumAttachedDrawingElements(SUFaceRef face,
 @param[in]  len   The number of attached drawing elements to retrieve.
 @param[out] elems The attached drawing elements retrieved.
 @param[out] count The number of attached drawing elements retrieved.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object
@@ -485,6 +521,7 @@ SU_RESULT SUFaceGetAttachedDrawingElements(SUFaceRef face,
 /**
 @brief Reverses a face object.
 @param[in] face The face object.
+@related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if face is not a valid object

@@ -1,6 +1,6 @@
 // Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
-#ifndef SKETCHUP_MODEL_EDGEUSE_H_
-#define SKETCHUP_MODEL_EDGEUSE_H_
+#ifndef SKETCHUP_MODEL_EDGE_USE_H_
+#define SKETCHUP_MODEL_EDGE_USE_H_
 
 #include <SketchUpAPI/common.h>
 #include <SketchUpAPI/geometry.h>
@@ -23,6 +23,7 @@ extern "C" {
 @brief Converts from an \ref SUEdgeUseRef to an \ref SUEntityRef.
        This is essentially an upcast operation.
 @param[in] edgeuse The given edge use reference.
+@related SUEdgeUseRef
 @return
 - The converted \ref SUEntityRef if edgeuse is a valid edge use.
 - If not, the returned reference will be invalid.
@@ -34,6 +35,7 @@ SU_EXPORT SUEntityRef SUEdgeUseToEntity(SUEdgeUseRef edgeuse);
        This is essentially a downcast operation so the given \ref SUEntityRef
        must be convertible to an \ref SUEdgeUseRef.
 @param[in] entity The given entity reference.
+@related SUEdgeUseRef
 @return
 - The converted \ref SUEdgeUseRef if the downcast operation succeeds.
 - If not, the returned reference will be invalid.
@@ -44,6 +46,7 @@ SU_EXPORT SUEdgeUseRef SUEdgeUseFromEntity(SUEntityRef entity);
 @brief Retrieves the edge object the EdgeUse object belongs to.
 @param[in]  edgeuse The EdgeUse object.
 @param[out] edge    The edge object retrieved.
+@related SUEdgeUseRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edgeuse is not a valid object
@@ -55,6 +58,7 @@ SU_RESULT SUEdgeUseGetEdge(SUEdgeUseRef edgeuse, SUEdgeRef* edge);
 @brief Retrieves the loop object the EdgeUse object is associated with.
 @param[in]  edgeuse The EdgeUse object.
 @param[out] loop    The loop object retrieved.
+@related SUEdgeUseRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edgeuse is not a valid object
@@ -66,6 +70,7 @@ SU_RESULT SUEdgeUseGetLoop(SUEdgeUseRef edgeuse, SULoopRef* loop);
 @brief Retrieves the face object the EdgeUse object is associated with.
 @param[in]  edgeuse The EdgeUse object.
 @param[out] face    The face object retrieved.
+@related SUEdgeUseRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edgeuse is not a valid object
@@ -78,6 +83,7 @@ SU_RESULT SUEdgeUseGetFace(SUEdgeUseRef edgeuse, SUFaceRef* face);
        object.
 @param[in]  edgeuse The EdgeUse object.
 @param[out] count   The number of partners.
+@related SUEdgeUseRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edgeuse is not a valid object
@@ -91,6 +97,7 @@ SU_RESULT SUEdgeUseGetNumPartners(SUEdgeUseRef edgeuse, size_t* count);
 @param[in]  len      The number of partners to retrieve.
 @param[out] partners The partners retrieved.
 @param[out] count    The number of partners retrieved.
+@related SUEdgeUseRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edgeuse is not a valid object
@@ -104,6 +111,7 @@ SU_RESULT SUEdgeUseGetPartners(SUEdgeUseRef edgeuse, size_t len,
        opposite direction as its corresponding edge.
 @param[in]  edgeuse The EdgeUse object.
 @param[out] reversed The retrieved flag.
+@related SUEdgeUseRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edgeuse is not a valid object
@@ -116,6 +124,7 @@ SU_RESULT SUEdgeUseIsReversed(SUEdgeUseRef edgeuse, bool* reversed);
        collection of linked EdgeUses.
 @param[in]  edgeuse      The EdgeUse object.
 @param[out] prev_edgeuse The EdgeUse retrieved.
+@related SUEdgeUseRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edgeuse is not a valid object
@@ -129,6 +138,7 @@ SU_RESULT SUEdgeUseGetPrevious(SUEdgeUseRef edgeuse,
        collection of linked EdgeUses.
 @param[in]  edgeuse      The EdgeUse object.
 @param[out] next_edgeuse The EdgeUse retrieved.
+@related SUEdgeUseRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edgeuse is not a valid object
@@ -145,6 +155,7 @@ SU_RESULT SUEdgeUseGetNext(SUEdgeUseRef edgeuse,
        edge.
 @param[in]  edgeuse The EdgeUse object.
 @param[out] vertex  The vertex object retrieved.
+@related SUEdgeUseRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edge is not a valid EdgeUse object
@@ -161,6 +172,7 @@ the corresponding edge of the EdgeUse object. An EdgeUse object is part of a
 face loop whose direction may be the reverse of the direction of the edge.
 @param[in]  edgeuse The EdgeUse object.
 @param[out] vertex  The vertex object retrieved.
+@related SUEdgeUseRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edge is not a valid EdgeUse object
@@ -173,6 +185,7 @@ SU_RESULT SUEdgeUseGetEndVertex(SUEdgeUseRef edgeuse,
 @brief Retrieves the normal vector at the start vertex of an EdgeUse object.
 @param[in]  edgeuse The EdgeUse object.
 @param[out] normal  The normal vector retrieved.
+@related SUEdgeUseRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edge is not a valid object
@@ -185,6 +198,7 @@ SU_RESULT SUEdgeUseGetStartVertexNormal(SUEdgeUseRef edgeuse,
 @brief Retrieves the normal vector at the end vertex of an EdgeUse object.
 @param[in]  edgeuse The EdgeUse object.
 @param[out] normal  The normal vector retrieved.
+@related SUEdgeUseRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if edge is not a valid object
@@ -197,4 +211,4 @@ SU_RESULT SUEdgeUseGetEndVertexNormal(SUEdgeUseRef edgeuse,
 }  //  extern "C" {
 #endif
 
-#endif  // SKETCHUP_MODEL_EDGEUSE_H_
+#endif  // SKETCHUP_MODEL_EDGE_USE_H_

@@ -21,6 +21,7 @@ extern "C" {
 @since SketchUp 2016, API 4.0
 @param[in]  attribute The dynamic component attribute object.
 @param[out] name      The internal name of the attribute.
+@related SUDynamicComponentAttributeRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if attribute is not a valid object
@@ -38,6 +39,7 @@ SU_RESULT SUDynamicComponentAttributeGetName(
 @param[in]  attribute    The dynamic component attribute object.
 @param[out] display_name The attribute name as it should be displayed to the
                          user.
+@related SUDynamicComponentAttributeRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if attribute is not a valid object
@@ -55,6 +57,7 @@ SU_RESULT SUDynamicComponentAttributeGetDisplayName(
 @param[in]  attribute  The dynamic component attribute object.
 @param[out] visible    Set to true if the attribute is visible to users and
                        false if it is not.
+@related SUDynamicComponentAttributeRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if attribute is not a valid object
@@ -70,6 +73,7 @@ SU_RESULT SUDynamicComponentAttributeGetVisibility(
 @param[in]  attribute     The dynamic component attribute object.
 @param[out] display_value The value data for the attribute converted to a string
                           formatted as it should be displayed to the user.
+@related SUDynamicComponentAttributeRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if attribute is not a valid object

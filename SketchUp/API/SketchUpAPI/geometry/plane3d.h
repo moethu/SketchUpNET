@@ -16,6 +16,7 @@ extern "C" {
 @param[in]  point1 The first point.
 @param[in]  point2 The second point.
 @param[in]  point3 The third point.
+@related SUPlane3D
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if plane is NULL
@@ -32,6 +33,7 @@ SU_RESULT SUPlane3DSetWithPoints(struct SUPlane3D* plane,
 @param[out] plane  The plane defined by the point and normal.
 @param[in]  point  The point.
 @param[in]  normal The normal vector.
+@related SUPlane3D
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if plane is NULL
@@ -49,6 +51,7 @@ SU_RESULT SUPlane3DSetWithPointAndNormal(struct SUPlane3D* plane,
 @param[in]  b      The second coefficient.
 @param[in]  c      The third coefficient.
 @param[in]  d      The fourth coefficient.
+@related SUPlane3D
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if plane is NULL
@@ -64,6 +67,7 @@ SU_RESULT SUPlane3DSetWithCoefficients(struct SUPlane3D* plane,
 @since SketchUp 2016, API 4.0
 @param[in]  plane    The plane from which to get the position.
 @param[out] position The 3D point struct retrieved.
+@related SUPlane3D
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if plane is NULL
@@ -77,6 +81,7 @@ SU_RESULT SUPlane3DGetPosition(const struct SUPlane3D* plane,
 @since SketchUp 2017, API 5.0
 @param[in]  plane  The plane from which to get the normal.
 @param[out] normal The 3D vector struct retrieved.
+@related SUPlane3D
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if plane is NULL
@@ -91,6 +96,7 @@ SU_RESULT SUPlane3DGetNormal(const struct SUPlane3D* plane,
 @param[in]  plane The plane.
 @param[in]  point The 3D point.
 @param[out] is_on Whether or not the point is on the plane.
+@related SUPlane3D
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if plane or point are NULL
@@ -106,6 +112,7 @@ SU_RESULT SUPlane3DIsOn(const struct SUPlane3D* plane,
 @param[in]  plane    The plane.
 @param[in]  point    The 3D point.
 @param[out] distance The distance between the plane and point.
+@related SUPlane3D
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if plane or point are NULL
@@ -121,6 +128,7 @@ SU_RESULT SUPlane3DDistanceTo(const struct SUPlane3D* plane,
 @param[in]  plane           The plane.
 @param[in]  point           The 3D point to project onto the plane.
 @param[out] projected_point The point resulting from the projection.
+@related SUPlane3D
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if plane or point are NULL
@@ -136,6 +144,7 @@ SU_RESULT SUPlane3DProjectTo(const struct SUPlane3D* plane,
 @since SketchUp 2018, API 6.0
 @param[in]     transform The transformation to be applied.
 @param[in,out] plane     The plane to be transformed.
+@related SUPlane3D
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_INPUT if transform is NULL

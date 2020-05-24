@@ -12,4 +12,4 @@ DEFINE_SU_TYPE(SUStringRef)
 
 #pragma pack(pop)
 
-#endif  // SKETCHUP_COMMON_DEFS_H_
+#endif  // SKETCHUP_DEFS_H_
