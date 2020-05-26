@@ -120,9 +120,7 @@ namespace SketchUpNET
 		/// </summary>
 		bool LoadModel(System::String^ filename, bool includeMeshes)
 		{
-			msclr::interop::marshal_context oMarshalContext;
-
-			const char* path = oMarshalContext.marshal_as<const char*>(filename);
+			const char* path = Utilities::ToString(filename);
 
 			SUInitialize();
 
@@ -237,8 +235,7 @@ namespace SketchUpNET
 
 		bool SaveAs(System::String^ filename, SKPVersion version, System::String^ newFilename)
 		{
-			msclr::interop::marshal_context oMarshalContext;
-			const char* path = oMarshalContext.marshal_as<const char*>(filename);
+			const char* path = Utilities::ToString(filename);
 			SUInitialize();
 
 			SUModelRef model = SU_INVALID;
@@ -291,9 +288,7 @@ namespace SketchUpNET
 		/// </summary>
 		bool AppendToModel(System::String^ filename)
 		{
-			msclr::interop::marshal_context oMarshalContext;
-
-			const char* path = oMarshalContext.marshal_as<const char*>(filename);
+			const char* path = Utilities::ToString(filename);
 
 			SUInitialize();
 

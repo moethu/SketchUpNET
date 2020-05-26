@@ -65,9 +65,16 @@ namespace SketchUpNET
 			return gcnew System::String(name_utf8, 0, name_length, System::Text::Encoding::UTF8);
 		}
 
-		static const char* ToString(System::String^ name)
+		static const char* ToString(System::String^ value)
 		{
-			return (const char*)(System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(name)).ToPointer();
+			array<unsigned char>^ bytes = System::Text::Encoding::UTF8->GetBytes(value);
+			char* result = new char[bytes->Length + 1];
+			result[bytes->Length] = 0;
+			int i = 0;
+			for each(unsigned char c in bytes) {
+				result[i++] = c;
+			}
+			return result;
 		}
 
 		
