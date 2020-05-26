@@ -40,6 +40,18 @@ namespace SketchUpNET.Unittest
         }
 
         [TestMethod]
+        public void SaveAsUTF8()
+        {
+            SketchUpNET.SketchUp skp = new SketchUp();
+            string dir = System.IO.Path.GetDirectoryName(TestFile);
+            skp.SaveAs(TestFile, SKPVersion.V2016, dir + "/Überß.skp");
+
+            Assert.IsTrue(System.IO.File.Exists(dir + "/Überß.skp"));
+            bool res = skp.LoadModel(dir + "/Überß.skp");
+            Assert.IsTrue(res);
+        }
+
+        [TestMethod]
         public void DoNotGetMesh()
         {
             SketchUpNET.SketchUp skp = new SketchUp();
