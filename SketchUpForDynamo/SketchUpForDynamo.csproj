@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{60201034-7CD1-4217-82BB-1161D8D0BB0A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SketchUpForDynamo</RootNamespace>
+    <AssemblyName>SketchUpForDynamo</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\SketchUpForDynamo.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DSCoreNodes">
+      <HintPath>C:\Program Files\Dynamo\Dynamo Core\2\DSCoreNodes.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DynamoCore">
+      <HintPath>C:\Program Files\Dynamo\Dynamo Core\2\DynamoCore.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DynamoServices">
+      <HintPath>C:\Program Files\Dynamo\Dynamo Core\2\DynamoServices.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DynamoUtilities">
+      <HintPath>C:\Program Files\Dynamo\Dynamo Core\2\DynamoUtilities.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ProtoCore">
+      <HintPath>C:\Program Files\Dynamo\Dynamo Core\2\ProtoCore.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ProtoGeometry">
+      <HintPath>C:\Program Files\Dynamo\Dynamo Core\2\ProtoGeometry.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ProtoScript">
+      <HintPath>C:\Program Files\Dynamo\Dynamo Core\2\ProtoScript.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SketchUpNET, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\x64\Release\SketchUpNET.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Material.cs" />
+    <Compile Include="SketchUp.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SketchUpForDynamoImages.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\API\sketchup.lib">
+      <Link>sketchup.lib</Link>
+    </None>
+    <None Include="..\API\SketchUpAPI.lib">
+      <Link>SketchUpAPI.lib</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\API\SketchUpAPI.dll">
+      <Link>SketchUpAPI.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\API\SketchUpCommonPreferences.dll">
+      <Link>SketchUpCommonPreferences.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="BeforeBuild">
+    <GetReferenceAssemblyPaths TargetFrameworkMoniker=".NETFramework, Version=v2.0">
+      <Output TaskParameter="FullFrameworkReferenceAssemblyPaths" PropertyName="FrameworkAssembliesPath" />
+    </GetReferenceAssemblyPaths>
+    <GenerateResource UseSourcePath="true" Sources="$(ProjectDir)SketchUpForDynamoImages.resx" OutputResources="$(ProjectDir)SketchUpForDynamoImages.resources" References="$(FrameworkAssembliesPath)System.Drawing.dll" />
+    <AL TargetType="library" EmbedResources="$(ProjectDir)SketchUpForDynamoImages.resources" OutputAssembly="$(OutDir)SketchUpForDynamo.customization.dll" />
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>
