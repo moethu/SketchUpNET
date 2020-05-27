@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SketchUpNET", "SketchUpNET\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SketchUpNET.Unittest", "SketchUpNET.Unittest\SketchUpNET.Unittest.csproj", "{5AAC9C72-CFBD-4B20-83FC-DBAFA4FC7A53}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SketchUpNETConsole", "SketchUpNETConsole\SketchUpNETConsole.csproj", "{22367EBD-AACB-4494-B909-40FC5E83FCAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,26 @@ Global
 		{5AAC9C72-CFBD-4B20-83FC-DBAFA4FC7A53}.Release|Win32.Build.0 = Release|Any CPU
 		{5AAC9C72-CFBD-4B20-83FC-DBAFA4FC7A53}.Release|x64.ActiveCfg = Release|Any CPU
 		{5AAC9C72-CFBD-4B20-83FC-DBAFA4FC7A53}.Release|x64.Build.0 = Release|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Debug|ARM.Build.0 = Debug|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Debug|Win32.Build.0 = Debug|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Debug|x64.Build.0 = Debug|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Release|ARM.ActiveCfg = Release|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Release|ARM.Build.0 = Release|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Release|Win32.ActiveCfg = Release|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Release|Win32.Build.0 = Release|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Release|x64.ActiveCfg = Release|Any CPU
+		{22367EBD-AACB-4494-B909-40FC5E83FCAC}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
