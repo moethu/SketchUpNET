@@ -9,8 +9,9 @@ This library adds .NET support to the existing SketchUp C-API. It makes most Ske
 
 This Repo contains two projects using SketchUpNET in C#.NET:
 
-- An Autodesk's(R) Dynamo Node Package allowing you to read/write SketchUp files from Dynamo. https://github.com/moethu/SketchUpNET/tree/master/SketchUp/SketchUpNET/SketchUpForDynamo
-- A Set of Components for McNeel's(R) Grasshopper(R) allowing you to read/write SketchUp files from GH. https://github.com/moethu/SketchUpNET/tree/master/SketchUp/SketchUpNET/SketchUpForGrasshopper
+- SketchUpForDynamo: An Autodesk's(R) Dynamo Node Package allowing you to read/write SketchUp files from Dynamo. 
+- SketchUpForGrasshopper: A Set of Components for McNeel's(R) Grasshopper(R) allowing you to read/write SketchUp files from GH.
+- SketchUpNETConsole: A sample C# console application using SketchUpNET.
 
 If you want to build your own application using the SketchUp API take the following steps:
 
