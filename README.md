@@ -17,7 +17,7 @@ If you want to build your own application using the SketchUp API take the follow
 
 #### Loading a Model
 
-```
+```csharp
 SketchUpNET.SketchUp skp = new SketchUp();
 skp.LoadModel("myfile.skp", true);
 foreach (var srf in skp.Surfaces) {
@@ -27,13 +27,13 @@ foreach (var srf in skp.Surfaces) {
 
 #### Saving a Model
 
-```
+```csharp
 skp.WriteNewModel("filename.skp");
 ```
 
 #### Converting a Model
 
-```
+```csharp
 SketchUpNET.SketchUp skp = new SketchUp();
 skp.SaveAs("old-file.skp", SKPVersion.V2020, "new-file.skp");
 ```
