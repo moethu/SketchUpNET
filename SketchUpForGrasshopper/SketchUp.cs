@@ -116,8 +116,10 @@ namespace SketchUpForGrasshopper
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Path", "P", "Path to Sketchup File (skp)", GH_ParamAccess.item);
-            pManager.AddCurveParameter("Curves", "C", "Curves", GH_ParamAccess.list);
-            pManager.AddSurfaceParameter("Surfaces", "S", "Surfaces", GH_ParamAccess.list);
+            int a = pManager.AddCurveParameter("Curves", "C", "Curves", GH_ParamAccess.list);
+            int b = pManager.AddSurfaceParameter("Surfaces", "S", "Surfaces", GH_ParamAccess.list);
+            pManager[a].Optional = true;
+            pManager[b].Optional = true;
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
