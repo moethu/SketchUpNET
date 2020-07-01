@@ -54,6 +54,7 @@ namespace SketchUpForGrasshopper
             pManager.AddBrepParameter("Surfaces", "S", "Surfaces", GH_ParamAccess.list);
             pManager.AddTextParameter("Layers", "L", "Layers", GH_ParamAccess.list);
             pManager.AddGenericParameter("Instances", "I", "Instances", GH_ParamAccess.list);
+            pManager.AddCurveParameter("Curves", "C", "Curves", GH_ParamAccess.list);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -64,10 +65,11 @@ namespace SketchUpForGrasshopper
             List<GH_Brep> surfaces = new List<GH_Brep>();
             List<GH_String> layers = new List<GH_String>();
             List<Instance> Instances = new List<Instance>();
+            List<GH_Curve> curves = new List<GH_Curve>();
 
             SketchUp skp = new SketchUp();
             if (skp.LoadModel(path.Value))
-            { 
+            {
                 foreach (Surface srf in skp.Surfaces)
                     foreach (var brep in srf.ToRhinoGeo())
                         surfaces.Add(new GH_Brep(brep));
@@ -77,11 +79,15 @@ namespace SketchUpForGrasshopper
 
                 foreach (Instance i in skp.Instances)
                     Instances.Add(i);
+
+                foreach (Edge c in skp.Edges)
+                    curves.Add(new GH_Curve(c.ToRhinoGeo().ToNurbsCurve()));
             }
 
             DA.SetDataList(0, surfaces);
             DA.SetDataList(1, layers);
             DA.SetDataList(2, Instances);
+            DA.SetDataList(3, curves);
         }
 
         public override Guid ComponentGuid
@@ -180,7 +186,7 @@ namespace SketchUpForGrasshopper
         /// <summary>
         /// Converts a SketchUp Vertex to a Rhino Point
         /// </summary>
-        public static Rhino.Geometry.Point3d ToRhinoGeo(this SketchUpNET.Vertex v, Transform t)
+        public static Rhino.Geometry.Point3d ToRhinoGeo(this SketchUpNET.Vertex v, Transform t = null)
         {
             if (t == null)
                 return new Rhino.Geometry.Point3d(v.X , v.Y , v.Z );
@@ -202,7 +208,7 @@ namespace SketchUpForGrasshopper
         /// <summary>
         /// Converts a SketchUp Edge to a Rhino Line
         /// </summary>
-        public static Rhino.Geometry.Line ToRhinoGeo(this SketchUpNET.Edge v, Transform t)
+        public static Rhino.Geometry.Line ToRhinoGeo(this SketchUpNET.Edge v, Transform t = null)
         {
             return new Rhino.Geometry.Line(v.Start.ToRhinoGeo(t), v.End.ToRhinoGeo(t));
         }
