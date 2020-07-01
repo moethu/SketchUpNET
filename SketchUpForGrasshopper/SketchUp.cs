@@ -1,7 +1,7 @@
 ﻿/*
 
 	SketchUpForGrasshopper - Trimble(R) SketchUp(R) interface for McNeel's(R) Grasshopper(R) 
-	Copyright(C) 2015, Autor: Maximilian Thumfart
+	Copyright(C) 2020, Autor: Maximilian Thumfart
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of this software
     and associated documentation files (the "Software"), to deal in the Software without restriction, 
@@ -38,16 +38,15 @@ using SketchUpNET;
 namespace SketchUpForGrasshopper
 {
     /// <summary>
-    /// Grevit Revit Family Component
+    /// SketchUp Model Component
     /// </summary>
     public class SketchUpModel : GH_Component
     {
-        public SketchUpModel() : base("Sketch Up Model", "Sketch Up Model", "Sketch Up Model", "SketchUpSharp", "Model") { }
-
+        public SketchUpModel() : base("Load SketchUp Model", "Load SketchUp Model", "Loads a SketchUp Model from file", "SketchUpSharp", "Model") { }
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("Path", "P", "Path to SKP File", GH_ParamAccess.item);
+            pManager.AddTextParameter("Path", "P", "Path to Sketchup File (skp)", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
@@ -79,14 +78,11 @@ namespace SketchUpForGrasshopper
                     Instances.Add(i);
             }
 
-
-
             DA.SetDataList(0, surfaces);
             DA.SetDataList(1, layers);
             DA.SetDataList(2, Instances);
         }
 
-        // Properties
         public override Guid ComponentGuid
         {
             get
@@ -101,18 +97,14 @@ namespace SketchUpForGrasshopper
                 return Properties.Resources.Skp;
             }
         }
-
-
     }
 
-
     /// <summary>
-    /// Grevit Revit Family Component
+    /// Decomposes a SketchUp Model Instance
     /// </summary>
     public class SketchUpInstance : GH_Component
     {
-        public SketchUpInstance() : base("Sketch Up Instance", "Sketch Up Instance", "Sketch Up Instance", "SketchUpSharp", "Elements") { }
-
+        public SketchUpInstance() : base("Decompose SketchUp Instance", "Decompose SketchUp Instance", "Decomposes a SketchUp Instance", "SketchUpSharp", "Elements") { }
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
@@ -123,7 +115,6 @@ namespace SketchUpForGrasshopper
         {
             pManager.AddPointParameter("Location", "L", "Location", GH_ParamAccess.item);
             pManager.AddTextParameter("Name", "N", "Name", GH_ParamAccess.item);
-
             pManager.AddNumberParameter("Scale", "S", "Scale", GH_ParamAccess.item);
             pManager.AddBrepParameter("Surfaces", "Sf", "Surfaces", GH_ParamAccess.list);
             pManager.AddTextParameter("Parent Name", "PN", "Parent Name", GH_ParamAccess.item);
@@ -132,35 +123,33 @@ namespace SketchUpForGrasshopper
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-
             Instance i = null;
             DA.GetData<Instance>(0, ref i);
 
-            GH_Point p = new GH_Point(new Rhino.Geometry.Point3d(i.Transformation.X, i.Transformation.Y, i.Transformation.Z));
+            GH_Point location = new GH_Point(new Rhino.Geometry.Point3d(i.Transformation.X, i.Transformation.Y, i.Transformation.Z));
             GH_Number scale = new GH_Number(i.Transformation.Scale);
             GH_String name = new GH_String(i.Name);
-            SketchUpNET.Component par = i.Parent as Component;
-            GH_String parent = new GH_String(par.Name);
 
             List<GH_Brep> surfaces = new List<GH_Brep>();
             List<GH_Brep> inner = new List<GH_Brep>();
 
-
-                foreach (Surface srf in par.Surfaces)
+            GH_String parentName = new GH_String("");
+            SketchUpNET.Component parentComponent = i.Parent as Component;
+            if (parentComponent != null)
+            {
+                parentName = new GH_String(parentComponent.Name);
+                foreach (Surface srf in parentComponent.Surfaces)
                     surfaces.Add(new GH_Brep(srf.ToRhinoGeo(i.Transformation)));
+            }
 
-
-
-
-            DA.SetData(0, p);
+            DA.SetData(0, location);
             DA.SetData(1, name);
             DA.SetData(2, scale);
             DA.SetDataList(3, surfaces);
-            DA.SetData(4, parent);
+            DA.SetData(4, parentName);
             DA.SetDataList(5, inner);
         }
 
-        // Properties
         public override Guid ComponentGuid
         {
             get
@@ -175,12 +164,16 @@ namespace SketchUpForGrasshopper
                 return Properties.Resources.Skp;
             }
         }
-
-
     }
 
+    /// <summary>
+    /// Geometry Translations
+    /// </summary>
     public static class Geometry
     {
+        /// <summary>
+        /// Converts a SketchUp Vertex to a Rhino Point
+        /// </summary>
         public static Rhino.Geometry.Point3d ToRhinoGeo(this SketchUpNET.Vertex v, Transform t)
         {
             if (t == null)
@@ -192,17 +185,25 @@ namespace SketchUpForGrasshopper
             }
         }
 
+        /// <summary>
+        /// Converts a SketchUp Vector to a Rhino Vector
+        /// </summary>
         public static Rhino.Geometry.Vector3d ToRhinoGeo(this SketchUpNET.Vector v)
         {
                 return new Rhino.Geometry.Vector3d(v.X, v.Y, v.Z);
-
         }
 
+        /// <summary>
+        /// Converts a SketchUp Edge to a Rhino Line
+        /// </summary>
         public static Rhino.Geometry.Line ToRhinoGeo(this SketchUpNET.Edge v, Transform t)
         {
             return new Rhino.Geometry.Line(v.Start.ToRhinoGeo(t), v.End.ToRhinoGeo(t));
         }
 
+        /// <summary>
+        /// Converts a SketchUp Surface to a Rhino Surface
+        /// </summary>
         public static Rhino.Geometry.Brep ToRhinoGeo(this SketchUpNET.Surface v, Transform t = null)
         {
             List<Rhino.Geometry.Curve> curves = new List<Rhino.Geometry.Curve>();
@@ -227,7 +228,9 @@ namespace SketchUpForGrasshopper
             return result;
         }
 
-
+        /// <summary>
+        /// Converts a SketchUp Surface InnerLoops to a Rhino Geometries
+        /// </summary>
         public static List<Rhino.Geometry.Brep> InnerLoops(this SketchUpNET.Surface v, Transform t = null)
         {
             List<Rhino.Geometry.Brep> breps = new List<Rhino.Geometry.Brep>();
