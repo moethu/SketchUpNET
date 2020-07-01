@@ -139,13 +139,14 @@ namespace SketchUpForGrasshopper
             GH_Point p = new GH_Point(new Rhino.Geometry.Point3d(i.Transformation.X, i.Transformation.Y, i.Transformation.Z));
             GH_Number scale = new GH_Number(i.Transformation.Scale);
             GH_String name = new GH_String(i.Name);
-            GH_String parent = new GH_String(i.Parent.Name);
+            SketchUpNET.Component par = i.Parent as Component;
+            GH_String parent = new GH_String(par.Name);
 
             List<GH_Brep> surfaces = new List<GH_Brep>();
             List<GH_Brep> inner = new List<GH_Brep>();
 
 
-                foreach (Surface srf in i.Parent.Surfaces)
+                foreach (Surface srf in par.Surfaces)
                     surfaces.Add(new GH_Brep(srf.ToRhinoGeo(i.Transformation)));
 
 

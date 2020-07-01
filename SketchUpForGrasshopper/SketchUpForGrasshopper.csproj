@@ -31,19 +31,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="GH_IO">
-      <HintPath>..\..\..\..\Grevit\Grevit.Grasshopper\bin\Debug\GH_IO.dll</HintPath>
+      <HintPath>C:\Program Files\Rhino 6\Plug-ins\Grasshopper\GH_IO.dll</HintPath>
     </Reference>
     <Reference Include="Grasshopper">
-      <HintPath>..\..\..\..\Grevit\Grevit.Grasshopper\bin\Debug\Grasshopper.dll</HintPath>
+      <HintPath>C:\Program Files\Rhino 6\Plug-ins\Grasshopper\Grasshopper.dll</HintPath>
     </Reference>
     <Reference Include="RhinoCommon">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\McNeel\Rhinoceros 5.0\System\RhinoCommon.dll</HintPath>
+      <HintPath>C:\Program Files\Rhino 6\System\RhinoCommon.dll</HintPath>
     </Reference>
     <Reference Include="Rhino_DotNet">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\McNeel\Rhinoceros 5.0\System\Rhino_DotNet.dll</HintPath>
-    </Reference>
-    <Reference Include="SketchUpNET">
-      <HintPath>..\x64\Debug\SketchUpNET.dll</HintPath>
+      <HintPath>C:\Program Files\Rhino 6\System\Rhino_DotNet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -71,6 +68,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Skp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SketchUpNET\SketchUpNET.vcxproj">
+      <Project>{1c4d4501-eb39-45c8-bed0-609a978e823f}</Project>
+      <Name>SketchUpNET</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
