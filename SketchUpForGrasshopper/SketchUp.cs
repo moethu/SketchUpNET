@@ -107,6 +107,54 @@ namespace SketchUpForGrasshopper
     }
 
     /// <summary>
+    /// Save SketchUp Model Component
+    /// </summary>
+    public class SaveSketchUpModel : GH_Component
+    {
+        public SaveSketchUpModel() : base("Save SketchUp Model", "Save SketchUp Model", "Save a SketchUp Model to file", "GrassUp", "Model") { }
+
+        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        {
+            pManager.AddTextParameter("Path", "P", "Path to Sketchup File (skp)", GH_ParamAccess.item);
+            pManager.AddCurveParameter("Curves", "C", "Curves", GH_ParamAccess.list);
+            pManager.AddSurfaceParameter("Surfaces", "S", "Surfaces", GH_ParamAccess.list);
+        }
+
+        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        {
+
+        }
+
+        protected override void SolveInstance(IGH_DataAccess DA)
+        {
+            GH_String path = new GH_String();
+            DA.GetData<GH_String>(0, ref path);
+
+            List<GH_Surface> surfaces = new List<GH_Surface>();
+            DA.GetDataList<GH_Surface>(1, surfaces);
+            List<GH_Curve> curves = new List<GH_Curve>();
+            DA.GetDataList<GH_Curve>(2, curves);
+
+            Geometry.WriteModel(path.Value, surfaces, curves, false);
+        }
+
+        public override Guid ComponentGuid
+        {
+            get
+            {
+                return new Guid("{5ea8ce3d-d262-4d7f-a733-1573beeb4b5d}");
+            }
+        }
+        protected override Bitmap Internal_Icon_24x24
+        {
+            get
+            {
+                return Properties.Resources.Skp;
+            }
+        }
+    }
+
+    /// <summary>
     /// Decomposes a SketchUp Model Instance
     /// </summary>
     public class SketchUpInstance : GH_Component
@@ -269,12 +317,12 @@ namespace SketchUpForGrasshopper
         /// <summary>
         /// Converts a Rhino Surface to a SketchUp Surface
         /// </summary>
-        public static SketchUpNET.Surface ToSkpGeo(this Rhino.Geometry.Surface surface)
+        public static SketchUpNET.Surface ToSkpGeo(this Rhino.Geometry.Brep surface)
         {
             Surface srf = new Surface();
             srf.Vertices = new List<Vertex>();
             
-            foreach (var curve in surface.ToBrep().Edges)
+            foreach (var curve in surface.Edges)
             {
                 if (curve.IsLinear())
                 {
@@ -336,5 +384,38 @@ namespace SketchUpForGrasshopper
             }
             return breps;
         }
+
+        public static void WriteModel(string path, List<GH_Surface> surfaces = null, List<GH_Curve> curves = null, bool append = false)
+        {
+            SketchUpNET.SketchUp skp = new SketchUpNET.SketchUp();
+            skp.Surfaces = new List<Surface>();
+            skp.Edges = new List<Edge>();
+            skp.Curves = new List<Curve>();
+
+            if (curves != null)
+                foreach (var c in curves)
+                {
+                    var curve = c.Value;
+                    if (curve.IsLinear())
+                    {
+                        var line = new SketchUpNET.Edge(curve.PointAt(0).ToSkpGeo(), curve.PointAt(1.0).ToSkpGeo(), DefaultLayer);
+                        skp.Edges.Add(line);
+                    }
+                    else
+                    {
+                        skp.Curves.Add(curve.ToSkpGeo());
+                    }
+                }
+
+            if (surfaces != null)
+                foreach (var surface in surfaces)
+                    skp.Surfaces.Add(surface.Value.ToSkpGeo());
+
+            if (System.IO.File.Exists(path) && append)
+                skp.AppendToModel(path);
+            else
+                skp.WriteNewModel(path);
+        }
+
     }
 }
