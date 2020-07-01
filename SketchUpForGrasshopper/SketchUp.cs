@@ -42,7 +42,7 @@ namespace SketchUpForGrasshopper
     /// </summary>
     public class SketchUpModel : GH_Component
     {
-        public SketchUpModel() : base("Load SketchUp Model", "Load SketchUp Model", "Loads a SketchUp Model from file", "SketchUpSharp", "Model") { }
+        public SketchUpModel() : base("Load SketchUp Model", "Load SketchUp Model", "Loads a SketchUp Model from file", "GrassUp", "Model") { }
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
@@ -111,7 +111,7 @@ namespace SketchUpForGrasshopper
     /// </summary>
     public class SketchUpInstance : GH_Component
     {
-        public SketchUpInstance() : base("Decompose SketchUp Instance", "Decompose SketchUp Instance", "Decomposes a SketchUp Instance", "SketchUpSharp", "Elements") { }
+        public SketchUpInstance() : base("Decompose SketchUp Instance", "Decompose SketchUp Instance", "Decomposes a SketchUp Instance", "GrassUp", "Elements") { }
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
@@ -126,6 +126,7 @@ namespace SketchUpForGrasshopper
             pManager.AddBrepParameter("Surfaces", "Sf", "Surfaces", GH_ParamAccess.list);
             pManager.AddTextParameter("Parent Name", "PN", "Parent Name", GH_ParamAccess.item);
             pManager.AddBrepParameter("Inner", "I", "Inner", GH_ParamAccess.list);
+            pManager.AddCurveParameter("Curves", "C", "Curves", GH_ParamAccess.list);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -139,6 +140,7 @@ namespace SketchUpForGrasshopper
 
             List<GH_Brep> surfaces = new List<GH_Brep>();
             List<GH_Brep> inner = new List<GH_Brep>();
+            List<GH_Curve> curves = new List<GH_Curve>();
 
             GH_String parentName = new GH_String("");
             SketchUpNET.Component parentComponent = i.Parent as Component;
@@ -152,6 +154,9 @@ namespace SketchUpForGrasshopper
                         surfaces.Add(new GH_Brep(brep));
                     }
                 }
+
+                foreach (Edge c in parentComponent.Edges)
+                    curves.Add(new GH_Curve(c.ToRhinoGeo().ToNurbsCurve()));
             }
 
             DA.SetData(0, location);
@@ -160,6 +165,7 @@ namespace SketchUpForGrasshopper
             DA.SetDataList(3, surfaces);
             DA.SetData(4, parentName);
             DA.SetDataList(5, inner);
+            DA.SetDataList(6, curves);
         }
 
         public override Guid ComponentGuid
@@ -183,6 +189,8 @@ namespace SketchUpForGrasshopper
     /// </summary>
     public static class Geometry
     {
+        public static string DefaultLayer = "Default";
+
         /// <summary>
         /// Converts a SketchUp Vertex to a Rhino Point
         /// </summary>
@@ -195,6 +203,22 @@ namespace SketchUpForGrasshopper
                 Vertex transformed = t.GetTransformed(v);
                 return new Rhino.Geometry.Point3d(transformed.X, transformed.Y, transformed.Z);
             }
+        }
+
+        /// <summary>
+        /// Converts a Rhino Point to a SketchUp Point
+        /// </summary>
+        public static SketchUpNET.Vertex ToSkpGeo(this Rhino.Geometry.Point3d v)
+        {
+            return new SketchUpNET.Vertex(v.X, v.Y, v.Z);
+        }
+
+        /// <summary>
+        /// Converts a Rhino Vector to a SketchUp Vector
+        /// </summary>
+        public static SketchUpNET.Vector ToSkpGeo(this Rhino.Geometry.Vector3d v)
+        {
+            return new SketchUpNET.Vector(v.X, v.Y, v.Z);
         }
 
         /// <summary>
@@ -214,16 +238,70 @@ namespace SketchUpForGrasshopper
         }
 
         /// <summary>
+        /// Converts a Rhino Line to a SketchUp Edge
+        /// </summary>
+        public static SketchUpNET.Edge ToSkpGeo(this Rhino.Geometry.Line v)
+        {
+            return new SketchUpNET.Edge(v.PointAt(0).ToSkpGeo(), v.PointAt(1.0).ToSkpGeo(), DefaultLayer);
+        }
+
+
+        /// <summary>
+        /// Converts a Rhino Curve to a SketchUp Curve
+        /// </summary>
+        public static SketchUpNET.Curve ToSkpGeo(this Rhino.Geometry.Curve v)
+        {
+            List<Edge> edges = new List<Edge>();
+            if (v.IsLinear())
+            {
+                edges.Add(new Edge(v.PointAt(0).ToSkpGeo(), v.PointAt(1.0).ToSkpGeo(), DefaultLayer));
+            }
+            else
+            {
+                for (double i = 0; i < 1.0; i = i + 0.1)
+                {
+                    edges.Add(new Edge(v.PointAt(i).ToSkpGeo(), v.PointAt(i + 0.1).ToSkpGeo(), DefaultLayer));
+                }
+            }
+            return new SketchUpNET.Curve(edges,v.IsArc());
+        }
+
+        /// <summary>
+        /// Converts a Rhino Surface to a SketchUp Surface
+        /// </summary>
+        public static SketchUpNET.Surface ToSkpGeo(this Rhino.Geometry.Surface surface)
+        {
+            Surface srf = new Surface();
+            srf.Vertices = new List<Vertex>();
+            
+            foreach (var curve in surface.ToBrep().Edges)
+            {
+                if (curve.IsLinear())
+                {
+                    srf.Vertices.Add(curve.PointAt(0.0).ToSkpGeo());
+                }
+                else
+                {
+                    for (double i = 0; i < 1.0; i = i + 0.1)
+                    {
+                        srf.Vertices.Add(curve.PointAt(i).ToSkpGeo());
+                    }
+                }
+            }
+            return srf;
+        }
+
+        /// <summary>
         /// Converts a SketchUp Surface to a Rhino Surface
         /// </summary>
         public static Rhino.Geometry.Brep[] ToRhinoGeo(this SketchUpNET.Surface v, Transform t = null)
         {
             List<Rhino.Geometry.Curve> curves = new List<Rhino.Geometry.Curve>();
-
+            var tol = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
             foreach (SketchUpNET.Edge c in v.OuterEdges.Edges)
                 curves.Add(c.ToRhinoGeo(t).ToNurbsCurve());
 
-            Rhino.Geometry.Brep[] b = Rhino.Geometry.Brep.CreatePlanarBreps(curves,0.1);
+            Rhino.Geometry.Brep[] b = Rhino.Geometry.Brep.CreatePlanarBreps(curves,tol);
             if (b == null) return new Rhino.Geometry.Brep[] { };
 
             List<Rhino.Geometry.Brep> breps = v.InnerLoops(t);
@@ -243,12 +321,13 @@ namespace SketchUpForGrasshopper
         public static List<Rhino.Geometry.Brep> InnerLoops(this SketchUpNET.Surface v, Transform t = null)
         {
             List<Rhino.Geometry.Brep> breps = new List<Rhino.Geometry.Brep>();
+            var tol = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
 
             foreach (Loop loop in v.InnerEdges)
             {
                 List<Rhino.Geometry.Curve> curves = new List<Rhino.Geometry.Curve>();
                 foreach (SketchUpNET.Edge c in loop.Edges) curves.Add(c.ToRhinoGeo(t).ToNurbsCurve());
-                Rhino.Geometry.Brep[] b = Rhino.Geometry.Brep.CreatePlanarBreps(curves, 0.1);
+                Rhino.Geometry.Brep[] b = Rhino.Geometry.Brep.CreatePlanarBreps(curves,tol);
                 if (b != null)
                 {
                     foreach (var brep in b)
