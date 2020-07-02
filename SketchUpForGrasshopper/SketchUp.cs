@@ -47,6 +47,8 @@ namespace SketchUpForGrasshopper
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("Path", "P", "Path to Sketchup File (skp)", GH_ParamAccess.item);
+            int a = pManager.AddBooleanParameter("Mesh", "M", "Load Meshes (Default: True)", GH_ParamAccess.item);
+            pManager[a].Optional = true;
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
@@ -55,6 +57,7 @@ namespace SketchUpForGrasshopper
             pManager.AddTextParameter("Layers", "L", "Layers", GH_ParamAccess.list);
             pManager.AddGenericParameter("Instances", "I", "Instances", GH_ParamAccess.list);
             pManager.AddCurveParameter("Curves", "C", "Curves", GH_ParamAccess.list);
+            pManager.AddMeshParameter("Meshes", "M", "Meshes", GH_ParamAccess.list);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -62,17 +65,31 @@ namespace SketchUpForGrasshopper
             GH_String path = new GH_String();
             DA.GetData<GH_String>(0, ref path);
 
+            GH_Boolean mesh = new GH_Boolean(true);
+            if (!DA.GetData<GH_Boolean>(1, ref mesh))
+            {
+                mesh = new GH_Boolean(true);
+            }
+
             List<GH_Brep> surfaces = new List<GH_Brep>();
             List<GH_String> layers = new List<GH_String>();
             List<Instance> Instances = new List<Instance>();
             List<GH_Curve> curves = new List<GH_Curve>();
+            List<GH_Mesh> meshes = new List<GH_Mesh>();
 
             SketchUp skp = new SketchUp();
-            if (skp.LoadModel(path.Value))
+            if (skp.LoadModel(path.Value, mesh.Value))
             {
                 foreach (Surface srf in skp.Surfaces)
+                {
                     foreach (var brep in srf.ToRhinoGeo())
                         surfaces.Add(new GH_Brep(brep));
+
+                    if (srf.FaceMesh != null)
+                    {
+                        meshes.Add(new GH_Mesh(srf.FaceMesh.ToRhinoGeo()));
+                    }
+                }
 
                 foreach (Layer l in skp.Layers)
                     layers.Add(new GH_String(l.Name));
@@ -88,6 +105,7 @@ namespace SketchUpForGrasshopper
             DA.SetDataList(1, layers);
             DA.SetDataList(2, Instances);
             DA.SetDataList(3, curves);
+            DA.SetDataList(4, meshes);
         }
 
         public override Guid ComponentGuid
@@ -177,6 +195,7 @@ namespace SketchUpForGrasshopper
             pManager.AddTextParameter("Parent Name", "PN", "Parent Name", GH_ParamAccess.item);
             pManager.AddBrepParameter("Inner", "I", "Inner", GH_ParamAccess.list);
             pManager.AddCurveParameter("Curves", "C", "Curves", GH_ParamAccess.list);
+            pManager.AddCurveParameter("Meshes", "M", "Meshes", GH_ParamAccess.list);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -191,6 +210,7 @@ namespace SketchUpForGrasshopper
             List<GH_Brep> surfaces = new List<GH_Brep>();
             List<GH_Brep> inner = new List<GH_Brep>();
             List<GH_Curve> curves = new List<GH_Curve>();
+            List<GH_Mesh> meshes = new List<GH_Mesh>();
 
             GH_String parentName = new GH_String("");
             SketchUpNET.Component parentComponent = i.Parent as Component;
@@ -203,10 +223,17 @@ namespace SketchUpForGrasshopper
                     {
                         surfaces.Add(new GH_Brep(brep));
                     }
+
+                    if (srf.FaceMesh != null)
+                    {
+                        meshes.Add(new GH_Mesh(srf.FaceMesh.ToRhinoGeo()));
+                    }
                 }
 
                 foreach (Edge c in parentComponent.Edges)
                     curves.Add(new GH_Curve(c.ToRhinoGeo().ToNurbsCurve()));
+
+               
             }
 
             DA.SetData(0, location);
@@ -216,6 +243,7 @@ namespace SketchUpForGrasshopper
             DA.SetData(4, parentName);
             DA.SetDataList(5, inner);
             DA.SetDataList(6, curves);
+            DA.SetDataList(7, meshes);
         }
 
         public override Guid ComponentGuid
@@ -385,6 +413,22 @@ namespace SketchUpForGrasshopper
                 }
             }
             return breps;
+        }
+
+
+        public static Rhino.Geometry.Mesh ToRhinoGeo(this SketchUpNET.Mesh mesh, Transform t = null)
+        {
+            Rhino.Geometry.Mesh m = new Rhino.Geometry.Mesh();
+
+            foreach (var v in mesh.Vertices)
+                m.Vertices.Add(v.ToRhinoGeo(t));
+
+            foreach (var v in mesh.Faces)
+                m.Faces.AddFace(v.A,v.B,v.C);
+
+            m.Normals.ComputeNormals();
+            m.Compact();
+            return m;
         }
 
         public static void WriteModel(string path, List<GH_Surface> surfaces = null, List<GH_Curve> curves = null, bool append = false)
