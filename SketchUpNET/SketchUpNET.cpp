@@ -94,6 +94,11 @@ namespace SketchUpNET
 		System::Collections::Generic::Dictionary<String^, Material^>^ Materials;
 
 		/// <summary>
+		/// Containing All Model Entities
+		/// </summary>
+		System::Collections::Generic::Dictionary<Int32, Object^>^ Entities;
+
+		/// <summary>
 		/// Containing Model Component Instances
 		/// </summary>
 		System::Collections::Generic::List<Instance^>^ Instances;
@@ -149,6 +154,7 @@ namespace SketchUpNET
 			Groups = gcnew System::Collections::Generic::List<Group^>();
 			Components = gcnew System::Collections::Generic::Dictionary<String^,Component^>();
 			Materials = gcnew System::Collections::Generic::Dictionary<String^, Material^>();
+			Entities = gcnew System::Collections::Generic::Dictionary<Int32, Object^>();
 
 			SUEntitiesRef entities = SU_INVALID;
 			SUModelGetEntities(model, &entities);
@@ -191,26 +197,11 @@ namespace SketchUpNET
 				SUEntitiesGetGroups(entities, groupCount, &groups[0], &groupCount);
 
 				for (size_t i = 0; i < groupCount; i++) {
-					Group^ group = Group::FromSU(groups[i], includeMeshes, Materials);
+					Group^ group = Group::FromSU(groups[i], includeMeshes, Materials, Entities);
 					Groups->Add(group);
+					Entities->Add(group->ID, group);
 				}
 
-			}
-
-
-			// Get all Scenes
-			size_t sCount = 0;
-			SUModelGetNumScenes(model, &sCount);
-			Scenes = gcnew System::Collections::Generic::List<Scene^>();
-
-			if (sCount > 0) {
-				std::vector<SUSceneRef> scenes(sCount);
-				SUModelGetScenes(model, sCount, &scenes[0], &sCount);
-
-				for (size_t i = 0; i < sCount; i++) {
-					Scene^ s = Scene::FromSU(scenes[i]);
-					Scenes->Add(s);
-				}
 			}
 
 
@@ -223,15 +214,15 @@ namespace SketchUpNET
 				SUModelGetComponentDefinitions(model, compCount, &comps[0], &compCount);
 
 				for (size_t i = 0; i < compCount; i++) {
-					Component^ component = Component::FromSU(comps[i], includeMeshes, Materials);
+					Component^ component = Component::FromSU(comps[i], includeMeshes, Materials, Entities);
 					Components->Add(component->Guid, component);
 				}
 			}
 
-			Surfaces = Surface::GetEntitySurfaces(entities, includeMeshes, Materials);
-			Curves = Curve::GetEntityCurves(entities);
-			Edges = Edge::GetEntityEdges(entities);
-			Instances = Instance::GetEntityInstances(entities);
+			Surfaces = Surface::GetEntitySurfaces(entities, includeMeshes, Materials, Entities);
+			Curves = Curve::GetEntityCurves(entities, Entities);
+			Edges = Edge::GetEntityEdges(entities, Entities);
+			Instances = Instance::GetEntityInstances(entities, Entities);
 
 			for each (Instance^ var in Instances)
 			{
@@ -252,6 +243,21 @@ namespace SketchUpNET
 				FixRefs(var);
 			}
 
+
+			// Get all Scenes
+			size_t sCount = 0;
+			SUModelGetNumScenes(model, &sCount);
+			Scenes = gcnew System::Collections::Generic::List<Scene^>();
+
+			if (sCount > 0) {
+				std::vector<SUSceneRef> scenes(sCount);
+				SUModelGetScenes(model, sCount, &scenes[0], &sCount);
+
+				for (size_t i = 0; i < sCount; i++) {
+					Scene^ s = Scene::FromSU(scenes[i], Entities);
+					Scenes->Add(s);
+				}
+			}
 
 			SUModelRelease(&model);
 			SUTerminate();

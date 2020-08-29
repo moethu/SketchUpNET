@@ -74,7 +74,7 @@ namespace SketchUpNET
 
 		Component(){};
 	internal:
-		static Component^ FromSU(SUComponentDefinitionRef comp, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials)
+		static Component^ FromSU(SUComponentDefinitionRef comp, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials, System::Collections::Generic::Dictionary<Int32, Object^>^ entitycontainer)
 		{
 			SUStringRef name = SU_INVALID;
 			SUStringCreate(&name);
@@ -95,11 +95,11 @@ namespace SketchUpNET
 			SUStringCreate(&guid);
 			SUComponentDefinitionGetGuid(comp, &guid);
 
-			List<Surface^>^ surfaces = Surface::GetEntitySurfaces(entities, includeMeshes, materials);
-			List<Curve^>^ curves = Curve::GetEntityCurves(entities);
-			List<Edge^>^ edges = Edge::GetEntityEdges(entities);
-			List<Instance^>^ instances = Instance::GetEntityInstances(entities);
-			List<Group^>^ grps = Group::GetEntityGroups(entities, includeMeshes, materials);
+			List<Surface^>^ surfaces = Surface::GetEntitySurfaces(entities, includeMeshes, materials, entitycontainer);
+			List<Curve^>^ curves = Curve::GetEntityCurves(entities, entitycontainer);
+			List<Edge^>^ edges = Edge::GetEntityEdges(entities, entitycontainer);
+			List<Instance^>^ instances = Instance::GetEntityInstances(entities, entitycontainer);
+			List<Group^>^ grps = Group::GetEntityGroups(entities, includeMeshes, materials, entitycontainer);
 			
 			
 

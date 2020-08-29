@@ -115,7 +115,7 @@ namespace SketchUpNET
 			return result;
 		}
 
-		static List<Curve^>^ GetEntityCurves(SUEntitiesRef entities)
+		static List<Curve^>^ GetEntityCurves(SUEntitiesRef entities, System::Collections::Generic::Dictionary<Int32, Object^>^ entitycontainer)
 		{
 			List<Curve^>^ curves = gcnew List<Curve^>();
 
@@ -131,6 +131,7 @@ namespace SketchUpNET
 				for (size_t i = 0; i < curveCount; i++) {
 					Curve^ curve = Curve::FromSU(curvevector[i]);
 					curves->Add(curve);
+					entitycontainer->Add(curve->ID, curve);
 				}
 			}
 

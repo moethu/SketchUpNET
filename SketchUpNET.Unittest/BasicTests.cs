@@ -10,7 +10,7 @@ namespace SketchUpNET.Unittest
         public void Initialize()
         {
             Type t = typeof(UnitTests);
-            TestFile = System.IO.Path.GetDirectoryName(t.Assembly.Location) + @"\..\..\..\..\Testfiles\TestModel.skp";
+            TestFile = System.IO.Path.GetDirectoryName(t.Assembly.Location) + @"\..\..\..\..\Testfiles\scenes.skp";
         }
 
         public static string TestFile;
@@ -63,6 +63,20 @@ namespace SketchUpNET.Unittest
         /// </summary>
         [TestMethod]
         public void TestDoNotGetMesh()
+        {
+            SketchUpNET.SketchUp skp = new SketchUp();
+            skp.LoadModel(TestFile, false);
+            foreach (var srf in skp.Surfaces)
+            {
+                Assert.IsNull(srf.FaceMesh);
+            }
+        }
+
+        /// <summary>
+        /// Test loading scenes
+        /// </summary>
+        [TestMethod]
+        public void TestGetScene()
         {
             SketchUpNET.SketchUp skp = new SketchUp();
             skp.LoadModel(TestFile, false);

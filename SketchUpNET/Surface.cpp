@@ -237,7 +237,7 @@ namespace SketchUpNET
 		}
 
 
-		static List<Surface^>^ GetEntitySurfaces(SUEntitiesRef entities, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials)
+		static List<Surface^>^ GetEntitySurfaces(SUEntitiesRef entities, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials, System::Collections::Generic::Dictionary<Int32, Object^>^ entitycontainer)
 		{
 			List<Surface^>^ surfaces = gcnew List<Surface^>();
 
@@ -252,6 +252,7 @@ namespace SketchUpNET
 				for (size_t i = 0; i < faceCount; i++) {
 					Surface^ surface = Surface::FromSU(faces[i], includeMeshes, materials);
 					surfaces->Add(surface);
+					entitycontainer->Add(surface->ID, surface);
 				}
 			}
 

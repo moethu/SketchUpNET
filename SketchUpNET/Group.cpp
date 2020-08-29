@@ -79,7 +79,7 @@ namespace SketchUpNET
 
 		Group(){};
 	internal:
-		static Group^ FromSU(SUGroupRef group, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials)
+		static Group^ FromSU(SUGroupRef group, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials, System::Collections::Generic::Dictionary<Int32, Object^>^ entitycontainer)
 		{
 			SUStringRef name = SU_INVALID;
 			SUStringCreate(&name);
@@ -95,11 +95,11 @@ namespace SketchUpNET
 			SUTransformation transform = SU_INVALID;
 			SUGroupGetTransform(group, &transform);
 			
-			List<Surface^>^ surfaces = Surface::GetEntitySurfaces(entities, includeMeshes, materials);
-			List<Edge^>^ edges = Edge::GetEntityEdges(entities);
-			List<Curve^>^ curves = Curve::GetEntityCurves(entities);
-			List<Instance^>^ inst = Instance::GetEntityInstances(entities);
-			List<Group^>^ grps = Group::GetEntityGroups(entities, includeMeshes, materials);
+			List<Surface^>^ surfaces = Surface::GetEntitySurfaces(entities, includeMeshes, materials, entitycontainer);
+			List<Edge^>^ edges = Edge::GetEntityEdges(entities, entitycontainer);
+			List<Curve^>^ curves = Curve::GetEntityCurves(entities, entitycontainer);
+			List<Instance^>^ inst = Instance::GetEntityInstances(entities, entitycontainer);
+			List<Group^>^ grps = Group::GetEntityGroups(entities, includeMeshes, materials, entitycontainer);
 			
 			// Layer
 			SULayerRef layer = SU_INVALID;
@@ -117,7 +117,7 @@ namespace SketchUpNET
 			return v;
 		};
 
-		static List<Group^>^ GetEntityGroups(SUEntitiesRef entities, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials)
+		static List<Group^>^ GetEntityGroups(SUEntitiesRef entities, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials, System::Collections::Generic::Dictionary<Int32, Object^>^ entitycontainer)
 		{
 			List<Group^>^ groups = gcnew List<Group^>();
 
@@ -129,7 +129,7 @@ namespace SketchUpNET
 				SUEntitiesGetGroups(entities, instanceCount, &instances[0], &instanceCount);
 
 				for (size_t i = 0; i < instanceCount; i++) {
-					Group^ inst = Group::FromSU(instances[i], includeMeshes, materials);
+					Group^ inst = Group::FromSU(instances[i], includeMeshes, materials, entitycontainer);
 					groups->Add(inst);
 				}
 

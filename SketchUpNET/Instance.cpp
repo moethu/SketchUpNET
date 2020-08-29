@@ -114,7 +114,7 @@ namespace SketchUpNET
 
 			return v;
 		};
-		static List<Instance^>^ GetEntityInstances(SUEntitiesRef entities)
+		static List<Instance^>^ GetEntityInstances(SUEntitiesRef entities, System::Collections::Generic::Dictionary<Int32, Object^>^ entitycontainer)
 		{
 			List<Instance^>^ instancelist = gcnew List<Instance^>();
 
@@ -130,6 +130,7 @@ namespace SketchUpNET
 				for (size_t i = 0; i < instanceCount; i++) {
 					Instance^ inst = Instance::FromSU(instances[i]);
 					instancelist->Add(inst);
+					entitycontainer->Add(inst->ID, inst);
 				}
 
 			}

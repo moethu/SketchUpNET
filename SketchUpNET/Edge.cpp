@@ -110,7 +110,7 @@ namespace SketchUpNET
 			return result;
 		}
 
-		static List<Edge^>^ GetEntityEdges(SUEntitiesRef entities)
+		static List<Edge^>^ GetEntityEdges(SUEntitiesRef entities,System::Collections::Generic::Dictionary<Int32, Object^>^ entitycontainer)
 		{
 			List<Edge^>^ edges = gcnew List<Edge^>();
 
@@ -127,6 +127,7 @@ namespace SketchUpNET
 				for (size_t i = 0; i < edgeCount; i++) {
 					Edge^ edge = Edge::FromSU(edgevector[i]);
 					edges->Add(edge);
+					entitycontainer->Add(edge->ID, edge);
 				}
 			}
 
