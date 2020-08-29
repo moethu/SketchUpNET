@@ -51,6 +51,7 @@ namespace SketchUpNET
 	public ref class Surface
 	{
 	public:
+		Int32 ID;
 		Loop^ OuterEdges;
 		List<Loop^>^ InnerEdges;
 		List<Vertex^>^ Vertices;
@@ -62,7 +63,7 @@ namespace SketchUpNET
 
 		System::String^ Layer;
 
-		Surface(Loop^ outer, List<Loop^>^ inner, Vector^ normal, double area, List<Vertex^>^ vertices, Mesh^ m, System::String^ layername, Material^ backmat, Material^ frontmat)
+		Surface(Int32 id, Loop^ outer, List<Loop^>^ inner, Vector^ normal, double area, List<Vertex^>^ vertices, Mesh^ m, System::String^ layername, Material^ backmat, Material^ frontmat)
 		{
 			this->OuterEdges = outer;
 			this->InnerEdges = inner;
@@ -73,6 +74,7 @@ namespace SketchUpNET
 			this->Area = area;
 			this->Vertices = vertices;
 			this->Layer = layername;
+			this->ID = id;
 		};
 
 		Surface(){};
@@ -155,7 +157,8 @@ namespace SketchUpNET
 		static Surface^ FromSU(SUFaceRef face, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials)
 		{
 			List<Loop^>^ inner = gcnew List<Loop^>();
-			
+			int32_t id = -1;
+			SUEntityGetID(SUFaceToEntity(face), &id);
 			SULoopRef outer = SU_INVALID;
 			SUFaceGetOuterLoop(face, &outer);
 			
@@ -228,7 +231,7 @@ namespace SketchUpNET
 			Material^ backMat = (materials->ContainsKey(mbackName)) ? materials[mbackName] : Material::FromSU(mback);
 			Material^ frontMat = (materials->ContainsKey(minnerName)) ? materials[minnerName] : Material::FromSU(minner);
 
-			Surface^ v = gcnew Surface(Loop::FromSU(outer), inner, normal, area, vertices,m, layername, backMat, frontMat);
+			Surface^ v = gcnew Surface(id, Loop::FromSU(outer), inner, normal, area, vertices,m, layername, backMat, frontMat);
 
 			return v;
 		}

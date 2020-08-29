@@ -25,6 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <SketchUpAPI/unicodestring.h>
 #include <SketchUpAPI/model/model.h>
 #include <SketchUpAPI/model/entities.h>
+#include <SketchUpAPI/model/entity.h>
 #include <SketchUpAPI/model/face.h>
 #include <SketchUpAPI/model/edge.h>
 #include <SketchUpAPI/model/vertex.h>
@@ -50,12 +51,14 @@ namespace SketchUpNET
 		Vertex^ Start;
 		Vertex^ End;
 		System::String^ Layer;
+		Int32 ID;
 
-		Edge(Vertex ^ start, Vertex ^ end, System::String^ layer)
+		Edge(Int32 id, Vertex ^ start, Vertex ^ end, System::String^ layer)
 		{
 			this->Start = start;
 			this->End = end;
 			this->Layer = layer;
+			this->ID = id;
 		};
 
 		Edge(){};
@@ -70,7 +73,8 @@ namespace SketchUpNET
 			SUPoint3D end;
 			SUVertexGetPosition(startVertex, &start);
 			SUVertexGetPosition(endVertex, &end);
-
+			int32_t id = -1;
+			SUEntityGetID(SUEdgeToEntity(edge), &id);
 			// Layer
 			SULayerRef layer = SU_INVALID;
 			SUDrawingElementGetLayer(SUEdgeToDrawingElement(edge), &layer);
@@ -81,7 +85,7 @@ namespace SketchUpNET
 				layername = SketchUpNET::Utilities::GetLayerName(layer);
 			}
 			
-			Edge^ v = gcnew Edge(Vertex::FromSU(start), Vertex::FromSU(end), layername);
+			Edge^ v = gcnew Edge(id, Vertex::FromSU(start), Vertex::FromSU(end), layername);
 
 			return v;
 		};
@@ -118,7 +122,7 @@ namespace SketchUpNET
 			{
 				std::vector<SUEdgeRef> edgevector(edgeCount);
 				SUEntitiesGetEdges(entities, false, edgeCount, &edgevector[0], &edgeCount);
-
+				
 
 				for (size_t i = 0; i < edgeCount; i++) {
 					Edge^ edge = Edge::FromSU(edgevector[i]);

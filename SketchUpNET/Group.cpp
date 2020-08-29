@@ -55,6 +55,7 @@ namespace SketchUpNET
 		/// <summary>
 		/// Surfaces
 		/// </summary>
+		Int32 ID;
 		List<Surface^>^ Surfaces;
 		List<Edge^>^ Edges;
 		List<Curve^>^ Curves;
@@ -63,7 +64,7 @@ namespace SketchUpNET
 		Transform^ Transformation;
 		System::String^ Layer;
 
-		Group(System::String^ name, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges, List<Instance^>^ insts, List<Group^>^ group, Transform^ transformation, System::String^ layername)
+		Group(Int32 id, System::String^ name, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges, List<Instance^>^ insts, List<Group^>^ group, Transform^ transformation, System::String^ layername)
 		{
 			this->Name = name;
 			this->Surfaces = surfaces;
@@ -73,6 +74,7 @@ namespace SketchUpNET
 			this->Groups = group;
 			this->Transformation = transformation;
 			this->Layer = layername;
+			this->ID = id;
 		};
 
 		Group(){};
@@ -108,8 +110,9 @@ namespace SketchUpNET
 			{
 				layername = SketchUpNET::Utilities::GetLayerName(layer);
 			}
-
-			Group^ v = gcnew Group(SketchUpNET::Utilities::GetString(name), surfaces, curves, edges, inst, grps, Transform::FromSU(transform), layername);
+			int32_t id = -1;
+			SUEntityGetID(SUGroupToEntity(group), &id);
+			Group^ v = gcnew Group(id, SketchUpNET::Utilities::GetString(name), surfaces, curves, edges, inst, grps, Transform::FromSU(transform), layername);
 
 			return v;
 		};

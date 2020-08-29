@@ -47,11 +47,13 @@ namespace SketchUpNET
 
 		List<Edge^>^ Edges = gcnew List<Edge^>();
 		bool isArc;
+		Int32 ID;
 
-		Curve(List<Edge^>^ edges, bool isarc)
+		Curve(Int32 id, List<Edge^>^ edges, bool isarc)
 		{
 			this->Edges = edges;
 			this->isArc = isarc;
+			this->ID = id;
 		};
 
 		Curve(){};
@@ -61,7 +63,8 @@ namespace SketchUpNET
 		static Curve^ FromSU(SUCurveRef curve)
 		{
 			List<Edge^>^ edgelist = gcnew List<Edge^>();
-
+			int32_t id = -1;
+			SUEntityGetID(SUCurveToEntity(curve), &id);
 			size_t edgecount = 0;
 			SUCurveGetNumEdges(curve, &edgecount);
 			if (edgecount > 0)
@@ -81,7 +84,7 @@ namespace SketchUpNET
 			if (type == SUCurveType::SUCurveType_Arc) isArc = true;
 
 
-			Curve^ v = gcnew Curve(edgelist, isArc);
+			Curve^ v = gcnew Curve(id, edgelist, isArc);
 
 			return v;
 		};

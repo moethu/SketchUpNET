@@ -25,6 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <SketchUpAPI/unicodestring.h>
 #include <SketchUpAPI/model/model.h>
 #include <SketchUpAPI/model/entities.h>
+#include <SketchUpAPI/model/entity.h>
 #include <SketchUpAPI/model/face.h>
 #include <SketchUpAPI/model/edge.h>
 #include <SketchUpAPI/model/layer.h>
@@ -55,14 +56,16 @@ namespace SketchUpNET
 		System::String^ Guid;
 		System::Object^ Parent;
 		System::String^ Layer;
+		Int32 ID;
 
-		Instance(System::String^ name, System::String^ guid, String^ parent, Transform^ transformation, System::String^ layername)
+		Instance(Int32 id, System::String^ name, System::String^ guid, String^ parent, Transform^ transformation, System::String^ layername)
 		{
 			this->Name = name;
 			this->Transformation = transformation;
 			this->ParentID = parent;
 			this->Guid = guid;
 			this->Layer = layername;
+			this->ID = id;
 		};
 
 
@@ -105,8 +108,9 @@ namespace SketchUpNET
 			SUTransformation transform = SU_INVALID;
 			SUComponentInstanceGetTransform(comp, &transform);
 			
-
-			Instance^ v = gcnew Instance(SketchUpNET::Utilities::GetString(name), SketchUpNET::Utilities::GetString(instanceguid), parent, Transform::FromSU(transform), layername);
+			int32_t id = -1;
+			SUEntityGetID(SUComponentInstanceToEntity(comp), &id);
+			Instance^ v = gcnew Instance(id, SketchUpNET::Utilities::GetString(name), SketchUpNET::Utilities::GetString(instanceguid), parent, Transform::FromSU(transform), layername);
 
 			return v;
 		};

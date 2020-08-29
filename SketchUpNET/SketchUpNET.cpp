@@ -38,6 +38,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include "Group.h"
 #include "Instance.h"
 #include "Component.h"
+#include "Scene.h"
 
 #pragma once
 
@@ -106,6 +107,11 @@ namespace SketchUpNET
 		/// Containing Model Edges (Lines)
 		/// </summary>
 		System::Collections::Generic::List<Edge^>^ Edges;
+
+		/// <summary>
+		/// Containing Scenes
+		/// </summary>
+		System::Collections::Generic::List<Scene^>^ Scenes;
 
 		/// <summary>
 		/// Loads a SketchUp Model from filepath without loading Meshes.
@@ -189,6 +195,22 @@ namespace SketchUpNET
 					Groups->Add(group);
 				}
 
+			}
+
+
+			// Get all Scenes
+			size_t sCount = 0;
+			SUModelGetNumScenes(model, &sCount);
+			Scenes = gcnew System::Collections::Generic::List<Scene^>();
+
+			if (sCount > 0) {
+				std::vector<SUSceneRef> scenes(sCount);
+				SUModelGetScenes(model, sCount, &scenes[0], &sCount);
+
+				for (size_t i = 0; i < sCount; i++) {
+					Scene^ s = Scene::FromSU(scenes[i]);
+					Scenes->Add(s);
+				}
 			}
 
 
