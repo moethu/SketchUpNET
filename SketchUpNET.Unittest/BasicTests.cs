@@ -80,9 +80,10 @@ namespace SketchUpNET.Unittest
         {
             SketchUpNET.SketchUp skp = new SketchUp();
             skp.LoadModel(TestFile, false);
-            foreach (var srf in skp.Surfaces)
+            foreach (var scene in skp.Scenes)
             {
-                Assert.IsNull(srf.FaceMesh);
+                Assert.IsNotNull(scene.Name);
+                Assert.IsNotNull(scene.HiddenEntities);
             }
         }
 

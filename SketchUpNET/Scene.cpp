@@ -44,12 +44,12 @@ namespace SketchUpNET
 	public:
 
 		System::String^ Name;
-		List<Object^>^ hiddenInstanceIds;
+		List<Object^>^ HiddenEntities;
 
-		Scene(System::String^ name, List<Object^>^ hiddenInstanceIds)
+		Scene(System::String^ name, List<Object^>^ hiddenEntities)
 		{
 			this->Name = name;
-			this->hiddenInstanceIds = hiddenInstanceIds;
+			this->HiddenEntities = hiddenEntities;
 		};
 
 		Scene() {};
@@ -62,7 +62,7 @@ namespace SketchUpNET
 
 			size_t eCount = 0;
 			SUSceneGetNumHiddenEntities(scene, &eCount);
-			List<Object^>^ instancelist = gcnew List<Object^>();
+			List<Object^>^ entities = gcnew List<Object^>();
 
 			if (eCount > 0) {
 				std::vector<SUEntityRef> ents(eCount);
@@ -72,14 +72,21 @@ namespace SketchUpNET
 					int32_t id = -1;
 					SUEntityGetID(ents[i], &id);
 					if (entitycontainer->ContainsKey(id)) {
-						instancelist->Add(entitycontainer[id]);
+						entities->Add(entitycontainer[id]);
 					}
 					
 				}
 			}
 
-			return gcnew Scene(SketchUpNET::Utilities::GetString(name), instancelist);
+			return gcnew Scene(SketchUpNET::Utilities::GetString(name), entities);
 		};
+
+		SUSceneRef ToSU() {
+			SUSceneRef scene = SU_INVALID;
+			SUSceneCreate(&scene);
+			SUSceneSetName(scene, Utilities::ToString(this->Name));
+			return scene;
+		}
 	};
 
 }
