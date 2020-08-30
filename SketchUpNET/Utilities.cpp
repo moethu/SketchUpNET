@@ -38,6 +38,11 @@ using namespace System::Collections::Generic;
 
 namespace SketchUpNET
 {
+	public interface class IEntity
+	{
+		Int64 GetID();
+	};
+
 	public class Utilities
 	{
 		public:

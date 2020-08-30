@@ -47,7 +47,7 @@ using namespace System::Collections::Generic;
 
 namespace SketchUpNET
 {
-	public ref class Instance
+	public ref class Instance : IEntity
 	{
 	public:
 		System::String^ Name;
@@ -58,18 +58,22 @@ namespace SketchUpNET
 		System::String^ Layer;
 		Int32 ID;
 
-		Instance(Int32 id, System::String^ name, System::String^ guid, String^ parent, Transform^ transformation, System::String^ layername)
+		Instance(System::String^ name, System::String^ guid, String^ parent, Transform^ transformation, System::String^ layername)
 		{
 			this->Name = name;
 			this->Transformation = transformation;
 			this->ParentID = parent;
 			this->Guid = guid;
 			this->Layer = layername;
-			this->ID = id;
 		};
 
 
 		Instance(){};
+
+		virtual Int64 GetID() {
+			return this->ID;
+		}
+
 	internal:
 		static Instance^ FromSU(SUComponentInstanceRef comp)
 		{
@@ -110,11 +114,11 @@ namespace SketchUpNET
 			
 			int32_t id = -1;
 			SUEntityGetID(SUComponentInstanceToEntity(comp), &id);
-			Instance^ v = gcnew Instance(id, SketchUpNET::Utilities::GetString(name), SketchUpNET::Utilities::GetString(instanceguid), parent, Transform::FromSU(transform), layername);
-
+			Instance^ v = gcnew Instance(SketchUpNET::Utilities::GetString(name), SketchUpNET::Utilities::GetString(instanceguid), parent, Transform::FromSU(transform), layername);
+			v->ID = id;
 			return v;
 		};
-		static List<Instance^>^ GetEntityInstances(SUEntitiesRef entities, System::Collections::Generic::Dictionary<Int32, Object^>^ entitycontainer)
+		static List<Instance^>^ GetEntityInstances(SUEntitiesRef entities, System::Collections::Generic::Dictionary<Int64, IEntity^>^ entitycontainer)
 		{
 			List<Instance^>^ instancelist = gcnew List<Instance^>();
 

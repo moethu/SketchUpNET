@@ -74,7 +74,7 @@ namespace SketchUpNET
 
 		Component(){};
 	internal:
-		static Component^ FromSU(SUComponentDefinitionRef comp, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials, System::Collections::Generic::Dictionary<Int32, Object^>^ entitycontainer)
+		static Component^ FromSU(SUComponentDefinitionRef comp, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials, System::Collections::Generic::Dictionary<Int64, IEntity^>^ entitycontainer)
 		{
 			SUStringRef name = SU_INVALID;
 			SUStringCreate(&name);

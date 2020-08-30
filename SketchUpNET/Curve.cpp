@@ -41,22 +41,25 @@ using namespace System::Collections::Generic;
 
 namespace SketchUpNET
 {
-	public ref class Curve
+	public ref class Curve : IEntity
 	{
 	public:
 
 		List<Edge^>^ Edges = gcnew List<Edge^>();
 		bool isArc;
-		Int32 ID;
+		Int64 ID;
 
-		Curve(Int32 id, List<Edge^>^ edges, bool isarc)
+		Curve(List<Edge^>^ edges, bool isarc)
 		{
 			this->Edges = edges;
 			this->isArc = isarc;
-			this->ID = id;
 		};
 
 		Curve(){};
+
+		virtual Int64 GetID() {
+			return this->ID;
+		}
 
 	internal:
 
@@ -84,8 +87,8 @@ namespace SketchUpNET
 			if (type == SUCurveType::SUCurveType_Arc) isArc = true;
 
 
-			Curve^ v = gcnew Curve(id, edgelist, isArc);
-
+			Curve^ v = gcnew Curve(edgelist, isArc);
+			v->ID = id;
 			return v;
 		};
 		
@@ -101,6 +104,10 @@ namespace SketchUpNET
 				edges[i] = this->Edges[i]->ToSU();
 			}
 			SUCurveCreateWithEdges(&curve, edges, size);
+			SUEntityRef e = SUCurveToEntity(curve);
+			int32_t id = -1;
+			SUEntityGetID(e, &id);
+			this->ID = id;
 			return curve;
 		}
 
@@ -115,7 +122,7 @@ namespace SketchUpNET
 			return result;
 		}
 
-		static List<Curve^>^ GetEntityCurves(SUEntitiesRef entities, System::Collections::Generic::Dictionary<Int32, Object^>^ entitycontainer)
+		static List<Curve^>^ GetEntityCurves(SUEntitiesRef entities, System::Collections::Generic::Dictionary<Int64, IEntity^>^ entitycontainer)
 		{
 			List<Curve^>^ curves = gcnew List<Curve^>();
 

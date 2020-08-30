@@ -88,6 +88,24 @@ namespace SketchUpNET.Unittest
         }
 
         /// <summary>
+        /// Test writing and loading scenes
+        /// </summary>
+        [TestMethod]
+        public void TestWriteScene()
+        {
+            SketchUpNET.SketchUp skp = new SketchUp();
+            skp.LoadModel(TestFile, false);
+            var edge = new Edge(new Vertex(0, 0, 0), new Vertex(10, 10, 10), skp.Layers[0].Name);
+            skp.Edges.Add(edge);
+            var scene = new Scene("3", new System.Collections.Generic.List<IEntity>() { edge });
+            skp.Scenes.Add(scene);
+            skp.WriteNewModel("tmp.skp");
+
+            skp = new SketchUp();
+            skp.LoadModel("tmp.skp", false);
+        }
+
+        /// <summary>
         /// Test getting Materials from model
         /// </summary>
         [TestMethod]

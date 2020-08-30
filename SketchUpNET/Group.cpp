@@ -47,7 +47,7 @@ using namespace System::Collections::Generic;
 
 namespace SketchUpNET
 {
-	public ref class Group
+	public ref class Group : IEntity
 	{
 	public:
 		System::String^ Name;
@@ -55,7 +55,7 @@ namespace SketchUpNET
 		/// <summary>
 		/// Surfaces
 		/// </summary>
-		Int32 ID;
+		Int64 ID;
 		List<Surface^>^ Surfaces;
 		List<Edge^>^ Edges;
 		List<Curve^>^ Curves;
@@ -64,7 +64,7 @@ namespace SketchUpNET
 		Transform^ Transformation;
 		System::String^ Layer;
 
-		Group(Int32 id, System::String^ name, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges, List<Instance^>^ insts, List<Group^>^ group, Transform^ transformation, System::String^ layername)
+		Group(System::String^ name, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges, List<Instance^>^ insts, List<Group^>^ group, Transform^ transformation, System::String^ layername)
 		{
 			this->Name = name;
 			this->Surfaces = surfaces;
@@ -74,12 +74,16 @@ namespace SketchUpNET
 			this->Groups = group;
 			this->Transformation = transformation;
 			this->Layer = layername;
-			this->ID = id;
 		};
 
 		Group(){};
+
+		virtual Int64 GetID() {
+			return this->ID;
+		}
+
 	internal:
-		static Group^ FromSU(SUGroupRef group, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials, System::Collections::Generic::Dictionary<Int32, Object^>^ entitycontainer)
+		static Group^ FromSU(SUGroupRef group, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials, System::Collections::Generic::Dictionary<Int64, IEntity^>^ entitycontainer)
 		{
 			SUStringRef name = SU_INVALID;
 			SUStringCreate(&name);
@@ -112,12 +116,12 @@ namespace SketchUpNET
 			}
 			int32_t id = -1;
 			SUEntityGetID(SUGroupToEntity(group), &id);
-			Group^ v = gcnew Group(id, SketchUpNET::Utilities::GetString(name), surfaces, curves, edges, inst, grps, Transform::FromSU(transform), layername);
-
+			Group^ v = gcnew Group(SketchUpNET::Utilities::GetString(name), surfaces, curves, edges, inst, grps, Transform::FromSU(transform), layername);
+			v->ID = id;
 			return v;
 		};
 
-		static List<Group^>^ GetEntityGroups(SUEntitiesRef entities, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials, System::Collections::Generic::Dictionary<Int32, Object^>^ entitycontainer)
+		static List<Group^>^ GetEntityGroups(SUEntitiesRef entities, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials, System::Collections::Generic::Dictionary<Int64, IEntity^>^ entitycontainer)
 		{
 			List<Group^>^ groups = gcnew List<Group^>();
 

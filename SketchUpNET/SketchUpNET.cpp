@@ -96,7 +96,7 @@ namespace SketchUpNET
 		/// <summary>
 		/// Containing All Model Entities
 		/// </summary>
-		System::Collections::Generic::Dictionary<Int32, Object^>^ Entities;
+		System::Collections::Generic::Dictionary<Int64, IEntity^>^ Entities;
 
 		/// <summary>
 		/// Containing Model Component Instances
@@ -154,7 +154,7 @@ namespace SketchUpNET
 			Groups = gcnew System::Collections::Generic::List<Group^>();
 			Components = gcnew System::Collections::Generic::Dictionary<String^,Component^>();
 			Materials = gcnew System::Collections::Generic::Dictionary<String^, Material^>();
-			Entities = gcnew System::Collections::Generic::Dictionary<Int32, Object^>();
+			Entities = gcnew System::Collections::Generic::Dictionary<Int64, IEntity^>();
 
 			SUEntitiesRef entities = SU_INVALID;
 			SUModelGetEntities(model, &entities);
@@ -349,7 +349,7 @@ namespace SketchUpNET
 			SUEntitiesAddFaces(entities, Surfaces->Count, Surface::ListToSU(Surfaces));
 			SUEntitiesAddEdges(entities, Edges->Count, Edge::ListToSU(Edges));
 			SUEntitiesAddCurves(entities, Curves->Count, Curve::ListToSU(Curves));
-
+			
 			SUModelSaveToFile(model, Utilities::ToString(filename));
 			
 			SUModelRelease(&model);
@@ -378,6 +378,12 @@ namespace SketchUpNET
 			SUEntitiesAddEdges(entities, Edges->Count, Edge::ListToSU(Edges));
 			SUEntitiesAddCurves(entities, Curves->Count, Curve::ListToSU(Curves));
 			
+			for (int i = 0; i < Scenes->Count; i++)
+			{
+				SUSceneRef suscene = Scenes[i]->ToSU(model);
+				int id = -1;
+				SUModelAddScene(model, -1, suscene, &id);
+			}
 			
 			SUModelSaveToFile(model, Utilities::ToString(filename));
 			SUModelRelease(&model);
@@ -387,7 +393,6 @@ namespace SketchUpNET
 		}
 
 		private:
-
 
 			void FixRefs(Component^ comp)
 			{

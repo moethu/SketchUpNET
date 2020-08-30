@@ -27,6 +27,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <SketchUpAPI/model/entities.h>
 #include <SketchUpAPI/model/scene.h>
 #include <SketchUpAPI/model/entity.h>
+#include <SketchUpAPI/model/drawing_element.h>
 #include <msclr/marshal.h>
 #include "utilities.h"
 #include "Layer.h"
@@ -44,9 +45,9 @@ namespace SketchUpNET
 	public:
 
 		System::String^ Name;
-		List<Object^>^ HiddenEntities;
+		List<IEntity^>^ HiddenEntities;
 
-		Scene(System::String^ name, List<Object^>^ hiddenEntities)
+		Scene(System::String^ name, List<IEntity^>^ hiddenEntities)
 		{
 			this->Name = name;
 			this->HiddenEntities = hiddenEntities;
@@ -54,7 +55,7 @@ namespace SketchUpNET
 
 		Scene() {};
 	internal:
-		static Scene^ FromSU(SUSceneRef scene, System::Collections::Generic::Dictionary<Int32, Object^>^ entitycontainer)
+		static Scene^ FromSU(SUSceneRef scene, System::Collections::Generic::Dictionary<Int64, IEntity^>^ entitycontainer)
 		{
 			SUStringRef name = SU_INVALID;
 			SUStringCreate(&name);
@@ -62,7 +63,7 @@ namespace SketchUpNET
 
 			size_t eCount = 0;
 			SUSceneGetNumHiddenEntities(scene, &eCount);
-			List<Object^>^ entities = gcnew List<Object^>();
+			List<IEntity^>^ entities = gcnew List<IEntity^>();
 
 			if (eCount > 0) {
 				std::vector<SUEntityRef> ents(eCount);
@@ -81,12 +82,31 @@ namespace SketchUpNET
 			return gcnew Scene(SketchUpNET::Utilities::GetString(name), entities);
 		};
 
-		SUSceneRef ToSU() {
+		SUSceneRef ToSU(SUModelRef model) {
 			SUSceneRef scene = SU_INVALID;
 			SUSceneCreate(&scene);
 			SUSceneSetName(scene, Utilities::ToString(this->Name));
+
+			size_t num_pids = this->HiddenEntities->Count;
+			int64_t * pids = (int64_t *)malloc(*&num_pids * sizeof(int64_t));
+			for (size_t i = 0; i < num_pids; i++) {
+				Int64 id = this->HiddenEntities[i]->GetID();
+				pids[i] = id;
+				Console::WriteLine(id);
+			}
+
+			SUEntityRef * entites = (SUEntityRef *)malloc(*&num_pids * sizeof(SUEntityRef));
+			SUModelGetEntitiesByPersistentIDs(model, num_pids, pids, entites);
+
+			for (size_t i = 0; i < num_pids; i++) {
+				SUDrawingElementRef sd = SUDrawingElementFromEntity(entites[i]);
+				SUSceneSetDrawingElementHidden(scene, sd, true);
+			}
+
 			return scene;
 		}
+
+
 	};
 
 }

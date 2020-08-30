@@ -44,24 +44,28 @@ using namespace System::Collections::Generic;
 
 namespace SketchUpNET
 {
-	public ref class Edge
+	public ref class Edge : IEntity
 	{
 	public:
 
 		Vertex^ Start;
 		Vertex^ End;
 		System::String^ Layer;
-		Int32 ID;
+		Int64 ID;
 
-		Edge(Int32 id, Vertex ^ start, Vertex ^ end, System::String^ layer)
+		Edge(Vertex ^ start, Vertex ^ end, System::String^ layer)
 		{
 			this->Start = start;
 			this->End = end;
 			this->Layer = layer;
-			this->ID = id;
 		};
 
 		Edge(){};
+
+		virtual Int64 GetID() {
+			return this->ID;
+		}
+
 	internal:
 		static Edge^ FromSU(SUEdgeRef edge)
 		{
@@ -85,8 +89,8 @@ namespace SketchUpNET
 				layername = SketchUpNET::Utilities::GetLayerName(layer);
 			}
 			
-			Edge^ v = gcnew Edge(id, Vertex::FromSU(start), Vertex::FromSU(end), layername);
-
+			Edge^ v = gcnew Edge(Vertex::FromSU(start), Vertex::FromSU(end), layername);
+			v->ID = id;
 			return v;
 		};
 
@@ -96,6 +100,11 @@ namespace SketchUpNET
 			SUPoint3D start = this->Start->ToSU();
 			SUPoint3D end = this->End->ToSU();
 			SUEdgeCreate(&edge,&start,&end);
+			SUEntityRef e = SUEdgeToEntity(edge);
+			int32_t id = -1;
+			SUEntityGetID(e, &id);
+			Console::WriteLine(id);
+			this->ID = id;
 			return edge;
 		}
 
@@ -110,7 +119,7 @@ namespace SketchUpNET
 			return result;
 		}
 
-		static List<Edge^>^ GetEntityEdges(SUEntitiesRef entities,System::Collections::Generic::Dictionary<Int32, Object^>^ entitycontainer)
+		static List<Edge^>^ GetEntityEdges(SUEntitiesRef entities,System::Collections::Generic::Dictionary<Int64, IEntity^>^ entitycontainer)
 		{
 			List<Edge^>^ edges = gcnew List<Edge^>();
 

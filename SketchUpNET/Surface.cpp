@@ -48,10 +48,10 @@ using namespace System::Collections::Generic;
 
 namespace SketchUpNET
 {
-	public ref class Surface
+	public ref class Surface : IEntity
 	{
 	public:
-		Int32 ID;
+		Int64 ID;
 		Loop^ OuterEdges;
 		List<Loop^>^ InnerEdges;
 		List<Vertex^>^ Vertices;
@@ -63,7 +63,7 @@ namespace SketchUpNET
 
 		System::String^ Layer;
 
-		Surface(Int32 id, Loop^ outer, List<Loop^>^ inner, Vector^ normal, double area, List<Vertex^>^ vertices, Mesh^ m, System::String^ layername, Material^ backmat, Material^ frontmat)
+		Surface(Loop^ outer, List<Loop^>^ inner, Vector^ normal, double area, List<Vertex^>^ vertices, Mesh^ m, System::String^ layername, Material^ backmat, Material^ frontmat)
 		{
 			this->OuterEdges = outer;
 			this->InnerEdges = inner;
@@ -73,11 +73,14 @@ namespace SketchUpNET
 			this->FrontMaterial = frontmat;
 			this->Area = area;
 			this->Vertices = vertices;
-			this->Layer = layername;
-			this->ID = id;
 		};
 
 		Surface(){};
+
+		virtual Int64 GetID() {
+			return this->ID;
+		}
+
 	internal:
 
 		static Vertex^ GetCentroid(List<Vertex^>^ vertices, int vertexCount)
@@ -139,7 +142,10 @@ namespace SketchUpNET
 
 			SUFaceRef face = SU_INVALID;
 			SUFaceCreate(&face, points, &outer_loop);
-
+			SUEntityRef e = SUFaceToEntity(face);
+			int32_t id = -1;
+			SUEntityGetID(e, &id);
+			this->ID = id;
 			return face;
 		}
 
@@ -231,13 +237,13 @@ namespace SketchUpNET
 			Material^ backMat = (materials->ContainsKey(mbackName)) ? materials[mbackName] : Material::FromSU(mback);
 			Material^ frontMat = (materials->ContainsKey(minnerName)) ? materials[minnerName] : Material::FromSU(minner);
 
-			Surface^ v = gcnew Surface(id, Loop::FromSU(outer), inner, normal, area, vertices,m, layername, backMat, frontMat);
-
+			Surface^ v = gcnew Surface(Loop::FromSU(outer), inner, normal, area, vertices,m, layername, backMat, frontMat);
+			v->ID = id;
 			return v;
 		}
 
 
-		static List<Surface^>^ GetEntitySurfaces(SUEntitiesRef entities, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials, System::Collections::Generic::Dictionary<Int32, Object^>^ entitycontainer)
+		static List<Surface^>^ GetEntitySurfaces(SUEntitiesRef entities, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials, System::Collections::Generic::Dictionary<Int64, IEntity^>^ entitycontainer)
 		{
 			List<Surface^>^ surfaces = gcnew List<Surface^>();
 
