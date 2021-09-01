@@ -56,7 +56,8 @@ namespace SketchUpNET
 		V2017,
 		V2018,
 		V2019,
-		V2020
+		V2020,
+		V2021
 	};
 
 	/// <summary>

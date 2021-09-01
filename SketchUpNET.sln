@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2043
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SketchUpForDynamo", "SketchUpForDynamo\SketchUpForDynamo.csproj", "{60201034-7CD1-4217-82BB-1161D8D0BB0A}"
 EndProject
@@ -61,8 +61,8 @@ Global
 		{942583E2-369B-4A00-8E34-F22073A911B2}.Release|x64.ActiveCfg = Release|Any CPU
 		{1C4D4501-EB39-45C8-BED0-609A978E823F}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{1C4D4501-EB39-45C8-BED0-609A978E823F}.Debug|ARM.ActiveCfg = Debug|Win32
-		{1C4D4501-EB39-45C8-BED0-609A978E823F}.Debug|Mixed Platforms.ActiveCfg = Release|x64
-		{1C4D4501-EB39-45C8-BED0-609A978E823F}.Debug|Mixed Platforms.Build.0 = Release|x64
+		{1C4D4501-EB39-45C8-BED0-609A978E823F}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
+		{1C4D4501-EB39-45C8-BED0-609A978E823F}.Debug|Mixed Platforms.Build.0 = Debug|x64
 		{1C4D4501-EB39-45C8-BED0-609A978E823F}.Debug|Win32.ActiveCfg = Debug|Win32
 		{1C4D4501-EB39-45C8-BED0-609A978E823F}.Debug|Win32.Build.0 = Debug|Win32
 		{1C4D4501-EB39-45C8-BED0-609A978E823F}.Debug|x64.ActiveCfg = Debug|x64

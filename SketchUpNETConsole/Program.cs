@@ -10,10 +10,10 @@ namespace SketchUpNETConsole
     {
         static void Main(string[] args)
         {
-            if (args.Length > 1)
+            if (args.Length > 0)
             {
                 SketchUpNET.SketchUp skp = new SketchUpNET.SketchUp();
-                if (skp.LoadModel(args[1]))
+                if (skp.LoadModel(args[0]))
                 {
                     // do something
                 }
