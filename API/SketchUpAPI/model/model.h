@@ -79,7 +79,8 @@ enum SUModelVersion {
   SUModelVersion_SU2017,
   SUModelVersion_SU2018,
   SUModelVersion_SU2019,
-  SUModelVersion_SU2020
+  SUModelVersion_SU2020,
+  SUModelVersion_SU2021
 };
 
 /**
