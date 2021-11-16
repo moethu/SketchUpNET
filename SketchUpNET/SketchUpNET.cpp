@@ -56,7 +56,8 @@ namespace SketchUpNET
 		V2017,
 		V2018,
 		V2019,
-		V2020
+		V2020,
+		V2021
 	};
 
 	/// <summary>
@@ -282,6 +283,9 @@ namespace SketchUpNET
 				break;
 			case SketchUpNET::SKPVersion::V2020:
 				saveversion = SUModelVersion::SUModelVersion_SU2020;
+				break;
+			case SketchUpNET::SKPVersion::V2021:
+				saveversion = SUModelVersion::SUModelVersion_SU2021;
 				break;
 			default:
 				break;
