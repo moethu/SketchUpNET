@@ -1,4 +1,9 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013 Trimble Inc. All Rights Reserved.
+
+/**
+ * @file
+ * @brief Interfaces for SULoopRef.
+ */
 #ifndef SKETCHUP_MODEL_LOOP_H_
 #define SKETCHUP_MODEL_LOOP_H_
 
@@ -11,6 +16,7 @@ extern "C" {
 
 /**
 @struct SULoopRef
+@extends SUEntityRef
 @brief  References a loop object, which can be either the outer loop or an inner
         loop (hole) of a face.
 */

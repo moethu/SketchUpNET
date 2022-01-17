@@ -1,5 +1,9 @@
 // Copyright 2017 Trimble Inc., All rights reserved.
 
+/**
+ * @file
+ * @brief Interfaces for SUTransformation.
+ */
 #ifndef SKETCHUP_GEOMETRY_TRANSFORMATION_H_
 #define SKETCHUP_GEOMETRY_TRANSFORMATION_H_
 
@@ -24,6 +28,7 @@ extern "C" {
 @param[in]  normal    The 3D vector specifying the rotation component of the
                       transformation. This is treated as a unit vector, so any
                       scaling will be ignored.
+@related SUTransformation
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if transform is NULL
@@ -306,7 +311,7 @@ SU_RESULT SUTransformationGetZRotation(const struct SUTransformation* transform,
 SU_RESULT SUTransformationMultiply(const struct SUTransformation* transform1,
                                    const struct SUTransformation* transform2,
                                    struct SUTransformation* out_transform);
-  
+
 /**
 @brief Returns true if transformation has been mirrored.
 @since SketchUp 2019, API 7.0

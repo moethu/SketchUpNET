@@ -1,5 +1,10 @@
-// Copyright 2013 Trimble Navigation Ltd.  All Rights Reserved
+// Copyright 2013 Trimble Inc.  All Rights Reserved
 
+
+/**
+ * @file
+ * @brief Interfaces for SUOptionsManagerRef.
+ */
 #ifndef SKETCHUP_MODEL_OPTIONS_MANAGER_H_
 #define SKETCHUP_MODEL_OPTIONS_MANAGER_H_
 

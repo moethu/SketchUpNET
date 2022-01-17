@@ -1,5 +1,10 @@
-// Copyright 2015 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2015 Trimble Inc. All Rights Reserved.
 
+
+/**
+ * @file
+ * @brief Interfaces for SUSectionPlaneRef.
+ */
 #ifndef SKETCHUP_MODEL_SECTION_PLANE_H_
 #define SKETCHUP_MODEL_SECTION_PLANE_H_
 
@@ -14,6 +19,7 @@ extern "C" {
 
 /**
 @struct SUSectionPlaneRef
+@extends SUDrawingElementRef
 @brief  A sectionPlane entity reference.
 @since SketchUp 2016, API 4.0
 */
@@ -73,9 +79,9 @@ SU_EXPORT SUSectionPlaneRef SUSectionPlaneFromDrawingElement(
 
 /**
 @brief Creates an sectionPlane object. The sectionPlane object must be
-       subsequently deallocated with \ref SUSectionPlaneRelease unless it is
+       subsequently deallocated with \ref SUSectionPlaneRelease() unless it is
        associated with a parent object.  The plane is initialized as an xy
-       plane and can be changed with the \ref SUSectionPlaneSetPlane.
+       plane and can be changed with the \ref SUSectionPlaneSetPlane().
 @since SketchUp 2016, API 4.0
 @param[in] sectionPlane The sectionPlane object.
 @related SUSectionPlaneRef
@@ -87,8 +93,8 @@ SU_EXPORT SUSectionPlaneRef SUSectionPlaneFromDrawingElement(
 SU_RESULT SUSectionPlaneCreate(SUSectionPlaneRef* sectionPlane);
 
 /**
-@brief Releases a sectionPlane object. The sectionPlane object must have been 
-       created with \ref SUSectionPlaneCreate and not subsequently associated
+@brief Releases a sectionPlane object. The sectionPlane object must have been
+       created with \ref SUSectionPlaneCreate() and not subsequently associated
        with a parent object (e.g. \ref SUEntitiesRef).
 @since SketchUp 2016, API 4.0
 @param[in] sectionPlane The sectionPlane object.
@@ -130,7 +136,7 @@ SU_RESULT SUSectionPlaneGetPlane(SUSectionPlaneRef sectionPlane,
 @brief Retrieves a boolean indicating whether or not the section plane is
        active.
 @param[in]  sectionPlane  The sectionPlane object.
-@param[out] is_active     Returns true if the section plane is active. 
+@param[out] is_active     Returns true if the section plane is active.
 @related SUSectionPlaneRef
 @return
 - \ref SU_ERROR_NONE on success
@@ -141,7 +147,7 @@ SU_RESULT SUSectionPlaneIsActive(SUSectionPlaneRef sectionPlane,
                                  bool* is_active);
 
 /**
-@brief Retrieves the name of a section plane object. 
+@brief Retrieves the name of a section plane object.
 @since SketchUp 2018, API 6.0
 @param[in]  sectionPlane  The section plane object.
 @param[out] name          The name retrieved.

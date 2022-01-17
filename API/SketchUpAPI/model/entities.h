@@ -1,4 +1,9 @@
 // Copyright 2013-2020 Trimble Inc. All Rights Reserved.
+
+/**
+ * @file
+ * @brief Interfaces for SUEntitiesRef.
+ */
 #ifndef SKETCHUP_MODEL_ENTITIES_H_
 #define SKETCHUP_MODEL_ENTITIES_H_
 
@@ -75,13 +80,13 @@ SU_RESULT SUEntitiesGetBoundingBox(SUEntitiesRef entities,
                                    struct SUBoundingBox3D* bbox);
 
 /**
-@brief Retrieves the LLA coordinates (Latidue, Longitude and Altitude) bounding 
-       box of the given entities object. 
-       Note that the altitude is calculated based on the model origin, Example: 
+@brief Retrieves the LLA coordinates (Latidue, Longitude and Altitude) bounding
+       box of the given entities object.
+       Note that the altitude is calculated based on the model origin, Example:
        If an entities object has a bounding box with the following values
-       {{100,100,100}, {200,200,200}} the result will be something like the 
-       following: {{Latitude, Longitude, 100/METERS_TO_INCHES}, 
-       {Latitude, Longitude, 200/METERS_TO_INCHES}} where Latitude and Longitude 
+       {{100,100,100}, {200,200,200}} the result will be something like the
+       following: {{Latitude, Longitude, 100/METERS_TO_INCHES},
+       {Latitude, Longitude, 200/METERS_TO_INCHES}} where Latitude and Longitude
        are the geographical coordinates and altitude is just a conversion from
        inches to meters.
 @since SketchUp 2018 M0, API 6.0
@@ -321,9 +326,9 @@ SU_RESULT SUEntitiesGetPolyline3ds(SUEntitiesRef entities,
 /**
 @brief Adds face objects to a entities object.
 
-NOTE: This function does not merge geometry, which will likely create an invalid
-SketchUp model. It is recommended to use SUGeometryInput instead which does
-correctly merge geometry.
+@bug SUEntitiesAddFaces() will not merge overlapping vertices and edges, which
+  produces SketchUp models with unexpected state. Avoid using these functions
+  and instead use SUGeometryInputRef along with SUEntitiesFill().
 
 @param[in] entities The entities object.
 @param[in] len      The length of the array of face objects.
@@ -736,9 +741,9 @@ SU_RESULT SUEntitiesErase(SUEntitiesRef entities, size_t len,
     SUEntityRef elements[]);
 
 /**
-@brief Retrieves a boolean indicating whether the entities object is 
+@brief Retrieves a boolean indicating whether the entities object is
        recursively empty. A recursively empty entities object is defined as one
-       that either has zero entities or contains only instances of definitions 
+       that either has zero entities or contains only instances of definitions
        with recursively empty entities objects.
 @since SketchUp 2017, API 5.0
 @param[in]  entities The entities object.
@@ -785,19 +790,19 @@ SU_RESULT SUEntitiesEntityListFill(SUEntitiesRef entities,
 
 /**
 @brief Takes a set of edges and find all possible chains of edges and connect
-       them with a \SUCurveRef.
- 
+       them with a \ref SUCurveRef.
+
        A curve will not cross another curve. They will split where multiple
        curves meet.
 
 @since SketchUp 2020.1, API 8.1
-@param[in]  entities The entities object to be queried.
-@param[in]  len      The length of the array of edge objects.
-@param[in]  edges    The array of edge objects to weld.
-@param[out] list     The list object to be filled with /ref SUCurveRef objects.
-@related SUArcCurveRef
-@related SUCurveRef
+@param[in]  entities   The entities object to be queried.
+@param[in]  num_edges  The length of the array of edge objects.
+@param[in]  edges      The array of edge objects to weld.
+@param[out] list       The list object to be filled with \ref SUCurveRef objects.
 @related SUEntitiesRef
+@see SUArcCurveRef
+@see SUCurveRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if entities is not a valid object

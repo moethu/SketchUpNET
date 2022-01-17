@@ -1,4 +1,9 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013 Trimble Inc. All Rights Reserved.
+
+/**
+ * @file
+ * @brief Interfaces for SUDrawingElementRef.
+ */
 #ifndef SKETCHUP_MODEL_DRAWING_ELEMENT_H_
 #define SKETCHUP_MODEL_DRAWING_ELEMENT_H_
 
@@ -11,6 +16,7 @@ extern "C" {
 
 /**
 @struct SUDrawingElementRef
+@extends SUEntityRef
 @brief  References a drawing element, which is an abstract base type for some
         API types.
 */

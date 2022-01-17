@@ -1,4 +1,9 @@
-// Copyright 2013 Trimble Navigation Ltd.  All Rights Reserved
+// Copyright 2013 Trimble Inc.  All Rights Reserved
+
+/**
+ * @file
+ * @brief Interfaces for SUImageRef.
+ */
 #ifndef SKETCHUP_MODEL_IMAGE_H_
 #define SKETCHUP_MODEL_IMAGE_H_
 
@@ -13,6 +18,7 @@ extern "C" {
 
 /**
 @struct SUImageRef
+@extends SUDrawingElementRef
 @brief References an image object.
 */
 
@@ -66,7 +72,7 @@ SU_EXPORT SUImageRef SUImageFromDrawingElement(SUDrawingElementRef
 /**
 @brief Creates a new image object from an image file specified by a path.
        The created image must be subsequently added to the Entities of a model,
-       component definition or a group. Use \ref SUModelRemoveComponentDefinitions
+       component definition or a group. Use SUModelRemoveComponentDefinitions()
        to remove the image from a model.
 @param[out] image     The image object created.
 @param[in]  file_path The file path of the source image file.
@@ -84,7 +90,7 @@ SU_RESULT SUImageCreateFromFile(SUImageRef* image, const char* file_path);
 @brief Creates a new SketchUp model image object from an image representation
        object. The created image must be subsequently added to the Entities of
        a model, component definition or a group. Use
-       \ref SUModelRemoveComponentDefinitions to remove the image from a model.
+       SUModelRemoveComponentDefinitions() to remove the image from a model.
 @since SketchUp 2017, API 5.0
 @param[out] image     The image object created.
 @param[in]  image_rep The basic image object retrieved.
@@ -101,8 +107,8 @@ SU_RESULT SUImageCreateFromImageRep(SUImageRef* image, SUImageRepRef image_rep);
 /**
 @brief Retrieves a basic image from a SketchUp model image.  The given image
        representation object must have been constructed using one of the
-       SUImageRepCreate* functions. It must be released using \ref
-       SUImageRepRelease.
+       SUImageRepCreate* functions. It must be released using
+       SUImageRepRelease().
 afterwards.
 @since SketchUp 2017, API 5.0
 @param[in]  image        The texture object.
@@ -218,7 +224,7 @@ SU_RESULT SUImageGetPixelDimensions(SUImageRef image, size_t* width,
 /**
 @brief  Returns the total size and bits-per-pixel value of an image. This
         function is useful to determine the size of the buffer necessary to be
-        passed into \ref SUImageGetData. The returned data can be used along
+        passed into \ref SUImageGetData(). The returned data can be used along
         with the returned bits-per-pixel value and the image dimensions to
         compute RGBA values at individual pixels of the image.
 @deprecated Will be removed in the next version of the SketchUp API. The
@@ -240,7 +246,7 @@ SU_RESULT SUImageGetDataSize(SUImageRef image, size_t* data_size,
 /**
 @brief  Returns the pixel data for an image. The given array must be large enough
         to hold the image's data. This size can be obtained by calling
-        \ref SUImageGetDataSize.
+        \ref SUImageGetDataSize().
 @deprecated Will be removed in the next version of the SketchUp API. The
             functionality is replaced by SUImageGetImageRep followed by
             SUImageRepGetData.

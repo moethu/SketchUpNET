@@ -1,5 +1,10 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013 Trimble Inc. All Rights Reserved.
 
+
+/**
+ * @file
+ * @brief Interfaces for SUVertexRef.
+ */
 #ifndef SKETCHUP_MODEL_VERTEX_H_
 #define SKETCHUP_MODEL_VERTEX_H_
 
@@ -13,6 +18,7 @@ extern "C" {
 
 /**
 @struct SUVertexRef
+@extends SUEntityRef
 @brief  A vertex type that has a position and is associated with other geometry
         like edges, faces, and loops.
 */

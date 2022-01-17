@@ -1,5 +1,10 @@
 // Copyright 2018 Trimble Inc. All Rights Reserverd.
 
+
+/**
+ * @file
+ * @brief Interfaces for SULineStylesRef.
+ */
 #ifndef SKETCHUP_SOURCE_SKORE_SKETCHUP_PUBLIC_MODEL_LINESTYLES_H_
 #define SKETCHUP_SOURCE_SKORE_SKETCHUP_PUBLIC_MODEL_LINESTYLES_H_
 

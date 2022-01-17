@@ -1,5 +1,9 @@
-// Copyright 2015 Trimble Navigation Ltd. All rights reserved.
+// Copyright 2015 Trimble Inc. All rights reserved.
 
+/**
+ * @file
+ * @brief Interfaces for comparing values with tolerances.
+ */
 #ifndef SKETCHUP_UTILS_MATH_HELPERS_H_
 #define SKETCHUP_UTILS_MATH_HELPERS_H_
 

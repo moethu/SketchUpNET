@@ -1,5 +1,9 @@
-// Copyright 2013 Trimble Navigation Ltd., All rights reserved.
+// Copyright 2013 Trimble Inc., All rights reserved.
 
+/**
+ * @file
+ * @brief Interfaces for SUStringRef.
+ */
 #ifndef SKETCHUP_UNICODESTRING_H_
 #define SKETCHUP_UNICODESTRING_H_
 
@@ -20,13 +24,13 @@ extern "C" {
 @brief Creates an empty string.
 
 Constructs a string and initializes it to "", an empty string.
-You must use \ref SUStringRelease() on this string object to free its memory.
+You must use SUStringRelease() on this string object to free its memory.
 @param[out] out_string_ref The string object to be created.
 @related SUStringRef
 @return
 - \ref SU_ERROR_NONE on success
-- \ref SU_ERROR_NULL_POINTER_OUTPUT if out_string_ref is NULL
-- \ref SU_ERROR_OVERWRITE_VALID if *out_string_ref does not refer to an invalid
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if \p out_string_ref is `NULL`
+- \ref SU_ERROR_OVERWRITE_VALID if *\p out_string_ref does not refer to an invalid
   object
 */
 SU_RESULT SUStringCreate(SUStringRef* out_string_ref);
@@ -35,18 +39,18 @@ SU_RESULT SUStringCreate(SUStringRef* out_string_ref);
 @brief Creates a string from a UTF-8 string.
 
 Constructs a string and initializes it to a copy of the provided string,
-which is provided by a '\0' (null) terminated array of 8-bit characters.
+which is provided by a `'\0'` (`NULL`) terminated array of 8-bit characters.
 This string is interpreted as UTF-8.
-You must use \ref SUStringRelease() on this string object to free its memory.
+You must use SUStringRelease() on this string object to free its memory.
 @param[out] out_string_ref The string object to be created
-@param[in]  char_array     A null-terminated UTF-8 (or ASCII) string that
+@param[in]  char_array     A NULL-terminated UTF-8 (or ASCII) string that
                            initializes the string.
 @related SUStringRef
 @return
 - \ref SU_ERROR_NONE on success
-- \ref SU_ERROR_NULL_POINTER_INPUT if char_array is NULL
-- \ref SU_ERROR_NULL_POINTER_OUTPUT if out_string_ref is NULL
-- \ref SU_ERROR_OVERWRITE_VALID if *out_string_ref does not refer to an invalid
+- \ref SU_ERROR_NULL_POINTER_INPUT if \p char_array is `NULL`
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if \p out_string_ref is `NULL`
+- \ref SU_ERROR_OVERWRITE_VALID if *\p out_string_ref does not refer to an invalid
   object
 */
 SU_RESULT SUStringCreateFromUTF8(SUStringRef* out_string_ref,
@@ -56,18 +60,18 @@ SU_RESULT SUStringCreateFromUTF8(SUStringRef* out_string_ref,
 @brief Creates a string from a UTF-16 string.
 
 Constructs a string and initializes it to a copy of the provided string,
-which is provided by a 0 (null) terminated array of 16-bit characters.
+which is provided by a 0 (`NULL`) terminated array of 16-bit characters.
 This string is interpreted as UTF-16.
-You must use \ref SUStringRelease() on this string object to free its memory.
+You must use SUStringRelease() on this string object to free its memory.
 @param[out] out_string_ref The string object to be created
-@param[in]  char_array     A null-terminated UTF-16 string that initializes the
+@param[in]  char_array     A NULL-terminated UTF-16 string that initializes the
                            string
 @related SUStringRef
 @return
 - \ref SU_ERROR_NONE on Success
-- \ref SU_ERROR_NULL_POINTER_INPUT if char_array is NULL
-- \ref SU_ERROR_NULL_POINTER_OUTPUT if out_string_ref is NULL
-- \ref SU_ERROR_OVERWRITE_VALID if *out_string_ref does not refer to an invalid
+- \ref SU_ERROR_NULL_POINTER_INPUT if \p char_array is `NULL`
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if \p out_string_ref is `NULL`
+- \ref SU_ERROR_OVERWRITE_VALID if *\p out_string_ref does not refer to an invalid
   object
 */
 SU_RESULT SUStringCreateFromUTF16(SUStringRef* out_string_ref,
@@ -76,15 +80,15 @@ SU_RESULT SUStringCreateFromUTF16(SUStringRef* out_string_ref,
 /**
 @brief Deletes a string object.
 
-You must use \ref SUStringRelease when a SUStringRef object is no longer in use.
+You must use SUStringRelease() when a SUStringRef object is no longer in use.
 *string_ref is deleted and the reference is made invalid. (Calling
 SUIsInvalid(*string_ref) would evaluate true.)
 @param[in,out] string_ref The string object to be deleted.
 @related SUStringRef
 @return
 - \ref SU_ERROR_NONE on success
-- \ref SU_ERROR_NULL_POINTER_INPUT if string_ref is NULL
-- \ref SU_ERROR_INVALID_INPUT if *string_ref does not refer to a valid object
+- \ref SU_ERROR_NULL_POINTER_INPUT if \p string_ref is `NULL`
+- \ref SU_ERROR_INVALID_INPUT if *\p string_ref does not refer to a valid object
 */
 SU_RESULT SUStringRelease(SUStringRef* string_ref);
 
@@ -93,16 +97,16 @@ SU_RESULT SUStringRelease(SUStringRef* string_ref);
 
 Gives you the length of the string when encoded in UTF-8. This may be
 larger than the number of glyphs when multiple bytes are required.
-This value does not include the space for a '\0' (null) terminator value
+This value does not include the space for a '\0' (`NULL`) terminator value
 at the end of the string. It is a good idea when using this function with
-\ref SUStringGetUTF8() to add one to out_length.
+SUStringGetUTF8() to add one to \p out_length.
 @param[in]  string_ref The string object.
 @param[out] out_length The length returned.
 @related SUStringRef
 @return
 - \ref SU_ERROR_NONE on success
-- \ref SU_ERROR_INVALID_INPUT if string_ref does not refer to a valid object
-- \ref SU_ERROR_NULL_POINTER_OUTPUT if out_length is NULL
+- \ref SU_ERROR_INVALID_INPUT if \p string_ref does not refer to a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if \p out_length is `NULL`
 */
 SU_RESULT SUStringGetUTF8Length(SUStringRef string_ref, size_t* out_length);
 
@@ -111,17 +115,17 @@ SU_RESULT SUStringGetUTF8Length(SUStringRef string_ref, size_t* out_length);
 
 Gives you the length of the string when encoded in UTF-16. This may be
 larger than the number of glyphs when multiple values are required.
-This value does not include the space for a 0 (null) terminator value
+This value does not include the space for a 0 (`NULL`) terminator value
 at the end of the string. It is a good idea when using this function with
-\ref SUStringGetUTF16() to add one to out_length.
+SUStringGetUTF16() to add one to \p out_length.
 
 @param[in]  string_ref The string object.
 @param[out] out_length The length returned.
 @related SUStringRef
 @return
 - \ref SU_ERROR_NONE on success
-- \ref SU_ERROR_INVALID_INPUT if string_ref does not refer to a valid object
-- \ref SU_ERROR_NULL_POINTER_OUTPUT if out_length is NULL
+- \ref SU_ERROR_INVALID_INPUT if \p string_ref does not refer to a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if \p out_length is `NULL`
 */
 SU_RESULT SUStringGetUTF16Length(SUStringRef string_ref, size_t* out_length);
 
@@ -133,8 +137,8 @@ SU_RESULT SUStringGetUTF16Length(SUStringRef string_ref, size_t* out_length);
 @related SUStringRef
 @return
 - \ref SU_ERROR_NONE on success
-- \ref SU_ERROR_INVALID_INPUT if string_ref does not refer to a valid object
-- \ref SU_ERROR_NULL_POINTER_OUTPUT if char_array is NULL
+- \ref SU_ERROR_INVALID_INPUT if \p string_ref does not refer to a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if \p char_array is `NULL`
 */
 SU_RESULT SUStringSetUTF8(SUStringRef string_ref, const char* char_array);
 
@@ -146,8 +150,8 @@ SU_RESULT SUStringSetUTF8(SUStringRef string_ref, const char* char_array);
 @related SUStringRef
 @return
 - \ref SU_ERROR_NONE on success
-- \ref SU_ERROR_INVALID_INPUT if string_ref does not refer to a valid object
-- \ref SU_ERROR_NULL_POINTER_OUTPUT if char_array is NULL
+- \ref SU_ERROR_INVALID_INPUT if \p string_ref does not refer to a valid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if \p char_array is `NULL`
 */
 SU_RESULT SUStringSetUTF16(SUStringRef string_ref, const unichar* char_array);
 
@@ -155,7 +159,7 @@ SU_RESULT SUStringSetUTF16(SUStringRef string_ref, const unichar* char_array);
 @brief Writes the contents of the string into the provided character array.
 
 This function does not allocate memory. You must provide an array of sufficient
-length to get the entire string. The output string will be NULL terminated.
+length to get the entire string. The output string will be `NULL` terminated.
 @param[in]  string_ref        The string object.
 @param[in]  char_array_length The length of the given character array.
 @param[out] out_char_array    The character array to be filled in.
@@ -163,9 +167,9 @@ length to get the entire string. The output string will be NULL terminated.
 @related SUStringRef
 @return
 - \ref SU_ERROR_NONE on success
-- \ref SU_ERROR_INVALID_INPUT if string_ref does not refer to a valid string
-- \ref SU_ERROR_NULL_POINTER_OUTPUT : out_char_array or
-                                      out_number_of_chars_copied is NULL
+- \ref SU_ERROR_INVALID_INPUT if \p string_ref does not refer to a valid string
+- \ref SU_ERROR_NULL_POINTER_OUTPUT : \p out_char_array or
+                                      \p out_number_of_chars_copied is `NULL`
 */
 SU_RESULT SUStringGetUTF8(SUStringRef string_ref,
                           size_t char_array_length,
@@ -193,7 +197,7 @@ SU_RESULT SUStringGetUTF16(SUStringRef string_ref,
                            size_t char_array_length,
                            unichar* out_char_array,
                            size_t* out_number_of_chars_copied);
-  
+
 /**
 @brief Trim leading white spaces from the string.
 @since SketchUp 2017, API 5.0
@@ -227,7 +231,7 @@ SU_RESULT SUStringTrimRight(SUStringRef string_ref);
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if string_a or string_b do not refer to a valid string
-- \ref SU_ERROR_NULL_POINTER_OUTPUT if result is NULL 
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if result is NULL
 */
 SU_RESULT SUStringCompare(SUStringRef a, SUStringRef b, int *result);
 

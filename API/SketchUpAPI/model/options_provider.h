@@ -1,5 +1,10 @@
 // Copyright 2013-2019 Trimble Inc.  All Rights Reserved
 
+
+/**
+ * @file
+ * @brief Interfaces for SUOptionsProviderRef.
+ */
 #ifndef SKETCHUP_MODEL_OPTIONS_PROVIDER_H_
 #define SKETCHUP_MODEL_OPTIONS_PROVIDER_H_
 

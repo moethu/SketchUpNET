@@ -1,4 +1,9 @@
 // Copyright 2017 Trimble Inc. All Rights Reserved.
+
+/**
+ * @file
+ * @brief Interfaces for SULengthFormatterRef.
+ */
 #ifndef SKETCHUP_LENGTH_FORMATTER_H_
 #define SKETCHUP_LENGTH_FORMATTER_H_
 
@@ -145,6 +150,7 @@ SU_RESULT SULengthFormatterSetPrecision(SULengthFormatterRef formatter,
 @since Sketchup 2020, API 8.0
 @param[in]  formatter The formatter object.
 @param[out] precision The precision retrieved.
+@related SULengthFormatterRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if formatter is not a valid object
@@ -158,6 +164,7 @@ SU_RESULT SULengthFormatterGetAreaPrecision(SULengthFormatterRef formatter,
 @since Sketchup 2020, API 8.0
 @param[in] formatter The formatter object.
 @param[in] precision The precision to be set.
+@related SULengthFormatterRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if formatter is not a valid object
@@ -170,6 +177,7 @@ SU_RESULT SULengthFormatterSetAreaPrecision(SULengthFormatterRef formatter,
 @since Sketchup 2020, API 8.0
 @param[in]  formatter The formatter object.
 @param[out] precision The precision retrieved.
+@related SULengthFormatterRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if formatter is not a valid object
@@ -183,6 +191,7 @@ SU_RESULT SULengthFormatterGetVolumePrecision(SULengthFormatterRef formatter,
 @since Sketchup 2020, API 8.0
 @param[in] formatter The formatter object.
 @param[in] precision The precision to be set.
+@related SULengthFormatterRef
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if formatter is not a valid object

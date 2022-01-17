@@ -1,4 +1,9 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013 Trimble Inc. All Rights Reserved.
+
+/**
+ * @file
+ * @brief Interfaces for SUEdgeRef.
+ */
 #ifndef SKETCHUP_MODEL_EDGE_H_
 #define SKETCHUP_MODEL_EDGE_H_
 
@@ -14,8 +19,9 @@ extern "C" {
 #endif
 
 /**
-@struct SUEdgeRef
-@brief  References an edge.
+ * @struct SUEdgeRef
+ * @extends SUDrawingElementRef
+ * @brief  References an edge.
 */
 
 /**
@@ -68,7 +74,7 @@ SU_EXPORT SUEdgeRef SUEdgeFromDrawingElement(SUDrawingElementRef
 /**
 @brief Creates a new edge object.
 
-The edge object must be subsequently deallocated with \ref SUEdgeRelease unless
+The edge object must be subsequently deallocated with \ref SUEdgeRelease() unless
 the edge object is associated with a parent object.
 @param[out] edge  The edge object.
 @param[in]  start The start position of the edge object.
@@ -87,8 +93,8 @@ SU_RESULT SUEdgeCreate(SUEdgeRef* edge,
 /**
 @brief Releases an edge object.
 
-The edge object must have been created with \ref SUEdgeCreate and not
-subsequently associated with a parent object (e.g. \ref SUEntitiesAddEdges).
+The edge object must have been created with SUEdgeCreate() and not
+subsequently associated with a parent object (e.g. SUEntitiesAddEdges()).
 @param[in] edge The edge object.
 @related SUEdgeRef
 @return
@@ -222,7 +228,6 @@ SU_RESULT SUEdgeGetColor(SUEdgeRef edge, SUColor* color);
 
 /**
 @brief Computes the length of the edge with the provided transformation applied.
-@since 
 @param[in]  edge      The edge object.
 @param[in]  transform A transformation to be appllied to the edge.
 @param[out] length    The length retrieved.

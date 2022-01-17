@@ -1,5 +1,9 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013-2020 Trimble Inc. All Rights Reserved.
 
+/**
+ * @file
+ * @brief Interfaces for SUComponentInstanceRef.
+ */
 #ifndef SKETCHUP_MODEL_COMPONENT_INSTANCE_H_
 #define SKETCHUP_MODEL_COMPONENT_INSTANCE_H_
 
@@ -14,6 +18,7 @@ extern "C" {
 
 /**
 @struct SUComponentInstanceRef
+@extends SUDrawingElementRef
 @brief  References a component instance, i.e. an instance of a component
         definition.
 */
@@ -83,8 +88,8 @@ SU_RESULT SUComponentInstanceSetName(SUComponentInstanceRef instance,
                                      const char* name);
 
 /**
-@brief Deallocates a component instance object created with \ref
-       SUComponentDefinitionCreateInstance.
+@brief Deallocates a component instance object created with
+       SUComponentDefinitionCreateInstance().
 @param[in] instance The component instance object.
 @related SUComponentInstanceRef
 @return
@@ -158,7 +163,7 @@ SU_RESULT SUComponentInstanceSetTransform(
 /**
 @brief Retrieves the transform of a component instance object.
 
-See description of \ref SUComponentInstanceSetTransform for a discussion of
+See description of \ref SUComponentInstanceSetTransform() for a discussion of
 component instance transforms.
 @param[in]  instance  The component instance object.
 @param[out] transform The transform retrieved.

@@ -1,5 +1,10 @@
-// Copyright 2013 Trimble Navigation Ltd.  All Rights Reserved
+// Copyright 2013 Trimble Inc.  All Rights Reserved
 
+
+/**
+ * @file
+ * @brief Interfaces for SUTypedValueRef.
+ */
 #ifndef SKETCHUP_MODEL_TYPED_VALUE_H_
 #define SKETCHUP_MODEL_TYPED_VALUE_H_
 
@@ -23,23 +28,23 @@ extern "C" {
 @brief The set of types that a \ref SUTypedValueRef can represent.
 */
 enum SUTypedValueType {
-  SUTypedValueType_Empty = 0,
-  SUTypedValueType_Byte,
-  SUTypedValueType_Short,
-  SUTypedValueType_Int32,
-  SUTypedValueType_Float,
-  SUTypedValueType_Double,
-  SUTypedValueType_Bool,
-  SUTypedValueType_Color,
-  SUTypedValueType_Time,
-  SUTypedValueType_String,
-  SUTypedValueType_Vector3D,
-  SUTypedValueType_Array
+  SUTypedValueType_Empty = 0, ///< No value set
+  SUTypedValueType_Byte,      ///< Byte value type
+  SUTypedValueType_Short,     ///< Short value type
+  SUTypedValueType_Int32,     ///< Int32 value type
+  SUTypedValueType_Float,     ///< Float value type
+  SUTypedValueType_Double,    ///< Double value type
+  SUTypedValueType_Bool,      ///< Bool value type
+  SUTypedValueType_Color,     ///< Color value type
+  SUTypedValueType_Time,      ///< Time value type
+  SUTypedValueType_String,    ///< String value type
+  SUTypedValueType_Vector3D,  ///< Vector3D value type
+  SUTypedValueType_Array      ///< Array value type
 };
 
 /**
 @brief  Creates a typed value object.  The created object must be released
-        with \ref SUTypedValueRelease.
+        with \ref SUTypedValueRelease().
 @param[out] typed_value The created typed value object.
 @related SUTypedValueRef
 @return
@@ -51,7 +56,7 @@ SU_RESULT SUTypedValueCreate(SUTypedValueRef* typed_value);
 
 /**
 @brief  Releases a typed value object that was previously created with
-        \ref SUTypedValueCreate.
+        \ref SUTypedValueCreate().
 @param[in] typed_value The typed value object.
 @related SUTypedValueRef
 @return

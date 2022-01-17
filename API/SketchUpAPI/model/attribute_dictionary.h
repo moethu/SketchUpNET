@@ -1,4 +1,9 @@
-// Copyright 2013 Trimble Navigation Ltd.  All Rights Reserved
+// Copyright 2013-2020 Trimble Inc.  All Rights Reserved
+
+/**
+ * @file
+ * @brief Interfaces for SUAttributeDictionaryRef.
+ */
 #ifndef SKETCHUP_MODEL_ATTRIBUTE_DICTIONARY_H_
 #define SKETCHUP_MODEL_ATTRIBUTE_DICTIONARY_H_
 
@@ -69,6 +74,7 @@ SU_EXPORT SUAttributeDictionaryRef SUAttributeDictionaryFromEntity(SUEntityRef
 
 /**
 @struct SUAttributeDictionaryRef
+@extends SUEntityRef
 @brief  A dictionary type with SUStringRef objects as keys and SUTypedValueRef
         objects as values.
 */
@@ -99,6 +105,7 @@ SU_RESULT SUAttributeDictionaryGetName(SUAttributeDictionaryRef dictionary,
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if dictionary or value_in is an invalid object.
 - \ref SU_ERROR_NULL_POINTER_INPUT if key is NULL
+- \ref SU_ERROR_INVALID_OPERATION if dictionary is read-only.
 */
 SU_RESULT SUAttributeDictionarySetValue(SUAttributeDictionaryRef dictionary,
                                         const char* key,
@@ -111,7 +118,7 @@ SU_RESULT SUAttributeDictionarySetValue(SUAttributeDictionaryRef dictionary,
 @param[in] key        The key of the key-value pair. Assumed to be UTF-8
                       encoded.
 @param[out] value_out The value retrieved. Must be a valid object, i.e.
-                      must have been allocated via \ref SUTypedValueCreate.
+                      must have been allocated via SUTypedValueCreate().
 @related SUAttributeDictionaryRef
 @return
 - \ref SU_ERROR_NONE on success

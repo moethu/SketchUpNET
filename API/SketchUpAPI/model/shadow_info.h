@@ -1,5 +1,10 @@
-// Copyright 2014 Trimble Navigation Ltd.  All rights reserved.
+// Copyright 2014 Trimble Inc.  All rights reserved.
 
+
+/**
+ * @file
+ * @brief Interfaces for SUShadowInfoRef.
+ */
 #ifndef SKETCHUP_MODEL_SHADOW_INFO_H_
 #define SKETCHUP_MODEL_SHADOW_INFO_H_
 

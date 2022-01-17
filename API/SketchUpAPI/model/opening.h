@@ -1,4 +1,9 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013 Trimble Inc. All Rights Reserved.
+
+/**
+ * @file
+ * @brief Interfaces for SUOpeningRef.
+ */
 #ifndef SKETCHUP_MODEL_OPENING_H_
 #define SKETCHUP_MODEL_OPENING_H_
 

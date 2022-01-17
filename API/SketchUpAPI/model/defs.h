@@ -1,5 +1,9 @@
-// Copyright 2013 Trimble Inc. All Rights Reserved.
+// Copyright 2013-2020 Trimble Inc. All Rights Reserved.
 
+/**
+ * @file
+ * @brief Types related to the SketchUp model.
+ */
 #ifndef SKETCHUP_MODEL_DEFS_H_
 #define SKETCHUP_MODEL_DEFS_H_
 
@@ -40,6 +44,7 @@ DEFINE_SU_TYPE(SUImageRef)
 DEFINE_SU_TYPE(SUImageRepRef)
 DEFINE_SU_TYPE(SUInstancePathRef)
 DEFINE_SU_TYPE(SULayerRef)
+DEFINE_SU_TYPE(SULayerFolderRef)
 DEFINE_SU_TYPE(SULineStyleRef)
 DEFINE_SU_TYPE(SULineStylesRef)
 DEFINE_SU_TYPE(SULocationRef)
@@ -57,6 +62,7 @@ DEFINE_SU_TYPE(SUSceneRef)
 DEFINE_SU_TYPE(SUSchemaRef)
 DEFINE_SU_TYPE(SUSchemaTypeRef)
 DEFINE_SU_TYPE(SUSectionPlaneRef)
+DEFINE_SU_TYPE(SUSelectionRef)
 DEFINE_SU_TYPE(SUShadowInfoRef)
 DEFINE_SU_TYPE(SUStyleRef)
 DEFINE_SU_TYPE(SUStylesRef)
@@ -72,59 +78,61 @@ DEFINE_SU_TYPE(SUVertexRef)
 @brief Types of concrete object references.
 */
 enum SURefType {
-  SURefType_Unknown = 0,
-  SURefType_AttributeDictionary,
-  SURefType_Camera,
-  SURefType_ComponentDefinition,
-  SURefType_ComponentInstance,
-  SURefType_Curve,
-  SURefType_Edge,
-  SURefType_EdgeUse,
-  SURefType_Entities,
-  SURefType_Face,
-  SURefType_Group,
-  SURefType_Image,
-  SURefType_Layer,
-  SURefType_Location,
-  SURefType_Loop,
-  SURefType_MeshHelper,
-  SURefType_Material,
-  SURefType_Model,
-  SURefType_Polyline3D,
-  SURefType_Scene,
-  SURefType_Texture,
-  SURefType_TextureWriter,
-  SURefType_TypedValue,
-  SURefType_UVHelper,
-  SURefType_Vertex,
-  SURefType_RenderingOptions,
-  SURefType_GuidePoint,
-  SURefType_GuideLine,
-  SURefType_Schema,
-  SURefType_SchemaType,
-  SURefType_ShadowInfo,
-  SURefType_Axes,
-  SURefType_ArcCurve,
-  SURefType_SectionPlane,
-  SURefType_DynamicComponentInfo,
-  SURefType_DynamicComponentAttribute,
-  SURefType_Style,
-  SURefType_Styles,
-  SURefType_ImageRep,
-  SURefType_InstancePath,
-  SURefType_Font,
-  SURefType_Dimension,
-  SURefType_DimensionLinear,
-  SURefType_DimensionRadial,
-  SURefType_DimensionStyle,
-  SURefType_Text,
-  SURefType_EntityList,
-  SURefType_EntityListIterator,
-  SURefType_DrawingElement,
-  SURefType_Entity,
-  SURefType_LengthFormatter,
-  SURefType_LineStyle,
-  SURefType_LineStyleManager
+  SURefType_Unknown = 0, ///< Unknown object type.
+  SURefType_AttributeDictionary, ///< SUAttributeDictionaryRef type
+  SURefType_Camera, ///< SUCameraRef type
+  SURefType_ComponentDefinition, ///< SUComponentDefinitionRef type
+  SURefType_ComponentInstance, ///< SUComponentInstanceRef type
+  SURefType_Curve, ///< SUCurveRef type
+  SURefType_Edge, ///< SUEdgeRef type
+  SURefType_EdgeUse, ///< SUEdgeUseRef type
+  SURefType_Entities, ///< SUEntitiesRef type
+  SURefType_Face, ///< SUFaceRef type
+  SURefType_Group, ///< SUGroupRef type
+  SURefType_Image, ///< SUImageRef type
+  SURefType_Layer, ///< SULayerRef type
+  SURefType_Location, ///< SULocationRef type
+  SURefType_Loop, ///< SULoopRef type
+  SURefType_MeshHelper, ///< SUMeshHelperRef type
+  SURefType_Material, ///< SUMaterialRef type
+  SURefType_Model, ///< SUModelRef type
+  SURefType_Polyline3D, ///< SUPolyline3DRef type
+  SURefType_Scene, ///< SUSceneRef type
+  SURefType_Texture, ///< SUTextureRef type
+  SURefType_TextureWriter, ///< SUTextureWriterRef type
+  SURefType_TypedValue, ///< SUTypedValueRef type
+  SURefType_UVHelper, ///< SUUVHelperRef type
+  SURefType_Vertex, ///< SUVertexRef type
+  SURefType_RenderingOptions, ///< SURenderingOptionsRef type
+  SURefType_GuidePoint, ///< SUGuidePointRef type
+  SURefType_GuideLine, ///< SUGuideLineRef type
+  SURefType_Schema, ///< SUSchemaRef type
+  SURefType_SchemaType, ///< SUSchemaTypeRef type
+  SURefType_ShadowInfo, ///< SUShadowInfoRef type
+  SURefType_Axes, ///< SUAxesRef type
+  SURefType_ArcCurve, ///< SUArcCurveRef type
+  SURefType_SectionPlane, ///< SUSectionPlaneRef type
+  SURefType_DynamicComponentInfo, ///< SUDynamicComponentInfoRef type
+  SURefType_DynamicComponentAttribute, ///< SUDynamicComponentAttributeRef type
+  SURefType_Style, ///< SUStyleRef type
+  SURefType_Styles, ///< SUStylesRef type
+  SURefType_ImageRep, ///< SUImageRepRef type
+  SURefType_InstancePath, ///< SUInstancePathRef type
+  SURefType_Font, ///< SUFontRef type
+  SURefType_Dimension, ///< SUDimensionRef type
+  SURefType_DimensionLinear, ///< SUDimensionLinearRef type
+  SURefType_DimensionRadial, ///< SUDimensionRadialRef type
+  SURefType_DimensionStyle, ///< SUDimensionStyleRef type
+  SURefType_Text, ///< SUTextRef type
+  SURefType_EntityList, ///< SUEntityListRef type
+  SURefType_EntityListIterator, ///< SUEntityListIteratorRef type
+  SURefType_DrawingElement, ///< SUDrawingElementRef type
+  SURefType_Entity, ///< SUEntityRef type
+  SURefType_LengthFormatter, ///< SULengthFormatterRef type
+  SURefType_LineStyle, ///< SULineStyleRef type
+  SURefType_LineStyleManager, ///< SULineStyleManagerRef type
+  SURefType_Selection, ///< SUSelectionRef type
+  SURefType_LayerFolder ///< SULayerFolderRef type
 };
 
 #pragma pack(pop)

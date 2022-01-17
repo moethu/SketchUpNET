@@ -1,5 +1,9 @@
-// Copyright 2014 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2014-2020 Trimble Inc. All Rights Reserved.
 
+/**
+ * @file
+ * @brief Interfaces for SUClassificationsRef.
+ */
 #ifndef SKETCHUP_MODEL_CLASSIFICATIONS_H_
 #define SKETCHUP_MODEL_CLASSIFICATIONS_H_
 

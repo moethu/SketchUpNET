@@ -1,5 +1,9 @@
 // Copyright 2017 Trimble Inc., All rights reserved.
 
+/**
+ * @file
+ * @brief Interfaces for SUBoundingBox3D.
+ */
 #ifndef SKETCHUP_GEOMETRY_BOUNDING_BOX_H_
 #define SKETCHUP_GEOMETRY_BOUNDING_BOX_H_
 

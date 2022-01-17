@@ -1,5 +1,9 @@
-﻿// Copyright 2012 Trimble Navigation Ltd. All Rights Reserved.
+﻿// Copyright 2012-2020 Trimble Inc. All Rights Reserved.
 
+/**
+ * @file
+ * @brief Interfaces for SketchUpModelExporterInterface.
+ */
 #ifndef MODELEXPORTERPLUGIN_H_
 #define MODELEXPORTERPLUGIN_H_
 
@@ -132,42 +136,6 @@ class SketchUpModelExporterInterface {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
-/**
-@struct SketchUpDeprecatedModelExporterInterface
-@brief  Old style exporters must implement this interface. Note that this
-        interface is being deprecated. New exporters must implement
-        SketchUpModelExporterInterface.
-*/
-class SketchUpDeprecatedModelExporterInterface :
-    public SketchUpModelExporterInterface {
-
-public:
-  /**
-  @brief  Performs the conversion from an active SketchUp model to the target
-          output file using options set during the ShowOptionsDialog method.
-  @param[in] document  The ISkpDocument pointer for the model being exported.
-  @param[in] output    The requested output file in UTF-8.
-  @param[in] progress  The exporter should support this progress interface. See
-                       that for details. The method should be tolerant to a NULL
-                       progress callback.
-  @return
-  - true on success
-  - false on failure or cancellation
-  */
-  virtual bool DeprecatedConvertFromSkp(
-      void* document,
-      const std::string& output,
-      SketchUpPluginProgressCallback* progress) = 0;
-
-private:
-  bool ConvertFromSkp(const std::string&,
-                      const std::string&,
-                      SketchUpPluginProgressCallback*,
-                      void*) {
-    return false;
-  }
-};
-////////////////////////////////////////////////////////////////////////////////
 
 #ifdef __OBJC__
 /** Each Mac plugin should support this simple protocol.
@@ -185,7 +153,8 @@ private:
 @end
 
 #else
-/** Each Windows DLL should export a function which returns the c++ interface.
+/**
+ * Each Windows DLL should export a function which returns the C++ interface.
  */
 typedef SketchUpModelExporterInterface*
     (*GetSketchUpModelExporterInterfaceFunc)(void);

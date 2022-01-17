@@ -1,5 +1,9 @@
 // Copyright 2017 Trimble Inc. All Rights Reserved.
 
+/**
+ * @file
+ * @brief Interfaces for SUPoint2D.
+ */
 #ifndef SKETCHUP_GEOMETRY_POINT2D_H_
 #define SKETCHUP_GEOMETRY_POINT2D_H_
 

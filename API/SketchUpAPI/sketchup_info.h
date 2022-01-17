@@ -1,5 +1,11 @@
-// Copyright 2015 Trimble Navigation Ltd., All rights reserved.
+// Copyright 2015 Trimble Inc., All rights reserved.
 
+/**
+ * @file
+ * @brief Interfaces for obtaining information about the executing SketchUp
+ *   application.
+ * @note This is only relevant for the Live API.
+ */
 #ifndef SKETCHUP_SKETCHUP_INFO_H_
 #define SKETCHUP_SKETCHUP_INFO_H_
 
@@ -39,12 +45,12 @@ SU_RESULT SUGetVersionStringUtf8(size_t length, char* version);
 
 /**
 @brief Returns the SketchUp edition (Pro or Make). This is only exported by
-       the SketchUp executable. It is not part of the standalone SDK. Note: 
-       Starting with version 2018, SketchUp Make is no longer available. So this 
+       the SketchUp executable. It is not part of the standalone SDK. Note:
+       Starting with version 2018, SketchUp Make is no longer available. So this
        function will always return \ref SUEdition_Pro.
 @since SketchUp 2016, API 4.0
 @param[out] edition The edition of Sketchup
-@related SUEdition
+@see SUEdition
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if edition is NULL

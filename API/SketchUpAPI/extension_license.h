@@ -1,5 +1,9 @@
-// Copyright 2014 Trimble Navigation Ltd., All rights reserved.
+// Copyright 2014 Trimble Inc., All rights reserved.
 
+/**
+ * @file
+ * @brief Interfaces for SUExtensionLicense.
+ */
 #ifndef SKETCHUP_EXTENSION_LICENSE_H_
 #define SKETCHUP_EXTENSION_LICENSE_H_
 

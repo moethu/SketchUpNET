@@ -1,5 +1,9 @@
-// Copyright 2013 Trimble Navigation Ltd., All rights reserved.
+// Copyright 2013 Trimble Inc., All rights reserved.
 
+/**
+ * @file
+ * @brief Define types for geometric operations.
+ */
 #ifndef SKETCHUP_GEOMETRY_H_
 #define SKETCHUP_GEOMETRY_H_
 
@@ -18,8 +22,8 @@ extern "C" {
 @brief Represents a point in 2-dimensional space.
 */
 struct SUPoint2D {
-  double x;
-  double y;
+  double x; ///< X coordinate
+  double y; ///< Y coordinate
 };
 
 /**
@@ -27,8 +31,8 @@ struct SUPoint2D {
 @brief Represents a vector in 2-dimensional space.
 */
 struct SUVector2D {
-  double x;
-  double y;
+  double x; ///< X magnitude
+  double y; ///< Y magnitude
 };
 
 /**
@@ -36,9 +40,9 @@ struct SUVector2D {
 @brief Represents a point in 3-dimensional space.
 */
 struct SUPoint3D {
-  double x;
-  double y;
-  double z;
+  double x; ///< X coordinate
+  double y; ///< Y coordinate
+  double z; ///< Z coordinate
 };
 
 /**
@@ -46,9 +50,9 @@ struct SUPoint3D {
 @brief Represents a vector in 3-dimensional space.
 */
 struct SUVector3D {
-  double x;
-  double y;
-  double z;
+  double x; ///< X magnitude
+  double y; ///< Y magnitude
+  double z; ///< Z magnitude
 };
 
 /**
@@ -58,10 +62,10 @@ struct SUVector3D {
        The coeficients are normalized so that a*a + b*b + c*c = 1.
 */
 struct SUPlane3D {
-  double a;
-  double b;
-  double c;
-  double d;
+  double a; ///< The "a" factor in the plane equation.
+  double b; ///< The "b" factor in the plane equation.
+  double c; ///< The "c" factor in the plane equation.
+  double d; ///< The "d" factor in the plane equation.
 };
 
 /**
@@ -70,8 +74,10 @@ struct SUPlane3D {
        diagonal corner points with minimum and maximum x,y,z coordinates.
 */
 struct SUBoundingBox3D {
-  struct SUPoint3D min_point;
-  struct SUPoint3D max_point;
+  struct SUPoint3D min_point; ///< A 3D point where x, y and z are minimum
+                              ///< values in the bounding box
+  struct SUPoint3D max_point; ///< A 3D point where x, y and z are maximum
+                              ///< values in the bounding box
 };
 
 /**
@@ -80,8 +86,8 @@ struct SUBoundingBox3D {
        coordinate system.
 */
 struct SUAxisAlignedRect2D {
-  struct SUPoint2D upper_left;
-  struct SUPoint2D lower_right;
+  struct SUPoint2D upper_left; ///< Upper left corner of the bounding box.
+  struct SUPoint2D lower_right; ///< Lower right corner of the bounding box.
 };
 
 /**
@@ -90,8 +96,8 @@ struct SUAxisAlignedRect2D {
 @since SketchUp 2018, API 6.0
 */
 struct SURay3D {
-  struct SUPoint3D point;
-  struct SUVector3D normal;
+  struct SUPoint3D point; ///< Origin of the ray.
+  struct SUVector3D normal; ///< Direction of the ray.
 };
 
 /**
@@ -100,12 +106,14 @@ struct SURay3D {
 
 Matrix values are in column-major order.
 The transformation is stored as:
-@code
+
+@code{.txt}
      -     -
      | R T |
  M = | 0 w |
      -     -
 @endcode
+
 where:
 <ul>
 <li> M is a 4x4 matrix
@@ -128,12 +136,12 @@ struct SUTransformation {
 </pre>
 */
 struct SUTransformation2D {
-  double m11;
-  double m12;
-  double m21;
-  double m22;
-  double tx;
-  double ty;
+  double m11; ///< the m11 component
+  double m12; ///< the m12 component
+  double m21; ///< the m21 component
+  double m22; ///< the m22 component
+  double tx;  ///< the tx component
+  double ty;  ///< the ty component
 };
 
 #ifdef __cplusplus

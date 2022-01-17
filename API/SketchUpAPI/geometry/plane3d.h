@@ -1,5 +1,9 @@
 // Copyright 2017 Trimble Inc., All rights reserved.
 
+/**
+ * @file
+ * @brief Interfaces for SUPlane3D.
+ */
 #ifndef SKETCHUP_GEOMETRY_PLANE3D_H_
 #define SKETCHUP_GEOMETRY_PLANE3D_H_
 
