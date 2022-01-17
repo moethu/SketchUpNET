@@ -109,6 +109,11 @@ namespace SketchUpNET
 		System::Collections::Generic::List<Edge^>^ Edges;
 
 		/// <summary>
+		/// Version of the loaded file is more recent than the SketchUp API
+		/// </summary>
+		bool MoreRecentFileVersion;
+
+		/// <summary>
 		/// Loads a SketchUp Model from filepath without loading Meshes.
 		/// Use this if you don't need meshed geometries.
 		/// </summary>
@@ -131,13 +136,14 @@ namespace SketchUpNET
 
 
 			SUModelRef model = SU_INVALID;
-
-			SUResult res = SUModelCreateFromFile(&model, path);
-
+			SUModelLoadStatus status;
+			SUModelCreateFromFileWithStatus(&model, path, &status);
 			
 
-			if (res != SU_ERROR_NONE)
-				return false;
+			if (status == SUModelLoadStatus_Success_MoreRecent)
+				MoreRecentFileVersion = true;
+			else
+				MoreRecentFileVersion = false;
 
 
 			Layers = gcnew System::Collections::Generic::List<Layer^>();
@@ -251,10 +257,13 @@ namespace SketchUpNET
 			SUInitialize();
 
 			SUModelRef model = SU_INVALID;
-			SUResult res = SUModelCreateFromFile(&model, path);
+			SUModelLoadStatus status;
+			SUModelCreateFromFileWithStatus(&model, path, &status);
 
-			if (res != SU_ERROR_NONE)
-				return false;
+			if (status == SUModelLoadStatus_Success_MoreRecent)
+				MoreRecentFileVersion = true;
+			else
+				MoreRecentFileVersion = false;
 
 			SUModelVersion saveversion = SUModelVersion::SUModelVersion_SU2020;
 
@@ -311,12 +320,13 @@ namespace SketchUpNET
 
 			SUModelRef model = SU_INVALID;
 
-			SUResult res = SUModelCreateFromFile(&model, path);
+			SUModelLoadStatus status;
+			SUModelCreateFromFileWithStatus(&model, path, &status);
 
-
-
-			if (res != SU_ERROR_NONE)
-				return false;
+			if (status == SUModelLoadStatus_Success_MoreRecent)
+				MoreRecentFileVersion = true;
+			else
+				MoreRecentFileVersion = false;
 
 
 			SUEntitiesRef entities = SU_INVALID;
