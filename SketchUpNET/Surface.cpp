@@ -51,13 +51,44 @@ namespace SketchUpNET
 	public ref class Surface
 	{
 	public:
+		/// <summary>
+		/// The outer edges of the surface in a closed loop
+		/// </summary>
 		Loop^ OuterEdges;
+
+		/// <summary>
+		/// List of closed inner loops, representing holes
+		/// </summary>
 		List<Loop^>^ InnerEdges;
+
+		/// <summary>
+		/// All vertices of the surfaces are stored here
+		/// </summary>
 		List<Vertex^>^ Vertices;
+
+		/// <summary>
+		/// Meshed surface if read meshes has been activated when opening the model
+		/// </summary>
 		Mesh^ FaceMesh;
+
+		/// <summary>
+		/// Area of the surface
+		/// </summary>
 		double Area;
+
+		/// <summary>
+		/// Normal vector of the surface pointing upwards
+		/// </summary>
 		Vector^ Normal;
+
+		/// <summary>
+		/// Back side material
+		/// </summary>
 		Material^ BackMaterial;
+
+		/// <summary>
+		/// Front side material
+		/// </summary>
 		Material^ FrontMaterial;
 
 		System::String^ Layer;
@@ -76,6 +107,33 @@ namespace SketchUpNET
 		};
 
 		Surface(){};
+
+		/// <summary>
+		/// Creates a new SketchUp Surface or Face from outer edges.
+		/// This is the most simple method to create a new surface.
+		/// Make sure the outer edges loop is closed and ordered.
+		/// All lines need to be connected from start- to endpoints,
+		/// the direction, CW or CCW doesn't matter.
+		/// </summary>
+		/// <param name="outer">Closed loop of outer edges</param>
+		Surface(Loop^ outer) {
+			this->OuterEdges = outer;
+			this->InnerEdges = gcnew List<Loop^>();
+		};
+
+		/// <summary>
+		/// Creates a new SketchUp Surface or Face from outer and inner edges.
+		/// Make sure all edges of each loop are closed and ordered.
+		/// All lines need to be connected from start- to endpoints,
+		/// the direction, CW or CCW doesn't matter.
+		/// </summary>
+		/// <param name="outer">Closed loop of outer edges</param>
+		/// <param name="inner">List of closed loops of inner edges</param>
+		Surface(Loop^ outer, List<Loop^>^ inner) {
+			this->InnerEdges = inner;
+			this->OuterEdges = outer;
+		};
+
 	internal:
 
 		static Vertex^ GetCentroid(List<Vertex^>^ vertices, int vertexCount)
@@ -160,7 +218,7 @@ namespace SketchUpNET
 					SUFaceAddInnerLoop(face, points, &inner_loop);
 				}
 			}		
-
+			
 			return face;
 		}
 
