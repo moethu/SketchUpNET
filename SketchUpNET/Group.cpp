@@ -18,6 +18,7 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
+#pragma once
 
 #include <SketchUpAPI/slapi.h>
 #include <SketchUpAPI/geometry.h>
@@ -37,9 +38,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include "Edge.h"
 #include "curve.h"
 #include "Instance.h"
-
-
-#pragma once
 
 using namespace System;
 using namespace System::Collections;
@@ -61,9 +59,10 @@ namespace SketchUpNET
 		List<Instance^>^ Instances;
 		List<Group^>^ Groups;
 		Transform^ Transformation;
+		SketchUpNET::Material^ Material;
 		System::String^ Layer;
 
-		Group(System::String^ name, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges, List<Instance^>^ insts, List<Group^>^ group, Transform^ transformation, System::String^ layername)
+		Group(System::String^ name, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges, List<Instance^>^ insts, List<Group^>^ group, Transform^ transformation, System::String^ layername, SketchUpNET::Material^ mat)
 		{
 			this->Name = name;
 			this->Surfaces = surfaces;
@@ -73,11 +72,12 @@ namespace SketchUpNET
 			this->Groups = group;
 			this->Transformation = transformation;
 			this->Layer = layername;
+			this->Material = mat;
 		};
 
 		Group(){};
 	internal:
-		static Group^ FromSU(SUGroupRef group, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials)
+		static Group^ FromSU(SUGroupRef group, bool includeMeshes, System::Collections::Generic::Dictionary<String^, SketchUpNET::Material^>^ materials)
 		{
 			SUStringRef name = SU_INVALID;
 			SUStringCreate(&name);
@@ -90,13 +90,21 @@ namespace SketchUpNET
 			size_t faceCount = 0;
 			SUEntitiesGetNumFaces(entities, &faceCount);
 
+			SUMaterialRef mat = SU_INVALID;
+			SUDrawingElementGetMaterial(SUGroupToDrawingElement(group), &mat);
+			SUStringRef matNameRef = SU_INVALID;
+			SUStringCreate(&matNameRef);
+			SUMaterialGetName(mat, &matNameRef);
+			System::String^ matName = SketchUpNET::Utilities::GetString(matNameRef);
+			SketchUpNET::Material^ groupMat = (materials->ContainsKey(matName)) ? materials[matName] : SketchUpNET::Material::FromSU(mat);
+
 			SUTransformation transform = SU_INVALID;
 			SUGroupGetTransform(group, &transform);
 			
 			List<Surface^>^ surfaces = Surface::GetEntitySurfaces(entities, includeMeshes, materials);
 			List<Edge^>^ edges = Edge::GetEntityEdges(entities);
 			List<Curve^>^ curves = Curve::GetEntityCurves(entities);
-			List<Instance^>^ inst = Instance::GetEntityInstances(entities);
+			List<Instance^>^ inst = Instance::GetEntityInstances(entities, materials);
 			List<Group^>^ grps = Group::GetEntityGroups(entities, includeMeshes, materials);
 			
 			// Layer
@@ -109,12 +117,12 @@ namespace SketchUpNET
 				layername = SketchUpNET::Utilities::GetLayerName(layer);
 			}
 
-			Group^ v = gcnew Group(SketchUpNET::Utilities::GetString(name), surfaces, curves, edges, inst, grps, Transform::FromSU(transform), layername);
+			Group^ v = gcnew Group(SketchUpNET::Utilities::GetString(name), surfaces, curves, edges, inst, grps, Transform::FromSU(transform), layername, groupMat);
 
 			return v;
 		};
 
-		static List<Group^>^ GetEntityGroups(SUEntitiesRef entities, bool includeMeshes, System::Collections::Generic::Dictionary<String^, Material^>^ materials)
+		static List<Group^>^ GetEntityGroups(SUEntitiesRef entities, bool includeMeshes, System::Collections::Generic::Dictionary<String^, SketchUpNET::Material^>^ materials)
 		{
 			List<Group^>^ groups = gcnew List<Group^>();
 

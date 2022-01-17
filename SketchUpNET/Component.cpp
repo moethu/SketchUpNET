@@ -89,7 +89,7 @@ namespace SketchUpNET
 
 			size_t faceCount = 0;
 			SUEntitiesGetNumFaces(entities, &faceCount);
-
+			
 			
 			SUStringRef guid = SU_INVALID;
 			SUStringCreate(&guid);
@@ -98,7 +98,7 @@ namespace SketchUpNET
 			List<Surface^>^ surfaces = Surface::GetEntitySurfaces(entities, includeMeshes, materials);
 			List<Curve^>^ curves = Curve::GetEntityCurves(entities);
 			List<Edge^>^ edges = Edge::GetEntityEdges(entities);
-			List<Instance^>^ instances = Instance::GetEntityInstances(entities);
+			List<Instance^>^ instances = Instance::GetEntityInstances(entities, materials);
 			List<Group^>^ grps = Group::GetEntityGroups(entities, includeMeshes, materials);
 			
 			

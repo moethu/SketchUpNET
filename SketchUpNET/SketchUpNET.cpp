@@ -216,7 +216,7 @@ namespace SketchUpNET
 			Surfaces = Surface::GetEntitySurfaces(entities, includeMeshes, Materials);
 			Curves = Curve::GetEntityCurves(entities);
 			Edges = Edge::GetEntityEdges(entities);
-			Instances = Instance::GetEntityInstances(entities);
+			Instances = Instance::GetEntityInstances(entities, Materials);
 
 			for each (Instance^ var in Instances)
 			{
