@@ -122,21 +122,32 @@ namespace SketchUpNET
 
 		SUFaceRef ToSU()
 		{
-			int count = Vertices->Count;
-
+			int count = OuterEdges->Edges->Count;
 			SULoopInputRef outer_loop = SU_INVALID;
 			SULoopInputCreate(&outer_loop);
-
 			SUPoint3D * points = (SUPoint3D *)malloc(*&count * sizeof(SUPoint3D));
-			
 			for (int i = 0; i < count; ++i) {
 				SULoopInputAddVertexIndex(outer_loop, i);
-
-				points[i] = Vertices[i]->ToSU();
+				points[i] = OuterEdges->Edges[i]->Start->ToSU();
 			}
 
 			SUFaceRef face = SU_INVALID;
 			SUFaceCreate(&face, points, &outer_loop);
+
+			int innner_count = InnerEdges->Count;
+			if (innner_count > 0) {
+				for (int i = 0; i < innner_count; ++i) {
+					SULoopInputRef inner_loop = SU_INVALID;
+					SULoopInputCreate(&inner_loop);
+					int count = InnerEdges[i]->Edges->Count;
+					SUPoint3D* points = (SUPoint3D*)malloc(*&count * sizeof(SUPoint3D));
+					for (int j = 0; j < count; ++j) {
+						SULoopInputAddVertexIndex(inner_loop, j);
+						points[j] = InnerEdges[i]->Edges[j]->Start->ToSU();
+					}
+					SUFaceAddInnerLoop(face, points, &inner_loop);
+				}
+			}		
 
 			return face;
 		}

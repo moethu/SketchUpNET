@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 
 namespace SketchUpNET.Unittest
 {
@@ -94,6 +95,43 @@ namespace SketchUpNET.Unittest
             }
 
             Assert.IsTrue(found);
+        }
+
+        [TestMethod]
+        public void TestInnerLoop()
+        {
+
+            SketchUpNET.SketchUp skp = new SketchUpNET.SketchUp();
+            skp.Surfaces = new List<Surface>();
+            skp.Curves = new List<Curve>();
+            skp.Edges = new List<Edge>();
+            List<SketchUpNET.Vertex> Verticies = new List<SketchUpNET.Vertex>();
+
+            SketchUpNET.Loop OuterEdges = new SketchUpNET.Loop();
+            OuterEdges.Edges = new List<Edge>();
+            {
+                OuterEdges.Edges.Add(new SketchUpNET.Edge(new Vertex(0, 0, 0), new Vertex(500, 0, 0), "Layer0"));
+                OuterEdges.Edges.Add(new SketchUpNET.Edge(new Vertex(500, 0, 0), new Vertex(500, 500, 0), "Layer0"));
+                OuterEdges.Edges.Add(new SketchUpNET.Edge(new Vertex(500, 500, 0), new Vertex(0, 500, 0), "Layer0"));
+                OuterEdges.Edges.Add(new SketchUpNET.Edge(new Vertex(0, 500, 0), new Vertex(0, 0, 0), "Layer0"));
+            }
+
+            List<Loop> InnerLoops = new List<Loop>();
+            {
+                SketchUpNET.Loop InnerEdges = new SketchUpNET.Loop();
+                InnerEdges.Edges = new List<Edge>();
+                InnerEdges.Edges.Add(new SketchUpNET.Edge(new Vertex(100, 100, 0), new Vertex(400, 100, 0), "Layer0"));
+                InnerEdges.Edges.Add(new SketchUpNET.Edge(new Vertex(400, 100, 0), new Vertex(400, 400, 0), "Layer0"));
+                InnerEdges.Edges.Add(new SketchUpNET.Edge(new Vertex(400, 400, 0), new Vertex(100, 400, 0), "Layer0"));
+                InnerEdges.Edges.Add(new SketchUpNET.Edge(new Vertex(100, 400, 0), new Vertex(100, 100, 0), "Layer0"));
+                InnerLoops.Add(InnerEdges);
+            }
+
+            SketchUpNET.Surface s = new SketchUpNET.Surface(OuterEdges, InnerLoops, null, 0, Verticies, null, "Layer0", null, null);
+            skp.Surfaces.Add(s);
+            
+            
+            skp.AppendToModel(@"Z:\1.skp");
         }
     }
 }
