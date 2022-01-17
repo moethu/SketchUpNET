@@ -122,18 +122,30 @@ namespace SketchUpNET
 
 		SUFaceRef ToSU()
 		{
-			int count = OuterEdges->Edges->Count;
+			SUFaceRef face = SU_INVALID;
 			SULoopInputRef outer_loop = SU_INVALID;
 			SULoopInputCreate(&outer_loop);
-			SUPoint3D * points = (SUPoint3D *)malloc(*&count * sizeof(SUPoint3D));
-			for (int i = 0; i < count; ++i) {
-				SULoopInputAddVertexIndex(outer_loop, i);
-				points[i] = OuterEdges->Edges[i]->Start->ToSU();
+
+			int count = OuterEdges->Edges->Count;
+			if (count > 0) {
+				SUPoint3D* points = (SUPoint3D*)malloc(*&count * sizeof(SUPoint3D));
+				for (int i = 0; i < count; ++i) {
+					SULoopInputAddVertexIndex(outer_loop, i);
+					points[i] = OuterEdges->Edges[i]->Start->ToSU();
+				}
+				SUFaceCreate(&face, points, &outer_loop);
+			} else {
+				// Maintaining backwards compatibility for 
+				// surfaces only consisting of outer vertices
+				count = Vertices->Count;
+				SUPoint3D* points = (SUPoint3D*)malloc(*&count * sizeof(SUPoint3D));
+				for (int i = 0; i < count; ++i) {
+					SULoopInputAddVertexIndex(outer_loop, i);
+					points[i] = Vertices[i]->ToSU();
+				}
+				SUFaceCreate(&face, points, &outer_loop);
 			}
-
-			SUFaceRef face = SU_INVALID;
-			SUFaceCreate(&face, points, &outer_loop);
-
+			
 			int innner_count = InnerEdges->Count;
 			if (innner_count > 0) {
 				for (int i = 0; i < innner_count; ++i) {
