@@ -102,6 +102,7 @@ namespace SketchUpNET.Unittest
         {
 
             SketchUpNET.SketchUp skp = new SketchUpNET.SketchUp();
+            skp.Layers = new List<Layer>() { new Layer("Layer0") };
             skp.Surfaces = new List<Surface>();
             skp.Curves = new List<Curve>();
             skp.Edges = new List<Edge>();
@@ -131,7 +132,13 @@ namespace SketchUpNET.Unittest
             skp.Surfaces.Add(s);
             
             
-            skp.AppendToModel(@"Z:\1.skp");
+            skp.WriteNewModel(@"TempModel.skp");
+            skp.LoadModel(@"TempModel.skp");
+
+            Assert.IsTrue(skp.Surfaces.Count == 1);
+            Assert.IsTrue(skp.Surfaces[0].InnerEdges.Count == 1);
+            Assert.IsTrue(skp.Surfaces[0].InnerEdges[0].Edges.Count == 4);
+            Assert.IsTrue(skp.Surfaces[0].OuterEdges.Edges.Count == 4);
         }
     }
 }
