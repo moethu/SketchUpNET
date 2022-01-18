@@ -38,7 +38,7 @@ SketchUpNET.SketchUp skp = new SketchUp();
 skp.SaveAs("old-file.skp", SKPVersion.V2020, "new-file.skp");
 ```
 
-### Writing a Surface to a File
+#### Writing a Surface to a File
 
 ```csharp
 SketchUpNET.SketchUp skp = new SketchUpNET.SketchUp();
