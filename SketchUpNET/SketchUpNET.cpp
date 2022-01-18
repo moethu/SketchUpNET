@@ -120,15 +120,27 @@ namespace SketchUpNET
 		/// <param name="filename">Path to .skp file</param>
 		bool LoadModel(System::String^ filename)
 		{
-			return LoadModel(filename, false);
+			return LoadModel(filename, false, false);
 		}
 
 		/// <summary>
-		/// Loads a SketchUp Model from filepath. Optionally load meshed geometries.
+		/// Loads a SketchUp Model from filepath. Optionally loads meshed geometries.
+		/// </summary>
+		/// <param name="filename">>Path to .skp file</param>
+		/// <param name="includeMeshes">Load model including meshed geometries</param>
+		/// <returns></returns>
+		bool LoadModel(System::String^ filename, bool includeMeshes)
+		{
+			return LoadModel(filename, includeMeshes, false);
+		}
+
+		/// <summary>
+		/// Loads a SketchUp Model from filepath. Optionally loads meshed geometries and activates group material inheritance.
 		/// </summary>
 		/// <param name="filename">Path to .skp file</param>
 		/// <param name="includeMeshes">Load model including meshed geometries</param>
-		bool LoadModel(System::String^ filename, bool includeMeshes)
+		/// <param name="inheritGroupMaterials">Empty surface materials should inherit parent group materials</param>
+		bool LoadModel(System::String^ filename, bool includeMeshes, bool inheritGroupMaterials)
 		{
 			const char* path = Utilities::ToString(filename);
 
@@ -235,6 +247,9 @@ namespace SketchUpNET
 			for each (Group^ var in Groups)
 			{
 				FixRefs(var);
+				if (inheritGroupMaterials) {
+					FixMaterialRefs(var);
+				}
 			}
 
 
@@ -375,6 +390,26 @@ namespace SketchUpNET
 					return SUModelVersion::SUModelVersion_SU2021;
 				default:
 					return SUModelVersion::SUModelVersion_SU2021;
+				}
+			}
+
+			void FixMaterialRefs(Group^ grp) {
+				SketchUpNET::Material^ parentMaterial = grp->Material;
+
+				for each (Group ^ g in grp->Groups) {
+					if (g->Material->Name == System::String::Empty) {
+						g->Material = parentMaterial;
+					}
+					FixMaterialRefs(g);
+				}
+
+				for each (Surface ^ s in grp->Surfaces) {
+					if (s->FrontMaterial->Name == System::String::Empty) {
+						s->FrontMaterial = parentMaterial;
+					}
+					if (s->BackMaterial->Name == System::String::Empty) {
+						s->BackMaterial = parentMaterial;
+					}
 				}
 			}
 
