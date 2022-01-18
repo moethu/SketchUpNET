@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+    <metadata>
+        <id>SketchUpNET</id>
+        <version>1.7.2.0</version>
+        <authors>moethu</authors>
+        <owners>moethu</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>SketchUp C#.NET API - A C++/CLI API Wrapper for the Trimble(R) SketchUp(R) C API</description>
+		<projectUrl>https://github.com/moethu/SketchUpNET</projectUrl>
+        <references>
+            <reference file="SketchUpNET.dll" />
+        </references>
+		<contentFiles>
+			<files include="**/SketchUpAPI.dll" buildAction="None" copyToOutput="true" flatten="true"/>
+			<files include="**/SketchUpAPI.lib" buildAction="None" copyToOutput="true" flatten="true"/>
+			<files include="**/SketchUpCommonPreferences.dll" buildAction="None" copyToOutput="true" flatten="true"/>
+			<files include="**/sketchup.lib" buildAction="None" copyToOutput="true" flatten="true"/>
+		</contentFiles>
+		<dependencies>
+            <group targetFramework=".NETFramework4.0" />
+        </dependencies>
+		<tags>sketchup</tags>
+    </metadata>
+    <files>
+        <file src="x64\Debug\SketchUpNET.dll" target="lib/net40" />
+		<file src="x64\Debug\SketchUpNET.xml" target="lib/net40" />
+		<file src="x64\Debug\SketchUpNET.pdb" target="lib/net40" />
+		<file src="API\SketchUpAPI.lib" target="contentFiles/any/any" />
+		<file src="API\SketchUpAPI.dll" target="contentFiles/any/any" />
+		<file src="API\SketchUpCommonPreferences.dll" target="contentFiles/any/any" />
+		<file src="API\sketchup.lib" target="contentFiles/any/any" />
+		<file src="API\SketchUpAPI.lib" target="content" />
+		<file src="API\SketchUpAPI.dll" target="content" />
+		<file src="API\SketchUpCommonPreferences.dll" target="content" />
+		<file src="API\sketchup.lib" target="content" />
+    </files>
+</package>
