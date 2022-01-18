@@ -43,11 +43,28 @@ namespace SketchUpNET
 		double Y;
 		double Z;
 
+		/// <summary>
+		/// Creates a new vertex
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <param name="z"></param>
 		Vertex(double x, double y, double z)
 		{
 			this->X = x;
 			this->Y = y;
 			this->Z = z;
+		};
+
+		/// <summary>
+		/// Creates a new vertex on z=0
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		Vertex(double x, double y) {
+			this->X = x;
+			this->Y = y;
+			this->Z = 0;
 		};
 
 		Vertex(){};

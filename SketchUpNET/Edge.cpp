@@ -51,6 +51,12 @@ namespace SketchUpNET
 		Vertex^ End;
 		System::String^ Layer;
 
+		/// <summary>
+		/// Creates a new edge by startpoint, endpoint and layer name
+		/// </summary>
+		/// <param name="start">Startpoint</param>
+		/// <param name="end">Endpoint</param>
+		/// <param name="layer">Layername</param>
 		Edge(Vertex ^ start, Vertex ^ end, System::String^ layer)
 		{
 			this->Start = start;
@@ -58,7 +64,18 @@ namespace SketchUpNET
 			this->Layer = layer;
 		};
 
-		Edge(){};
+		Edge() {};
+
+		/// <summary>
+		/// Creates a new edge by start end endpoint
+		/// </summary>
+		/// <param name="start">Startpoint</param>
+		/// <param name="end">Endpoint</param>
+		Edge(Vertex^ start, Vertex^ end){
+			this->Start = start;
+			this->End = end;
+		};
+
 	internal:
 		static Edge^ FromSU(SUEdgeRef edge)
 		{
