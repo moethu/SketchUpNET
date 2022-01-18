@@ -19,6 +19,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 */
 
+#pragma once
+
 #include <SketchUpAPI/slapi.h>
 #include <SketchUpAPI/geometry.h>
 #include <SketchUpAPI/initialize.h>
@@ -32,7 +34,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include "Camera.h"
 #include "Layer.h"
 
-#pragma once
 
 using namespace System;
 using namespace System::Collections;
