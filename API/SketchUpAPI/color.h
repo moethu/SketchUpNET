@@ -1,5 +1,9 @@
 // Copyright 2013 Trimble Inc., All rights reserved.
 
+/**
+ * @file
+ * @brief Interfaces for SUColor.
+ */
 #ifndef SKETCHUP_COLOR_H_
 #define SKETCHUP_COLOR_H_
 
@@ -21,10 +25,10 @@ typedef unsigned char SUByte;
 @brief Stores a RGBA color with 8 bit channels.
 */
 typedef struct {
-  SUByte red;
-  SUByte green;
-  SUByte blue;
-  SUByte alpha;
+  SUByte red; ///< Red color channel
+  SUByte green; ///< Green color channel
+  SUByte blue; ///< Blue color channel
+  SUByte alpha; ///< Alpha color channel
 } SUColor;
 
 /**

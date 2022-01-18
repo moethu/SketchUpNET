@@ -19,6 +19,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 */
 
+#pragma once
+
 #include <SketchUpAPI/slapi.h>
 #include <SketchUpAPI/geometry.h>
 #include <SketchUpAPI/initialize.h>
@@ -39,8 +41,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include "Instance.h"
 #include "Component.h"
 
-#pragma once
-
 using namespace System;
 using namespace System::Collections;
 using namespace System::Collections::Generic;
@@ -56,7 +56,8 @@ namespace SketchUpNET
 		V2017,
 		V2018,
 		V2019,
-		V2020
+		V2020,
+		V2021
 	};
 
 	/// <summary>
@@ -108,6 +109,11 @@ namespace SketchUpNET
 		System::Collections::Generic::List<Edge^>^ Edges;
 
 		/// <summary>
+		/// Version of the loaded file is more recent than the SketchUp API
+		/// </summary>
+		bool MoreRecentFileVersion;
+
+		/// <summary>
 		/// Loads a SketchUp Model from filepath without loading Meshes.
 		/// Use this if you don't need meshed geometries.
 		/// </summary>
@@ -130,13 +136,14 @@ namespace SketchUpNET
 
 
 			SUModelRef model = SU_INVALID;
-
-			SUResult res = SUModelCreateFromFile(&model, path);
-
+			SUModelLoadStatus status;
+			SUModelCreateFromFileWithStatus(&model, path, &status);
 			
 
-			if (res != SU_ERROR_NONE)
-				return false;
+			if (status == SUModelLoadStatus_Success_MoreRecent)
+				MoreRecentFileVersion = true;
+			else
+				MoreRecentFileVersion = false;
 
 
 			Layers = gcnew System::Collections::Generic::List<Layer^>();
@@ -209,7 +216,7 @@ namespace SketchUpNET
 			Surfaces = Surface::GetEntitySurfaces(entities, includeMeshes, Materials);
 			Curves = Curve::GetEntityCurves(entities);
 			Edges = Edge::GetEntityEdges(entities);
-			Instances = Instance::GetEntityInstances(entities);
+			Instances = Instance::GetEntityInstances(entities, Materials);
 
 			for each (Instance^ var in Instances)
 			{
@@ -250,42 +257,15 @@ namespace SketchUpNET
 			SUInitialize();
 
 			SUModelRef model = SU_INVALID;
-			SUResult res = SUModelCreateFromFile(&model, path);
+			SUModelLoadStatus status;
+			SUModelCreateFromFileWithStatus(&model, path, &status);
 
-			if (res != SU_ERROR_NONE)
-				return false;
+			if (status == SUModelLoadStatus_Success_MoreRecent)
+				MoreRecentFileVersion = true;
+			else
+				MoreRecentFileVersion = false;
 
-			SUModelVersion saveversion = SUModelVersion::SUModelVersion_SU2020;
-
-			switch (version)
-			{
-			case SketchUpNET::SKPVersion::V2013:
-				saveversion = SUModelVersion::SUModelVersion_SU2013;
-				break;
-			case SketchUpNET::SKPVersion::V2014:
-				saveversion = SUModelVersion::SUModelVersion_SU2014;
-				break;
-			case SketchUpNET::SKPVersion::V2015:
-				saveversion = SUModelVersion::SUModelVersion_SU2015;
-				break;
-			case SketchUpNET::SKPVersion::V2016:
-				saveversion = SUModelVersion::SUModelVersion_SU2016;
-				break;
-			case SketchUpNET::SKPVersion::V2017:
-				saveversion = SUModelVersion::SUModelVersion_SU2017;
-				break;
-			case SketchUpNET::SKPVersion::V2018:
-				saveversion = SUModelVersion::SUModelVersion_SU2018;
-				break;
-			case SketchUpNET::SKPVersion::V2019:
-				saveversion = SUModelVersion::SUModelVersion_SU2019;
-				break;
-			case SketchUpNET::SKPVersion::V2020:
-				saveversion = SUModelVersion::SUModelVersion_SU2020;
-				break;
-			default:
-				break;
-			}
+			SUModelVersion saveversion = ToSUVersion(version);
 
 			SUModelSaveToFileWithVersion(model, Utilities::ToString(newFilename), saveversion);
 
@@ -307,12 +287,13 @@ namespace SketchUpNET
 
 			SUModelRef model = SU_INVALID;
 
-			SUResult res = SUModelCreateFromFile(&model, path);
+			SUModelLoadStatus status;
+			SUModelCreateFromFileWithStatus(&model, path, &status);
 
-
-
-			if (res != SU_ERROR_NONE)
-				return false;
+			if (status == SUModelLoadStatus_Success_MoreRecent)
+				MoreRecentFileVersion = true;
+			else
+				MoreRecentFileVersion = false;
 
 
 			SUEntitiesRef entities = SU_INVALID;
@@ -331,10 +312,22 @@ namespace SketchUpNET
 		};
 
 		/// <summary>
-		/// Write current SketchUp Model to a new SketchUp file.
+		/// Write current SketchUp Model to a new SketchUp file using the latest version.
 		/// </summary>
 		/// <param name="filename">Path to .skp file</param>
+		/// <returns></returns>
 		bool WriteNewModel(System::String^ filename)
+		{
+			return WriteNewModel(filename, SketchUpNET::SKPVersion::V2021);
+		}
+
+		/// <summary>
+		/// Write current SketchUp Model to a new SketchUp file using a specific version.
+		/// </summary>
+		/// <param name="filename">Path to .skp file</param>
+		/// <param name="version">SketchUp version</param>
+		/// <returns></returns>
+		bool WriteNewModel(System::String^ filename, SketchUpNET::SKPVersion version)
 		{
 			SUInitialize();
 			SUModelRef model = SU_INVALID;
@@ -350,8 +343,8 @@ namespace SketchUpNET
 			SUEntitiesAddEdges(entities, Edges->Count, Edge::ListToSU(Edges));
 			SUEntitiesAddCurves(entities, Curves->Count, Curve::ListToSU(Curves));
 			
-			
-			SUModelSaveToFile(model, Utilities::ToString(filename));
+			SUModelVersion v = ToSUVersion(version);
+			SUModelSaveToFileWithVersion(model, Utilities::ToString(filename), v);
 			SUModelRelease(&model);
 			SUTerminate();
 
@@ -360,6 +353,30 @@ namespace SketchUpNET
 
 		private:
 
+			SUModelVersion ToSUVersion(SketchUpNET::SKPVersion version) {
+				switch (version) {
+				case SketchUpNET::SKPVersion::V2013:
+					return SUModelVersion::SUModelVersion_SU2013;
+				case SketchUpNET::SKPVersion::V2014:
+					return SUModelVersion::SUModelVersion_SU2014;
+				case SketchUpNET::SKPVersion::V2015:
+					return SUModelVersion::SUModelVersion_SU2015;
+				case SketchUpNET::SKPVersion::V2016:
+					return SUModelVersion::SUModelVersion_SU2016;
+				case SketchUpNET::SKPVersion::V2017:
+					return SUModelVersion::SUModelVersion_SU2017;
+				case SketchUpNET::SKPVersion::V2018:
+					return SUModelVersion::SUModelVersion_SU2018;
+				case SketchUpNET::SKPVersion::V2019:
+					return SUModelVersion::SUModelVersion_SU2019;
+				case SketchUpNET::SKPVersion::V2020:
+					return SUModelVersion::SUModelVersion_SU2020;
+				case SketchUpNET::SKPVersion::V2021:
+					return SUModelVersion::SUModelVersion_SU2021;
+				default:
+					return SUModelVersion::SUModelVersion_SU2021;
+				}
+			}
 
 			void FixRefs(Component^ comp)
 			{

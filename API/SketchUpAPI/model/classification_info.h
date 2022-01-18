@@ -1,5 +1,9 @@
-// Copyright 2016 Trimble Navigation Ltd. All Rights Reserved
+// Copyright 2016-2020 Trimble Inc. All Rights Reserved
 
+/**
+ * @file
+ * @brief Interfaces for SUClassificationInfoRef.
+ */
 #ifndef SKETCHUP_MODEL_CLASSIFICATION_INFO_H_
 #define SKETCHUP_MODEL_CLASSIFICATION_INFO_H_
 
@@ -15,14 +19,14 @@ extern "C" {
 @struct SUClassificationInfoRef
 @brief  References an object with classification information. Each
         SUClassificationInfoRef contains the names of the schemas and the schema
-        types, and the types attributes. See \ref
-        SUClassificationAttributeRef for details on the type attributes.
+        types, and the types attributes. See SUClassificationAttributeRef for
+        details on the type attributes.
 */
 
 /**
 @brief Releases the classification info. Classification info objects are created
-       from component instance using \ref
-       SUComponentInstanceCreateClassificationInfo, and must be released using
+       from component instance using
+       SUComponentInstanceCreateClassificationInfo(), and must be released using
        this function. This function also invalidates the given
        SUClassificationInfoRef.
 @since SketchUp 2017, API 5.0

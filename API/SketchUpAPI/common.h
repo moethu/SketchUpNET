@@ -1,6 +1,10 @@
-// Copyright 2015 Trimble Navigation Ltd., All rights reserved.
+// Copyright 2015 Trimble Inc., All rights reserved.
 // This file is intended for public distribution.
 
+/**
+ * @file
+ * @brief Generic interfaces for the API types.
+ */
 #ifndef SKETCHUP_COMMON_H_
 #define SKETCHUP_COMMON_H_
 
@@ -53,15 +57,15 @@ enum SUResult {
                         ///< in duplicate data.
   SU_ERROR_PARTIAL_SUCCESS,  ///< The requested operation was not fully
                              ///< completed but it returned an intermediate
-                             ///< successful result. 
+                             ///< successful result.
 
   SU_ERROR_UNSUPPORTED, ///< The requested operation is not supported
 
   SU_ERROR_INVALID_ARGUMENT, ///< An argument contains invalid information
-  
+
   SU_ERROR_ENTITY_LOCKED, ///< The entity being modified is locked
 
-  SU_ERROR_INVALID_OPERATION ///< The requested operation is invalid.
+  SU_ERROR_INVALID_OPERATION, ///< The requested operation is invalid.
 };
 
 // Define a platform-independent UTF16 type.
@@ -100,9 +104,14 @@ typedef wchar_t unichar; ///< A platform-independent UTF16 type.
     void *ptr; \
   } TYPENAME;
 
-#define SU_RESULT SU_EXPORT enum SUResult
+// #define SU_RESULT SU_EXPORT enum SUResult
 
 #endif // DOXYGEN_SHOULD_SKIP_THIS
+
+/**
+@brief Macro shortcut for enum \ref SUResult.
+*/
+#define SU_RESULT SU_EXPORT enum SUResult
 
 /**
 @brief Use this macro to initialize new reference variables.
@@ -151,7 +160,7 @@ typedef unsigned __int32 uint32_t;
 /**
 @brief This macro is used to indicate if functions are intended to be
        deprecated.  If you would like to hide the deprecation warnings simply
-       define SU_SUPPRESS_DEPRECATION_WARNINGS 
+       define SU_SUPPRESS_DEPRECATION_WARNINGS
 */
 #ifndef SU_SUPPRESS_DEPRECATION_WARNINGS
   #ifdef WIN32

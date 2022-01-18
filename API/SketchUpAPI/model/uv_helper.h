@@ -1,5 +1,10 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013 Trimble Inc. All Rights Reserved.
 
+
+/**
+ * @file
+ * @brief Interfaces for SUUVHelperRef.
+ */
 #ifndef SKETCHUP_MODEL_UV_HELPER_H_
 #define SKETCHUP_MODEL_UV_HELPER_H_
 
@@ -21,9 +26,9 @@ extern "C" {
 @brief Stores UV texture coordinates.
 */
 struct SUUVQ {
-  double u;
-  double v;
-  double q;
+  double u; ///< U coordinate
+  double v; ///< V coordinate
+  double q; ///< Q coordinate
 };
 
 /**

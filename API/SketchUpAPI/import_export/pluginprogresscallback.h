@@ -1,4 +1,9 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013-2020 Trimble Inc. All Rights Reserved.
+
+/**
+ * @file
+ * @brief Interfaces for import/export progress feedback and cancellation.
+ */
 #ifndef SKETCHUPPLUGINPROGRESSCALLBACK_H_
 #define SKETCHUPPLUGINPROGRESSCALLBACK_H_
 

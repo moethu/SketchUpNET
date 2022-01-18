@@ -19,6 +19,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 */
 
+#pragma once
+
 #include <SketchUpAPI/slapi.h>
 #include <SketchUpAPI/geometry.h>
 #include <SketchUpAPI/initialize.h>
@@ -38,9 +40,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include "utilities.h"
 #include "Transform.h"
 #include "Instance.h"
-
-
-#pragma once
 
 using namespace System;
 using namespace System::Collections;
@@ -89,7 +88,7 @@ namespace SketchUpNET
 
 			size_t faceCount = 0;
 			SUEntitiesGetNumFaces(entities, &faceCount);
-
+			
 			
 			SUStringRef guid = SU_INVALID;
 			SUStringCreate(&guid);
@@ -98,7 +97,7 @@ namespace SketchUpNET
 			List<Surface^>^ surfaces = Surface::GetEntitySurfaces(entities, includeMeshes, materials);
 			List<Curve^>^ curves = Curve::GetEntityCurves(entities);
 			List<Edge^>^ edges = Edge::GetEntityEdges(entities);
-			List<Instance^>^ instances = Instance::GetEntityInstances(entities);
+			List<Instance^>^ instances = Instance::GetEntityInstances(entities, materials);
 			List<Group^>^ grps = Group::GetEntityGroups(entities, includeMeshes, materials);
 			
 			

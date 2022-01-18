@@ -60,10 +60,6 @@
       <HintPath>C:\Program Files\Dynamo\Dynamo Core\2\ProtoScript.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="SketchUpNET, Version=0.0.0.0, Culture=neutral, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\x64\Release\SketchUpNET.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -84,6 +80,7 @@
   <ItemGroup>
     <None Include="..\API\sketchup.lib">
       <Link>sketchup.lib</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="..\API\SketchUpAPI.lib">
       <Link>SketchUpAPI.lib</Link>
@@ -99,6 +96,12 @@
       <Link>SketchUpCommonPreferences.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SketchUpNET\SketchUpNET.vcxproj">
+      <Project>{1c4d4501-eb39-45c8-bed0-609a978e823f}</Project>
+      <Name>SketchUpNET</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">

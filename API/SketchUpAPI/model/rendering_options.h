@@ -1,5 +1,10 @@
-// Copyright 2013 Trimble Navigation Ltd.  All rights reserved.
+// Copyright 2013 Trimble Inc.  All rights reserved.
 
+
+/**
+ * @file
+ * @brief Interfaces for SURenderingOptionsRef.
+ */
 #ifndef SKETCHUP_MODEL_RENDERING_OPTIONS_H_
 #define SKETCHUP_MODEL_RENDERING_OPTIONS_H_
 

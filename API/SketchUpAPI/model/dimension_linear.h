@@ -1,5 +1,10 @@
-// Copyright 2016 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2016 Trimble Inc. All Rights Reserved.
 
+
+/**
+ * @file
+ * @brief Interfaces for SUDimensionLinearRef.
+ */
 #ifndef SKETCHUP_MODEL_DIMENSION_LINEAR_H_
 #define SKETCHUP_MODEL_DIMENSION_LINEAR_H_
 
@@ -12,6 +17,7 @@ extern "C" {
 
 /**
 @struct SUDimensionLinearRef
+@extends SUDimensionRef
 @brief  A linear dimension entity reference.
 @since SketchUp 2017, API 5.0
 */
@@ -78,7 +84,7 @@ SU_EXPORT SUDimensionLinearRef SUDimensionLinearFromDimension(
 
 /**
 @brief Creates a new linear dimension object with default data. Refer to the
-       documentation for \ref SUDimensionLinearSetStartPoint for more
+       documentation for \ref SUDimensionLinearSetStartPoint() for more
        information about the various supported ways for setting connection
        points.
 @since SketchUp 2017, API 5.0
@@ -124,7 +130,7 @@ SU_RESULT SUDimensionLinearRelease(SUDimensionLinearRef* dimension);
 @brief Retrieves the start point of a dimension object. The given instance path
        object either must have been constructed using one of the
        SUInstancePathCreate* functions or it will be generated on the fly if it
-       is invalid. It must be released using \ref SUInstancePathRelease when
+       is invalid. It must be released using SUInstancePathRelease() when
        it is no longer needed.
 @since SketchUp 2017, API 5.0
 @param[in]  dimension The dimension object.
@@ -154,19 +160,22 @@ SU_RESULT SUDimensionLinearGetStartPoint(SUDimensionLinearRef dimension,
        other point may need to be adjusted as well. Users may want to verify
        the other connection point after setting this one.
 @since SketchUp 2017, API 5.0
-@code
+
+@code{.c}
   // Simple Example: Connect to an arbitrary position in space
   SUPoint3D point{ xposition, yposition, zposition};
   SUDimensionLinearSetStartPoint(dimension, &point, SU_INVALID);
 @endcode
-@code
+
+@code{.c}
   // Vertex Example: Connect to vertex entity
   SUInstancePathRef path = SU_INVALID;
   SUInstancePathCreate(&path);
   SUInstancePathSetLeaf(path, SUVertexToEntity(vertex));
   SUDimensionLinearSetStartPoint(dimension, NULL, path);
 @endcode
-@code
+
+@code{.c}
   // Edge Example: Connect to nearest point on an instance of an edge entity
   SUPoint3D point{ xposition, yposition, zposition};
   SUInstancePathRef path = SU_INVALID;
@@ -175,6 +184,7 @@ SU_RESULT SUDimensionLinearGetStartPoint(SUDimensionLinearRef dimension,
   SUInstancePathSetLeaf(path, SUEdgeToEntity(edge));
   SUDimensionLinearSetStartPoint(dimension, &point, path);
 @endcode
+
 @param[in] dimension The dimension object.
 @param[in] point     The 3d point to be set.
 @param[in] path      The instance path to be set.
@@ -195,8 +205,8 @@ SU_RESULT SUDimensionLinearSetStartPoint(SUDimensionLinearRef dimension,
 @brief Retrieves the end point of a dimension object. The given instance path
        object either must have been constructed using one of the
        SUInstancePathCreate* functions or it will be generated on the fly if it
-       is invalid. It must be released using \ref SUInstancePathRelease when it
-       is no longer needed.
+       is invalid. It must be released using SUInstancePathRelease() when
+       it is no longer needed.
 @since SketchUp 2017, API 5.0
 @param[in]  dimension The dimension object.
 @param[out] point     The 3d point retrieved.
@@ -212,8 +222,8 @@ SU_RESULT SUDimensionLinearGetEndPoint(SUDimensionLinearRef dimension,
 
 /**
 @brief Sets the end connection point of a dimension object. Refer to the
-       documentation for \ref SUDimensionLinearSetStartPoint for a detailed
-       description on supported ways of setting a dimension's connection point. 
+       documentation for \ref SUDimensionLinearSetStartPoint() for a detailed
+       description on supported ways of setting a dimension's connection point.
 @since SketchUp 2017, API 5.0
 @param[in] dimension The dimension object.
 @param[in] point     The 3d point to be set.
@@ -233,7 +243,7 @@ SU_RESULT SUDimensionLinearSetEndPoint(SUDimensionLinearRef dimension,
 
 /**
 @brief Retrieves the x-axis of a dimension object. The x-axis is the axis along
-       the length of the dimension.  
+       the length of the dimension.
 @since SketchUp 2017, API 5.0
 @param[in]  dimension The dimension object.
 @param[out] axis      The 3d vector retrieved.
@@ -267,7 +277,7 @@ SU_RESULT SUDimensionLinearSetXAxis(SUDimensionLinearRef dimension,
 @brief Retrieves the normal vector of a dimension object. The normal vector is
        a unit vector pointing out of the plane of the linear dimension. A
        linear dimension's plane is the plane defined by the x-axis and the
-       leader lines' direction vector.  
+       leader lines' direction vector.
 @since SketchUp 2017, API 5.0
 @param[in]  dimension The dimension object.
 @param[out] normal    The 3d vector retrieved.

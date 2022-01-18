@@ -42,7 +42,7 @@ namespace SketchUpForDynamo
         public static bool ReformatModel(string filepath, string version, string newfilepath)
         {
             SketchUpNET.SketchUp skp = new SketchUpNET.SketchUp();
-            SKPVersion v = SKPVersion.V2020;
+            SKPVersion v = SKPVersion.V2021;
             switch (version)
             {
                 case "2014": v = SKPVersion.V2014; break;
@@ -52,6 +52,7 @@ namespace SketchUpForDynamo
                 case "2018": v = SKPVersion.V2018; break;
                 case "2019": v = SKPVersion.V2019; break;
                 case "2020": v = SKPVersion.V2020; break;
+                case "2021": v = SKPVersion.V2021; break;
             }
             return skp.SaveAs(filepath, v, newfilepath);
         }

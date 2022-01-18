@@ -1,4 +1,9 @@
-// Copyright 2016 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2016 Trimble Inc. All Rights Reserved.
+
+/**
+ * @file
+ * @brief Interfaces for SUImageRepRef.
+ */
 #ifndef SKETCHUP_MODEL_IMAGE_REP_H_
 #define SKETCHUP_MODEL_IMAGE_REP_H_
 
@@ -20,18 +25,18 @@ extern "C" {
        order indices facilitate platform independent code when it is necessary
        to manipulate image pixel data. The struct's data also applies to 24-bit
        bitmap images except that such images don't have an alpha channel so the
-       \ref alpha_index varaible can be ignored.
+       \ref SUColorOrder.alpha_index varaible can be ignored.
 @since SketchUp 2017, API 5.2
 */
 struct SUColorOrder {
-  // Indicates the position of the red byte within a single pixel's data.
-  short red_index;
-  // Indicates the position of the green byte within a single pixel's data.
-  short green_index;
-  // Indicates the position of the blue byte within a single pixel's data.
-  short blue_index;
-  // Indicates the position of the alpha byte within a single pixel's data.
-  short alpha_index;
+  short red_index;   ///< Indicates the position of the red byte within a single
+                     ///< pixel's data.
+  short green_index; ///< Indicates the position of the green byte within a
+                     ///< single pixel's data.
+  short blue_index;  ///< Indicates the position of the blue byte within a
+                     ///< single pixel's data.
+  short alpha_index; ///< Indicates the position of the alpha byte within a
+                     ///< single pixel's data.
 };
 
 /**
@@ -198,8 +203,8 @@ SU_RESULT SUImageRepConvertTo32BitsPerPixel(SUImageRepRef image);
 /**
 @brief  Returns the total size and bits-per-pixel value of an image. This
         function is useful to determine the size of the buffer necessary to be
-        passed into \ref SUImageRepGetData. The returned data can be used along
-        with the returned bits-per-pixel value and the image dimensions to
+        passed into \ref SUImageRepGetData(). The returned data can be used
+        along with the returned bits-per-pixel value and the image dimensions to
         compute RGBA values at individual pixels of the image.
 @since SketchUp 2017, API 5.0
 @param[in]  image          The image object.
@@ -217,7 +222,7 @@ SU_RESULT SUImageRepGetDataSize(SUImageRepRef image, size_t* data_size,
 /**
 @brief Returns the pixel data for an image. The given array must be large
        enough to hold the image's data. This size can be obtained by calling
-       \ref SUImageRepGetDataSize.
+       \ref SUImageRepGetDataSize().
 @since SketchUp 2017, API 5.0
 @param[in]  image      The image object.
 @param[in]  data_size  The size of the byte array.

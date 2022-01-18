@@ -1,5 +1,10 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013 Trimble Inc. All Rights Reserved.
 
+
+/**
+ * @file
+ * @brief Interfaces for SULocationRef.
+ */
 #ifndef SKETCHUP_MODEL_LOCATION_H_
 #define SKETCHUP_MODEL_LOCATION_H_
 

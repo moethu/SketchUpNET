@@ -1,5 +1,9 @@
-// Copyright 2015 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2015-2020 Trimble Inc. All Rights Reserved.
 
+/**
+ * @file
+ * @brief Interfaces for SUArcCurveRef.
+ */
 #ifndef SKETCHUP_MODEL_ARCCURVE_H_
 #define SKETCHUP_MODEL_ARCCURVE_H_
 
@@ -16,6 +20,7 @@ extern "C" {
 
 /**
 @struct SUArcCurveRef
+@extends SUCurveRef
 @brief  References an arccurve.
 */
 
@@ -131,7 +136,7 @@ SU_RESULT SUArcCurveGetRadius(SUArcCurveRef arccurve, double* radius);
 - \ref SU_ERROR_INVALID_INPUT if arccurve is not a valid object
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if point is NULL
 */
-SU_RESULT SUArcCurveGetStartPoint(SUArcCurveRef arccurve, 
+SU_RESULT SUArcCurveGetStartPoint(SUArcCurveRef arccurve,
                                   struct SUPoint3D* point);
 
 /**

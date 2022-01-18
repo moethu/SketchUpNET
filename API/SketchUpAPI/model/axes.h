@@ -1,5 +1,9 @@
-// Copyright 2015 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2015-2020 Trimble Inc. All Rights Reserved.
 
+/**
+ * @file
+ * @brief Interfaces for SUAxesRef.
+ */
 #ifndef SKETCHUP_MODEL_AXES_H_
 #define SKETCHUP_MODEL_AXES_H_
 
@@ -14,6 +18,7 @@ extern "C" {
 
 /**
 @struct SUAxesRef
+@extends SUEntityRef
 @brief  An axes entity reference.
 @since SketchUp 2016, API 4.0
 */
@@ -70,7 +75,7 @@ SU_EXPORT SUAxesRef SUAxesFromDrawingElement(SUDrawingElementRef drawing_elem);
 
 /**
 @brief Creates a default constructed axes object. The axes object must be
-       subsequently deallocated with \ref SUAxesRelease unless it is
+       subsequently deallocated with \ref SUAxesRelease() unless it is
        associated with a parent object.
 @since SketchUp 2016, API 4.0
 @param[in] axes The axes object.
@@ -84,7 +89,7 @@ SU_RESULT SUAxesCreate(SUAxesRef* axes);
 
 /**
 @brief Creates an axes object. The axes object must be
-subsequently deallocated with \ref SUAxesRelease unless it is
+subsequently deallocated with \ref SUAxesRelease() unless it is
 associated with a parent object.
 @since SketchUp 2016, API 4.0
 @param[in] axes The axes object.
@@ -109,7 +114,7 @@ SU_RESULT SUAxesCreateCustom(SUAxesRef* axes,
 
 /**
 @brief Releases aa axes object. The axes object must have been created with
-       \ref SUAxesCreate and not subsequently associated with a parent object
+       \ref SUAxesCreate() and not subsequently associated with a parent object
        (e.g. \ref SUEntitiesRef).
 @since SketchUp 2016, API 4.0
 @param[in] axes The axes object.

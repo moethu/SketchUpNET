@@ -1,4 +1,9 @@
 // Copyright 2017 Trimble Inc. All Rights Reserved.
+
+/**
+ * @file
+ * @brief Interfaces for SUEntityRef.
+ */
 #ifndef SKETCHUP_MODEL_ENTITY_H_
 #define SKETCHUP_MODEL_ENTITY_H_
 
@@ -108,10 +113,12 @@ SU_RESULT SUEntityGetAttributeDictionaries(
     size_t* count);
 
 /**
-@brief Adds the attribute dictionary to an entity.
+@brief Adds the attribute dictionary to an entity. The given dictionary object
+       must not belong to another entity. In other words, each dictionary should
+       be added to one entity only.
 @since SketchUp 2018 M0, API 6.0
 @param[in] entity     The entity.
-@param[in] dictionary The dictionary object to be added. If the function is 
+@param[in] dictionary The dictionary object to be added. If the function is
                       successful, don't call SUAttributeDictionaryRelease on the
                       dictionary because the new entity will take ownership.
 @related SUEntityRef
@@ -120,7 +127,8 @@ SU_RESULT SUEntityGetAttributeDictionaries(
 - \ref SU_ERROR_INVALID_INPUT if entity or dictionary are not valid entities
 - \ref SU_ERROR_DUPLICATE if another attribute already exists with the
        same name.
-- \ref SU_ERROR_INVALID_ARGUMENT if dictionary's name is empty.
+- \ref SU_ERROR_INVALID_ARGUMENT if dictionary's name is empty or it's a name
+       that is reserved for internal use.
 */
 SU_RESULT SUEntityAddAttributeDictionary(
     SUEntityRef entity,

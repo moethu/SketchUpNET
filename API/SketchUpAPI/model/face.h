@@ -1,4 +1,9 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013 Trimble Inc. All Rights Reserved.
+
+/**
+ * @file
+ * @brief Interfaces for SUFaceRef.
+ */
 #ifndef SKETCHUP_MODEL_FACE_H_
 #define SKETCHUP_MODEL_FACE_H_
 
@@ -16,6 +21,7 @@ extern "C" {
 
 /**
 @struct SUFaceRef
+@extends SUDrawingElementRef
 @brief  References a face.
 */
 
@@ -68,6 +74,11 @@ SU_EXPORT SUFaceRef SUFaceFromDrawingElement(SUDrawingElementRef
 
 /**
 @brief Creates a face without holes.
+
+@bug SUEntitiesAddFaces() will not merge overlapping vertices and edges, which
+  produces SketchUp models with unexpected state. Avoid using these functions
+  and instead use SUGeometryInputRef along with SUEntitiesFill().
+
 @param[out] face       The face object created.
 @param[in]  vertices3d The array of vertices that make the face.
 @param[in]  outer_loop The loop input that describes the outer loop of the face.
@@ -90,6 +101,11 @@ SU_RESULT SUFaceCreate(SUFaceRef* face,
 
 /**
 @brief Creates a simple face without holes from an array of vertices.
+
+@bug SUEntitiesAddFaces() will not merge overlapping vertices and edges, which
+  produces SketchUp models with unexpected state. Avoid using these functions
+  and instead use SUGeometryInputRef along with SUEntitiesFill().
+
 @param[out] face       The face object created.
 @param[in]  vertices3d The array of vertices of the face.
 @param[in]  len        The length of the array of vertices.
@@ -299,8 +315,8 @@ SU_RESULT SUFaceAddInnerLoop(SUFaceRef face,
 SU_RESULT SUFaceGetNumOpenings(SUFaceRef face, size_t* count);
 
 /**
-@brief Retrieves the openings in the face. The retrieved \ref SUOpeningRef objects
-       must be manually released by calling \ref SUOpeningRelease on each one.
+@brief Retrieves the openings in the face. The retrieved SUOpeningRef() objects
+       must be manually released by calling SUOpeningRelease() on each one.
 @since SketchUp 2014, API 2.0
 @param[in]  face     The face object.
 @param[in]  len      The number of openings to retrieve.
@@ -449,7 +465,7 @@ SU_RESULT SUFaceIsComplex(SUFaceRef face, bool* is_complex);
 @param[in]  texture_writer An optional texture writer to aid in texture
                            coordinate calculations for non-affine textures.
 @param[out] uv_helper      The UV helper object created. Must be deallocated
-                           via \ref SUUVHelperRelease.
+                           via SUUVHelperRelease().
 @related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success
@@ -472,7 +488,7 @@ SU_RESULT SUFaceGetUVHelper(SUFaceRef face, bool front, bool back,
 @param[in] textureHandle  The handle of the image that should be mapped to the
                           face.
 @param[out] uv_helper     The UV helper object created.  Must be deallocated
-                          via \ref SUUVHelperRelease.
+                          via SUUVHelperRelease().
 @related SUFaceRef
 @return
 - \ref SU_ERROR_NONE on success

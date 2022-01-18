@@ -1,5 +1,10 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013 Trimble Inc. All Rights Reserved.
 
+
+/**
+ * @file
+ * @brief Interfaces for SUMeshHelperRef.
+ */
 #ifndef SKETCHUP_MODEL_MESH_HELPER_H_
 #define SKETCHUP_MODEL_MESH_HELPER_H_
 
@@ -106,8 +111,8 @@ SU_RESULT SUMeshHelperGetNumVertices(SUMeshHelperRef mesh_ref, size_t* count);
 /**
 @brief  Retrieves the array of indices of the vertices of a triangle mesh
         object. The each element indexes into the arrays retrieved with \ref
-        SUMeshHelperGetVertices, \ref SUMeshHelperGetFrontSTQCoords, \ref
-        SUMeshHelperGetBackSTQCoords and \ref SUMeshHelperGetNormals.  The
+        SUMeshHelperGetVertices, \ref SUMeshHelperGetFrontSTQCoords(), \ref
+        SUMeshHelperGetBackSTQCoords and \ref SUMeshHelperGetNormals().  The
         elements are sorted so that every three elements (i.e., stride of three)
         compose the indices to the three vertices of a triangle.
 @param[in]  mesh_ref The mesh object.

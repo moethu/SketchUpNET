@@ -1,5 +1,10 @@
-// Copyright 2016 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2016 Trimble Inc. All Rights Reserved.
 
+
+/**
+ * @file
+ * @brief Interfaces for SUDimensionRef.
+ */
 #ifndef SKETCHUP_MODEL_DIMENSION_H_
 #define SKETCHUP_MODEL_DIMENSION_H_
 
@@ -15,6 +20,7 @@ extern "C" {
 
 /**
 @struct SUDimensionRef
+@extends SUDrawingElementRef
 @brief  A dimension entity reference.
 @since SketchUp 2017, API 5.0
 */

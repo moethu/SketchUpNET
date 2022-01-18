@@ -1,5 +1,9 @@
 // Copyright 2017 Trimble Inc., All rights reserved.
 
+/**
+ * @file
+ * @brief Interfaces for SUTransformation2D.
+ */
 #ifndef SKETCHUP_GEOMETRY_TRANSFORMATION2D_H_
 #define SKETCHUP_GEOMETRY_TRANSFORMATION2D_H_
 

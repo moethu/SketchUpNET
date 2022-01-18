@@ -1,5 +1,9 @@
 // Copyright 2017 Trimble Inc. All Rights Reserved.
 
+/**
+ * @file
+ * @brief Interfaces for SUVector3D.
+ */
 #ifndef SKETCHUP_GEOMETRY_VECTOR3D_H_
 #define SKETCHUP_GEOMETRY_VECTOR3D_H_
 

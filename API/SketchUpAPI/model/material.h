@@ -1,4 +1,9 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013 Trimble Inc. All Rights Reserved.
+
+/**
+ * @file
+ * @brief Interfaces for SUMaterialRef.
+ */
 #ifndef SKETCHUP_MODEL_MATERIAL_H_
 #define SKETCHUP_MODEL_MATERIAL_H_
 
@@ -14,6 +19,7 @@ extern "C" {
 
 /**
 @struct SUMaterialRef
+@extends SUEntityRef
 @brief  References a material object.
 */
 
@@ -76,7 +82,7 @@ SU_EXPORT SUMaterialRef SUMaterialFromEntity(SUEntityRef entity);
 @brief Creates a material.
 
 If the material is not associated with any face, it must be deallocated with
-\ref SUMaterialRelease.
+\ref SUMaterialRelease().
 @param[out] material The material created.
 @related SUMaterialRef
 @return
@@ -100,10 +106,12 @@ SU_RESULT SUMaterialRelease(SUMaterialRef* material);
 
 /**
 @brief Sets the name of a material object.
-@warning *** Breaking Change: A new failure mode was added in SketchUp 2018,
+
+@warning Breaking Change: A new failure mode was added in SketchUp 2018,
          API 6.0. Returns \ref SU_ERROR_INVALID_ARGUMENT if the material is
          managed by a model and the provided name was previously associated
          with a different material in the model.
+
 @param[in] material The material object.
 @param[in] name     The name to set the material name. Assumed to be UTF-8
                     encoded.
@@ -119,11 +127,13 @@ SU_RESULT SUMaterialSetName(SUMaterialRef material, const char* name);
 /**
 @brief Retrieves the internal name of a material object. The internal name is
        the unprocessed  identifier string stored with the material.
-@warning *** Breaking Change: The behavior of this method was changed in
+
+@warning Breaking Change: The behavior of this method was changed in
          SketchUp 2017, API 5.0. In previous releases this method retrieved the
          material's non-localized display name but it was changed to retrieve
          the internal name. If the old functionality is required, use \ref
          SUMaterialGetNameLegacyBehavior.
+
 @param[in]  material The material object.
 @param[out] name     The name retrieved.
 @related SUMaterialRef
@@ -138,7 +148,7 @@ SU_RESULT SUMaterialGetName(SUMaterialRef material, SUStringRef* name);
 
 /**
 @brief Retrieves the name of a material object. This method was added for users
-       who require the functionality of \ref SUMaterialGetName prior to
+       who require the functionality of \ref SUMaterialGetName() prior to
        SketchUp 2017, API 5.0. If the internal name is encased in square
        brackets, [], this method will return the name without brackets,
        otherwise the name will match the name retrieved by \ref
@@ -304,8 +314,10 @@ SU_RESULT SUMaterialIsDrawnTransparent(SUMaterialRef material,
 
 /**
 @brief Retrieves the owner type of a material object.
-@warning *** Materials owned by SUImageRef and SULayerRef may not be applied
-             to any other entity in the model.
+
+@warning Materials owned by SUImageRef and SULayerRef may not be applied
+         to any other entity in the model.
+
 @since SketchUp 2019.2, API 7.1
 @param[in]  material The material object.
 @param[out] type     The type retrieved.

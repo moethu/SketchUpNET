@@ -1,5 +1,10 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013 Trimble Inc. All Rights Reserved.
 
+
+/**
+ * @file
+ * @brief Interfaces for SUGroupRef.
+ */
 #ifndef SKETCHUP_MODEL_GROUP_H_
 #define SKETCHUP_MODEL_GROUP_H_
 
@@ -14,6 +19,7 @@ extern "C" {
 
 /**
 @struct SUGroupRef
+@extends SUComponentInstanceRef
 @brief  References a group object.
 */
 
@@ -94,7 +100,7 @@ SU_EXPORT SUGroupRef SUGroupFromComponentInstance(SUComponentInstanceRef
 @brief Creates a new group object.
 
 The created group must be subsequently added to the Entities of a model,
-component definition or a group. Use \ref SUModelRemoveComponentDefinitions to
+component definition or a group. Use SUModelRemoveComponentDefinitions() to
 remove the group from a model.
 @param[out] group The group object created.
 @related SUGroupRef

@@ -1,5 +1,10 @@
-// Copyright 2015 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2015 Trimble Inc. All Rights Reserved.
 
+
+/**
+ * @file
+ * @brief Interfaces for SUStyleRef.
+ */
 #ifndef SKETCHUP_MODEL_STYLE_H_
 #define SKETCHUP_MODEL_STYLE_H_
 
@@ -14,6 +19,7 @@ extern "C" {
 
 /**
 @struct SUStyleRef
+@extends SUEntityRef
 @brief  A style entity reference.
 @since SketchUp 2017, API 5.0
 */
@@ -277,8 +283,8 @@ SU_RESULT SUStyleGetProperty(SUStyleRef style,
 
 /**
 @brief Retrieves an image containing the style's thumbnail.  The given image
-       representation object must have been constructed using \ref
-       SUImageRepCreate. It must be released using \ref SUImageRepRelease.
+       representation object must have been constructed using
+       SUImageRepCreate(). It must be released using SUImageRepRelease().
 @since SketchUp 2017, API 5.0
 @param[in]  style The style object.
 @param[out] image The image object retrieved.

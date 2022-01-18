@@ -1,5 +1,11 @@
 // Copyright 2013 Trimble Inc., All rights reserved.
 
+/**
+ * @file
+ * @brief Deprecated, don't use.
+ * @deprecated This file was left here for compatibility.
+ *             Avoid using it in future projects if possible.
+ */
 #ifndef SKETCHUP_MODEL_GEOMETRY_H_
 #define SKETCHUP_MODEL_GEOMETRY_H_
 

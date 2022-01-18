@@ -1,5 +1,9 @@
-// Copyright 2016 Trimble Navigation Ltd. All Rights Reserved
+// Copyright 2016-2020 Trimble Inc. All Rights Reserved
 
+/**
+ * @file
+ * @brief Interfaces for SUClassificationAttributeRef.
+ */
 #ifndef SKETCHUP_MODEL_CLASSIFICATION_ATTRIBUTE_H_
 #define SKETCHUP_MODEL_CLASSIFICATION_ATTRIBUTE_H_
 

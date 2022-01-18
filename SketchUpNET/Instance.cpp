@@ -18,7 +18,7 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
-
+#pragma once
 #include <SketchUpAPI/slapi.h>
 #include <SketchUpAPI/geometry.h>
 #include <SketchUpAPI/initialize.h>
@@ -35,10 +35,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <msclr/marshal.h>
 #include <vector>
 #include "transform.h"
-#include "Utilities.h"
-
-
-#pragma once
+#include "utilities.h"
+#include "Material.h"
 
 using namespace System;
 using namespace System::Collections;
@@ -55,20 +53,22 @@ namespace SketchUpNET
 		System::String^ Guid;
 		System::Object^ Parent;
 		System::String^ Layer;
+		SketchUpNET::Material^ Material;
 
-		Instance(System::String^ name, System::String^ guid, String^ parent, Transform^ transformation, System::String^ layername)
+		Instance(System::String^ name, System::String^ guid, String^ parent, Transform^ transformation, System::String^ layername, SketchUpNET::Material^ mat)
 		{
 			this->Name = name;
 			this->Transformation = transformation;
 			this->ParentID = parent;
 			this->Guid = guid;
 			this->Layer = layername;
+			this->Material = mat;
 		};
 
 
 		Instance(){};
 	internal:
-		static Instance^ FromSU(SUComponentInstanceRef comp)
+		static Instance^ FromSU(SUComponentInstanceRef comp, System::Collections::Generic::Dictionary<String^, SketchUpNET::Material^>^ materials)
 		{
 			SUStringRef name = SU_INVALID;
 			SUStringCreate(&name);
@@ -81,7 +81,14 @@ namespace SketchUpNET
 			SUStringCreate(&instanceguid);
 			SUComponentInstanceGetGuid(comp, &instanceguid);
 
-			
+
+			SUMaterialRef mat = SU_INVALID;
+			SUDrawingElementGetMaterial(SUComponentInstanceToDrawingElement(comp), &mat);
+			SUStringRef matNameRef = SU_INVALID;
+			SUStringCreate(&matNameRef);
+			SUMaterialGetName(mat, &matNameRef);
+			System::String^ matName = SketchUpNET::Utilities::GetString(matNameRef);
+			SketchUpNET::Material^ groupMat = (materials->ContainsKey(matName)) ? materials[matName] : SketchUpNET::Material::FromSU(mat);
 			
 
 			// Layer
@@ -106,11 +113,11 @@ namespace SketchUpNET
 			SUComponentInstanceGetTransform(comp, &transform);
 			
 
-			Instance^ v = gcnew Instance(SketchUpNET::Utilities::GetString(name), SketchUpNET::Utilities::GetString(instanceguid), parent, Transform::FromSU(transform), layername);
+			Instance^ v = gcnew Instance(SketchUpNET::Utilities::GetString(name), SketchUpNET::Utilities::GetString(instanceguid), parent, Transform::FromSU(transform), layername, groupMat);
 
 			return v;
 		};
-		static List<Instance^>^ GetEntityInstances(SUEntitiesRef entities)
+		static List<Instance^>^ GetEntityInstances(SUEntitiesRef entities, System::Collections::Generic::Dictionary<String^, SketchUpNET::Material^>^ materials)
 		{
 			List<Instance^>^ instancelist = gcnew List<Instance^>();
 
@@ -124,7 +131,7 @@ namespace SketchUpNET
 				SUEntitiesGetInstances(entities, instanceCount, &instances[0], &instanceCount);
 
 				for (size_t i = 0; i < instanceCount; i++) {
-					Instance^ inst = Instance::FromSU(instances[i]);
+					Instance^ inst = Instance::FromSU(instances[i], materials);
 					instancelist->Add(inst);
 				}
 

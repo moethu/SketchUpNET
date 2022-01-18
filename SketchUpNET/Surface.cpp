@@ -18,6 +18,7 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
+#pragma once
 
 #include <SketchUpAPI/slapi.h>
 #include <SketchUpAPI/geometry.h>
@@ -40,8 +41,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include "Mesh.h"
 #include "Material.h"
 
-#pragma once
-
 using namespace System;
 using namespace System::Collections;
 using namespace System::Collections::Generic;
@@ -51,13 +50,44 @@ namespace SketchUpNET
 	public ref class Surface
 	{
 	public:
+		/// <summary>
+		/// The outer edges of the surface in a closed loop
+		/// </summary>
 		Loop^ OuterEdges;
+
+		/// <summary>
+		/// List of closed inner loops, representing holes
+		/// </summary>
 		List<Loop^>^ InnerEdges;
+
+		/// <summary>
+		/// All vertices of the surfaces are stored here
+		/// </summary>
 		List<Vertex^>^ Vertices;
+
+		/// <summary>
+		/// Meshed surface if read meshes has been activated when opening the model
+		/// </summary>
 		Mesh^ FaceMesh;
+
+		/// <summary>
+		/// Area of the surface
+		/// </summary>
 		double Area;
+
+		/// <summary>
+		/// Normal vector of the surface pointing upwards
+		/// </summary>
 		Vector^ Normal;
+
+		/// <summary>
+		/// Back side material
+		/// </summary>
 		Material^ BackMaterial;
+
+		/// <summary>
+		/// Front side material
+		/// </summary>
 		Material^ FrontMaterial;
 
 		System::String^ Layer;
@@ -76,6 +106,33 @@ namespace SketchUpNET
 		};
 
 		Surface(){};
+
+		/// <summary>
+		/// Creates a new SketchUp Surface or Face from outer edges.
+		/// This is the most simple method to create a new surface.
+		/// Make sure the outer edges loop is closed and ordered.
+		/// All lines need to be connected from start- to endpoints,
+		/// the direction, CW or CCW doesn't matter.
+		/// </summary>
+		/// <param name="outer">Closed loop of outer edges</param>
+		Surface(Loop^ outer) {
+			this->OuterEdges = outer;
+			this->InnerEdges = gcnew List<Loop^>();
+		};
+
+		/// <summary>
+		/// Creates a new SketchUp Surface or Face from outer and inner edges.
+		/// Make sure all edges of each loop are closed and ordered.
+		/// All lines need to be connected from start- to endpoints,
+		/// the direction, CW or CCW doesn't matter.
+		/// </summary>
+		/// <param name="outer">Closed loop of outer edges</param>
+		/// <param name="inner">List of closed loops of inner edges</param>
+		Surface(Loop^ outer, List<Loop^>^ inner) {
+			this->InnerEdges = inner;
+			this->OuterEdges = outer;
+		};
+
 	internal:
 
 		static Vertex^ GetCentroid(List<Vertex^>^ vertices, int vertexCount)
@@ -122,22 +179,45 @@ namespace SketchUpNET
 
 		SUFaceRef ToSU()
 		{
-			int count = Vertices->Count;
-
+			SUFaceRef face = SU_INVALID;
 			SULoopInputRef outer_loop = SU_INVALID;
 			SULoopInputCreate(&outer_loop);
 
-			SUPoint3D * points = (SUPoint3D *)malloc(*&count * sizeof(SUPoint3D));
-			
-			for (int i = 0; i < count; ++i) {
-				SULoopInputAddVertexIndex(outer_loop, i);
-
-				points[i] = Vertices[i]->ToSU();
+			int count = OuterEdges->Edges->Count;
+			if (count > 0) {
+				SUPoint3D* points = (SUPoint3D*)malloc(*&count * sizeof(SUPoint3D));
+				for (int i = 0; i < count; ++i) {
+					SULoopInputAddVertexIndex(outer_loop, i);
+					points[i] = OuterEdges->Edges[i]->Start->ToSU();
+				}
+				SUFaceCreate(&face, points, &outer_loop);
+			} else {
+				// Maintaining backwards compatibility for 
+				// surfaces only consisting of outer vertices
+				count = Vertices->Count;
+				SUPoint3D* points = (SUPoint3D*)malloc(*&count * sizeof(SUPoint3D));
+				for (int i = 0; i < count; ++i) {
+					SULoopInputAddVertexIndex(outer_loop, i);
+					points[i] = Vertices[i]->ToSU();
+				}
+				SUFaceCreate(&face, points, &outer_loop);
 			}
-
-			SUFaceRef face = SU_INVALID;
-			SUFaceCreate(&face, points, &outer_loop);
-
+			
+			int innner_count = InnerEdges->Count;
+			if (innner_count > 0) {
+				for (int i = 0; i < innner_count; ++i) {
+					SULoopInputRef inner_loop = SU_INVALID;
+					SULoopInputCreate(&inner_loop);
+					int count = InnerEdges[i]->Edges->Count;
+					SUPoint3D* points = (SUPoint3D*)malloc(*&count * sizeof(SUPoint3D));
+					for (int j = 0; j < count; ++j) {
+						SULoopInputAddVertexIndex(inner_loop, j);
+						points[j] = InnerEdges[i]->Edges[j]->Start->ToSU();
+					}
+					SUFaceAddInnerLoop(face, points, &inner_loop);
+				}
+			}		
+			
 			return face;
 		}
 

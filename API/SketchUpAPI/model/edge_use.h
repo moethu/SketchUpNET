@@ -1,4 +1,9 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013 Trimble Inc. All Rights Reserved.
+
+/**
+ * @file
+ * @brief Interfaces for SUEdgeUseRef.
+ */
 #ifndef SKETCHUP_MODEL_EDGE_USE_H_
 #define SKETCHUP_MODEL_EDGE_USE_H_
 
@@ -8,6 +13,7 @@
 
 /**
 @struct SUEdgeUseRef
+@extends SUEntityRef
 @brief SUEdgeUseRef objects are used to retrieve the topology of the edges of
        a polygon. The geometry of the polygon being represented by \ref
        SULoopRef that is already associated with a face object. The typical use

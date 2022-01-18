@@ -1,5 +1,10 @@
-// Copyright 2015 Trimble Navigation Ltd.  All Rights Reserved
+// Copyright 2015 Trimble Inc.  All Rights Reserved
 
+
+/**
+ * @file
+ * @brief Interfaces for SUDynamicComponentAttributeRef.
+ */
 #ifndef SKETCHUP_MODEL_DYNAMIC_COMPONENT_ATTRIBUTE_H_
 #define SKETCHUP_MODEL_DYNAMIC_COMPONENT_ATTRIBUTE_H_
 

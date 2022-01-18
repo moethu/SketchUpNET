@@ -1,5 +1,10 @@
 // Copyright 2017 Trimble Inc. All Rights Reserved.
 
+
+/**
+ * @file
+ * @brief Interfaces for SUEntityListIteratorRef.
+ */
 #ifndef SKETCHUP_MODEL_ENTITY_LIST_ITERATOR_H_
 #define SKETCHUP_MODEL_ENTITY_LIST_ITERATOR_H_
 

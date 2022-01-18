@@ -1,5 +1,10 @@
-// Copyright 2016 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2016 Trimble Inc. All Rights Reserved.
 
+
+/**
+ * @file
+ * @brief Interfaces for SUFontRef.
+ */
 #ifndef SKETCHUP_MODEL_FONT_H_
 #define SKETCHUP_MODEL_FONT_H_
 
@@ -13,6 +18,7 @@ extern "C" {
 
 /**
 @struct SUFontRef
+@extends SUEntityRef
 @brief  A font entity reference.
 @since SketchUp 2017, API 5.0
 */
@@ -88,7 +94,7 @@ SU_RESULT SUFontGetUseWorldSize(SUFontRef font, bool* use_world_size);
 
 /**
 @brief Retrieves the height of the font in inches when the font size is defined
-       as a height in world space. That is, when \ref SUFontGetUseWorldSize
+       as a height in world space. That is, when \ref SUFontGetUseWorldSize()
        returns true.
 @since SketchUp 2017, API 5.0
 @param[in]  font       The font object.

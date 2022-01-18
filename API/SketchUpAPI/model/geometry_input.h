@@ -1,4 +1,9 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013 Trimble Inc. All Rights Reserved.
+
+/**
+ * @file
+ * @brief Interfaces for SUGeometryInputRef.
+ */
 #ifndef SKETCHUP_MODEL_GEOMETRY_INPUT_H_
 #define SKETCHUP_MODEL_GEOMETRY_INPUT_H_
 
@@ -15,7 +20,7 @@ extern "C" {
 /**
 @struct SUGeometryInputRef
 @brief  References a geometry input object. It is used as an input to
-        /ref SUEntitiesFill.
+        SUEntitiesFill().
 */
 
 /**
@@ -25,7 +30,7 @@ extern "C" {
        coordinates and corresponding vertex indices on the face. The vertices
        are referenced by index into the top level SUGeometryInputRef's vertex
        array. The member variable 'material' must be a valid material object,
-       and once the material input is used (e.g. with /ref SUEntitiesFill),
+       and once the material input is used (e.g. with SUEntitiesFill()),
        the material object must not be released since it will be associated
        with a parent object.
 */
@@ -45,9 +50,9 @@ struct SUMaterialInput {
 /**
 @brief Creates a geometry input object.
 @param[out] geom_input The object created. This object can be passed into
-                       \ref SUEntitiesFill to populate an entities object.
+                       SUEntitiesFill() to populate an entities object.
                        It should be released subsequently by calling
-                       \ref SUGeometryInputRelease.
+                       SUGeometryInputRelease().
 @related SUGeometryInputRef
 @return
 - \ref SU_ERROR_NONE on success
@@ -241,7 +246,7 @@ SU_RESULT SUGeometryInputAddCurve(SUGeometryInputRef geom_input,
        of the first new edge. Also, num_segments-1 vertices along the arc will
        be appended to the geometry's collection of verttices. In order to
        include an arccurve in a loop the user only needs add the arccurve's
-       points to a loop using \ref SULoopInputAddVertexIndex.
+       points to a loop using \ref SULoopInputAddVertexIndex().
 @since SketchUp 2017 M2, API 5.2
 @param[in]  geom_input         The geometry input object.
 @param[in]  start_point        The index of the vertex at the start of the arc.
@@ -296,20 +301,22 @@ SU_RESULT SULoopInputRelease(SULoopInputRef* loop_input);
 
 /**
 @brief Adds a vertex index to a loop input object.
-@warning *** Breaking Change: The behavior of this method was changed in
+
+@warning Breaking Change: The behavior of this method was changed in
          SketchUp 2017 M2, API 5.2. In previous releases this method returned
          \ref SU_ERROR_INVALID_INPUT if the specified index was already anywhere
          in the loop. In SketchUp 2017 M1 the concept of an explicitly closed
          loop was introduced. A loop can be explicitly closed by either using
          this method to insert an index which is already at the beginning of the
          loop, or by adding a curve to the loop which connects the loop's start
-         and end points using \ref SULoopInputAddCurve. If a loop was not
-         previously closed and \ref SULoopInputAddVertexIndex is used to add the
-         loop's start vertex, the loop will be closed and \ref SU_ERROR_NONE
+         and end points using \ref SULoopInputAddCurve(). If a loop was not
+         previously closed and \ref SULoopInputAddVertexIndex() is used to add
+         the loop's start vertex, the loop will be closed and \ref SU_ERROR_NONE
          will be returned. If attempts are made to add vertices after a loop has
          been explicitly closed \ref SU_ERROR_UNSUPPORTED will be returned. If
          an attempt is made to add a vertex that already existed in an open loop
          not at the front \ref SU_ERROR_INVALID_ARGUMENT will be returned.
+
 @param[in] loop_input   The loop input object.
 @param[in] vertex_index The vertex index to add. This references a vertex within
                         the parent geometry input's vertex collection (as a
@@ -428,7 +435,7 @@ SU_RESULT SULoopInputAddCurve(SULoopInputRef loop_input,
 @brief Retrieves whether the loop input is closed. A loop input can be closed
        either by re-adding the start vertex to the end of the loop using \ref
        SULoopInputAddVertexIndex or by adding a curve to the loop input which
-       connects the loop's start and end points using \ref SULoopInputAddCurve.
+       connects the loop's start and end points using \ref SULoopInputAddCurve().
 @since SketchUp 2017 M2, API 5.2
 @param[in]  loop_input The loop input object.
 @param[out] is_closed  The flag retrieved (true if the loop is closed).
@@ -444,10 +451,12 @@ SU_RESULT SULoopInputIsClosed(SULoopInputRef loop_input, bool* is_closed);
 /**
 @brief Adds a face to a geometry input object with a given outer loop for the
        face.
-@warning *** Breaking Change: The behavior of this method was changed in
+
+@warning Breaking Change: The behavior of this method was changed in
          SketchUp 2017 M2, API 5.2. An additional error code was added (\ref
          SU_ERROR_INVALID_ARGUMENT) to indicate to users when the loop contains
          invalid data.
+
 @param[in]  geom_input       The geometry input object.
 @param[in]  outer_loop       The outer loop to be set for the face. If the
                              function succeeds (i.e. returns SU_ERROR_NONE),
@@ -500,10 +509,12 @@ SU_RESULT SUGeometryInputFaceSetLayer(SUGeometryInputRef geom_input,
 
 /**
 @brief Adds an inner loop to a face in the geometry input.
-@warning *** Breaking Change: The behavior of this method was changed in
+
+@warning Breaking Change: The behavior of this method was changed in
          SketchUp 2017 M2, API 5.2. An additional error code was added (\ref
          SU_ERROR_INVALID_ARGUMENT) to indicate to users when the loop contains
          invalid data.
+
 @param[in] geom_input The geometry input object.
 @param[in] face_index Index of the face to receive the inner loop.
 @param[in] loop_input The inner loop to be added. If the function succeeds
@@ -592,9 +603,9 @@ SU_RESULT SUGeometryInputFaceSetHidden(SUGeometryInputRef geom_input,
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if vertices_count, faces_count,
        edge_count, curve_count, or arc_count is NULL
 */
-SU_RESULT SUGeometryInputGetCounts(SUGeometryInputRef geom_input, 
+SU_RESULT SUGeometryInputGetCounts(SUGeometryInputRef geom_input,
                                   size_t *vertices_count, size_t *faces_count,
-                                  size_t *edge_count, size_t *curve_count, 
+                                  size_t *edge_count, size_t *curve_count,
                                   size_t *arc_count);
 
 #ifdef __cplusplus

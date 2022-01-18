@@ -1,5 +1,10 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013 Trimble Inc. All Rights Reserved.
 
+
+/**
+ * @file
+ * @brief Interfaces for SUPolyline3dRef.
+ */
 #ifndef SKETCHUP_MODEL_POLYLINE3D_H_
 #define SKETCHUP_MODEL_POLYLINE3D_H_
 
@@ -13,6 +18,7 @@ extern "C" {
 
 /**
 @struct SUPolyline3dRef
+@extends SUEntityRef
 @brief  A polyline3d object. These are curve-like entities that do not
         generate inference snaps or affect geometry in any way.
 */
@@ -67,7 +73,7 @@ SU_EXPORT SUPolyline3dRef SUPolyline3dFromDrawingElement(SUDrawingElementRef
 
 /**
 @brief Creates a new polyline3d object. The polyline3d object must be
-       subsequently deallocated with \ref SUPolyline3dRelease unless it is
+       subsequently deallocated with \ref SUPolyline3dRelease() unless it is
        associated with a parent object.
 @param[out] polyline The polyline3d object.
 @related SUPolyline3dRef

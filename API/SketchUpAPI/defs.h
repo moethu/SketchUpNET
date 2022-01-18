@@ -1,5 +1,9 @@
 // Copyright 2017 Trimble Inc. All Rights Reserved.
 
+/**
+ * @file
+ * @brief General types for the API.
+ */
 #ifndef SKETCHUP_DEFS_H_
 #define SKETCHUP_DEFS_H_
 

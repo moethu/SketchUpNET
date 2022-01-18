@@ -1,5 +1,10 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013 Trimble Inc. All Rights Reserved.
 
+
+/**
+ * @file
+ * @brief Interfaces for SUTextureWriterRef.
+ */
 #ifndef SKETCHUP_MODEL_TEXTURE_WRITER_H_
 #define SKETCHUP_MODEL_TEXTURE_WRITER_H_
 
@@ -18,13 +23,13 @@ extern "C" {
         disk.  For face objects texture writer modifies non-affine textures on
         write so that the resulting texture image can be mapped with
         2-dimensional texture coordinates.  The modified UV coordinates are
-        retrieved from a mesh object created with \ref
-        SUMeshHelperCreateWithTextureWriter.
+        retrieved from a mesh object created with
+        SUMeshHelperCreateWithTextureWriter().
 */
 
 /**
 @brief  Creates a new texture writer object. The texture writer must be
-        subsequently deallocated with \ref SUTextureWriterRelease.
+        subsequently deallocated with SUTextureWriterRelease().
 @param[out] writer The created texture writer object.
 @related SUTextureWriterRef
 @return
@@ -127,8 +132,8 @@ SU_RESULT SUTextureWriterWriteTexture(SUTextureWriterRef writer,
 /**
  @brief  Retrieves an image from the given texture_id. The given image
          representation object must have been constructed using one of the
-         SUImageRepCreate* functions. It must be released using \ref 
-         SUImageRepRelease.
+         SUImageRepCreate* functions. It must be released using
+         SUImageRepRelease().
 @since SketchUp 2017 M2, API 5.2
 @param[in] writer      The texture writer object.
 @param[in] texture_id  The id of the texture.

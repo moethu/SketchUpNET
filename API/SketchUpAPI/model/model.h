@@ -1,5 +1,10 @@
-// Copyright 2013-2019 Trimble Inc Ltd. All Rights Reserved.
+// Copyright 2013-2020 Trimble Inc Ltd. All Rights Reserved.
 
+
+/**
+ * @file
+ * @brief Interfaces for SUModelRef.
+ */
 #ifndef SKETCHUP_MODEL_MODEL_H_
 #define SKETCHUP_MODEL_MODEL_H_
 
@@ -35,17 +40,17 @@ struct SUModelStatistics {
 @brief Types of \ref SUEntityRef objects.
 */
   enum SUEntityType {
-    SUEntityType_Edge = 0,
-    SUEntityType_Face,
-    SUEntityType_ComponentInstance,
-    SUEntityType_Group,
-    SUEntityType_Image,
-    SUEntityType_ComponentDefinition,
-    SUEntityType_Layer,
-    SUEntityType_Material,
-    SUNumEntityTypes
+    SUEntityType_Edge = 0, ///< SUEdgeRef entities
+    SUEntityType_Face, ///< SUFaceRef entities
+    SUEntityType_ComponentInstance, ///< SUComponentInstanceRef entities
+    SUEntityType_Group, ///< SUGroupRef entities
+    SUEntityType_Image, ///< SUImageRef entities
+    SUEntityType_ComponentDefinition, ///< SUComponentDefinitionRef entities
+    SUEntityType_Layer, ///< SULayerRef entities
+    SUEntityType_Material, ///< SUMaterialRef entities
+    SUNumEntityTypes ///< Number of entity types
   };
-  int entity_counts[SUNumEntityTypes];
+  int entity_counts[SUNumEntityTypes]; ///< Count of each entity type.
 };
 
 /**
@@ -79,12 +84,27 @@ enum SUModelVersion {
   SUModelVersion_SU2017,
   SUModelVersion_SU2018,
   SUModelVersion_SU2019,
-  SUModelVersion_SU2020
+  SUModelVersion_SU2020,
+  SUModelVersion_SU2021
+};
+
+/**
+@enum SUModelLoadStatus
+@brief Provides additional status information after loading a model successfully.
+@since SketchUp 2021, API 9.0
+*/
+enum SUModelLoadStatus {
+  SUModelLoadStatus_Success = 0, ///< Model was loaded successfully.
+  SUModelLoadStatus_Success_MoreRecent ///< Model was loaded successfully,
+                                       ///< however it was saved by a newer
+                                       ///< version of SketchUp. We strongly
+                                       ///< recommended that you update your SDK
+                                       ///< to the latest version.
 };
 
 /**
 @brief Creates an empty model object for the purposes of writing a SketchUp
-        document. This model object must be released with \ref SUModelRelease.
+        document. This model object must be released with \ref SUModelRelease().
 @param[out] model The model object created.
 @related SUModelRef
 @return
@@ -96,46 +116,106 @@ SU_RESULT SUModelCreate(SUModelRef* model);
 
 /**
 @brief Creates a model from a SketchUp file on local disk.  This model object
-       must be released with \ref SUModelRelease.
+       must be released with \ref SUModelRelease().
+@deprecated Replaced with SUModelCreateFromFileWithStatus() which can read
+    models saved by newer versions of SketchUp.
 @param[out] model     The model object created.
 @param[in]  file_path The source file path of the SketchUp file. Assumed to be
                       UTF-8 encoded.
 @related SUModelRef
 @return
 - \ref SU_ERROR_NONE on success
-- \ref SU_ERROR_NULL_POINTER_INPUT if file_path is NULL
-- \ref SU_ERROR_NULL_POINTER_OUTPUT if model is NULL
-- \ref SU_ERROR_OVERWRITE_VALID if model is already a valid object
+- \ref SU_ERROR_NULL_POINTER_INPUT if \p file_path is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if \p model is NULL
+- \ref SU_ERROR_OVERWRITE_VALID if \p model is already a valid object
 - \ref SU_ERROR_SERIALIZATION if an error occurs during reading of the file
-- \ref SU_ERROR_MODEL_INVALID if the file specified by file_path is an invalid
-  model. (since SketchUp 2014, API 2.0)
-- \ref SU_ERROR_MODEL_VERSION if the file has objects that have a newer version
-  than is supported by the current build of slapi. (since SketchUp 2014, API 2.0)
+- \ref SU_ERROR_MODEL_INVALID if the file specified by \p file_path is an
+  invalid model. (since SketchUp 2014, API 2.0)
+- \ref SU_ERROR_MODEL_VERSION if the model file has a newer version
+  than is supported by the current build of the SDK. (since SketchUp 2014, API 2.0)
 */
+SU_DEPRECATED_FUNCTION("9.0")
 SU_RESULT SUModelCreateFromFile(SUModelRef* model, const char* file_path);
 
 /**
+@brief Creates a model from a SketchUp file on local disk. This model object
+       must be released with \ref SUModelRelease().
+@since SketchUp 2021, API 9.0
+@param[out] model     The model object created.
+@param[in]  file_path The source file path of the SketchUp file. Assumed to be
+                      UTF-8 encoded.
+@param[out] status    Returns additional information on the status of a
+                      successful operation. Valid when the return value is
+                      \ref SU_ERROR_NONE.
+@related SUModelRef
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_NULL_POINTER_INPUT if \p file_path is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if \p model is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if \p status is NULL
+- \ref SU_ERROR_OVERWRITE_VALID if \p model is already a valid object
+- \ref SU_ERROR_SERIALIZATION if an error occurs during reading of the file
+- \ref SU_ERROR_MODEL_INVALID if the file specified by \p file_path is an
+  invalid model.
+- \ref SU_ERROR_MODEL_VERSION if the model file has a newer version
+  than is supported by the current build of the SDK.
+*/
+SU_RESULT SUModelCreateFromFileWithStatus(SUModelRef* model,
+    const char* file_path, enum SUModelLoadStatus* status);
+
+/**
 @brief Creates a model from a SketchUp skp file buffer.  This model object must
-       be released with \ref SUModelRelease.
+       be released with \ref SUModelRelease().
 @since SketchUp 2017 M2, API 5.2
+@deprecated Replaced with SUModelCreateFromBufferWithStatus() which can read
+    models saved by newer versions of SketchUp.
 @param[out] model       The model object created.
 @param[in]  buffer      The SketchUp file buffer.
 @param[in]  buffer_size The SketchUp file buffer size.
 @related SUModelRef
 @return
  - \ref SU_ERROR_NONE on success
- - \ref SU_ERROR_NULL_POINTER_INPUT if buffer is NULL
- - \ref SU_ERROR_NULL_POINTER_OUTPUT if model is NULL
- - \ref SU_ERROR_OVERWRITE_VALID if model is already a valid object
+ - \ref SU_ERROR_NULL_POINTER_INPUT if \p buffer is NULL
+ - \ref SU_ERROR_NULL_POINTER_OUTPUT if \p model is NULL
+ - \ref SU_ERROR_OVERWRITE_VALID if \p model is already a valid object
  - \ref SU_ERROR_SERIALIZATION if an error occurs during reading of the file
- - \ref SU_ERROR_MODEL_INVALID if the file specified by buffer is an invalid
- model.
- - \ref SU_ERROR_MODEL_VERSION if the file has objects that have a newer version
- than is supported by the current build of slapi.
+ - \ref SU_ERROR_MODEL_INVALID if the file specified by \p buffer is an
+   invalid model.
+ - \ref SU_ERROR_MODEL_VERSION if the model buffer has a newer version
+  than is supported by the current build of the SDK.
  */
+ SU_DEPRECATED_FUNCTION("9.0")
 SU_RESULT SUModelCreateFromBuffer(SUModelRef* model,
                                   const unsigned char* buffer,
                                   size_t buffer_size);
+
+/**
+@brief Creates a model from a SketchUp skp file buffer.  This model object must
+       be released with \ref SUModelRelease().
+@since SketchUp 2021, API 9.0
+@param[out] model       The model object created.
+@param[in]  buffer      The SketchUp file buffer.
+@param[in]  buffer_size The SketchUp file buffer size.
+@param[out] status      Returns additional information on the status of a
+                        successful operation. Valid when the return value is
+                        \ref SU_ERROR_NONE.
+@related SUModelRef
+@return
+ - \ref SU_ERROR_NONE on success
+ - \ref SU_ERROR_NULL_POINTER_INPUT if \p buffer is NULL
+ - \ref SU_ERROR_NULL_POINTER_OUTPUT if \p model is NULL
+ - \ref SU_ERROR_NULL_POINTER_OUTPUT if \p status is NULL
+ - \ref SU_ERROR_OVERWRITE_VALID if model is already a valid object
+ - \ref SU_ERROR_SERIALIZATION if an error occurs during reading of the file
+ - \ref SU_ERROR_MODEL_INVALID if the file specified by \p buffer is an invalid
+ model.
+ - \ref SU_ERROR_MODEL_VERSION if the model buffer has a newer version
+  than is supported by the current build of the SDK.
+ */
+SU_RESULT SUModelCreateFromBufferWithStatus(SUModelRef* model,
+    const unsigned char* buffer,
+    size_t buffer_size,
+    enum SUModelLoadStatus* status);
 
 /**
 @brief Releases a model object and its associated resources. The root component
@@ -153,7 +233,7 @@ SU_RESULT SUModelRelease(SUModelRef* model);
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 /**
 @brief Returns a model reference for a given internal model representation.
-        This model object must NOT be released with \ref SUModelRelease.
+        This model object must NOT be released with \ref SUModelRelease().
 @param[in] data Internal model representation.
 @related SUModelRef
 @return The created model reference.
@@ -162,7 +242,7 @@ SU_EXPORT SUModelRef SUModelFromExisting(uintptr_t data);
 #endif // DOXYGEN_SHOULD_SKIP_THIS
 
 /**
-@brief Retrieves model entities.
+@brief Retrieves the root model entities.
 @param[in]  model    The model object.
 @param[out] entities The entities retrieved.
 @related SUModelRef
@@ -171,8 +251,40 @@ SU_EXPORT SUModelRef SUModelFromExisting(uintptr_t data);
 - \ref SU_ERROR_INVALID_INPUT if model is an invalid object
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if entities is NULL
 */
-SU_RESULT SUModelGetEntities(SUModelRef model,
-                             SUEntitiesRef* entities);
+SU_RESULT SUModelGetEntities(SUModelRef model, SUEntitiesRef* entities);
+
+/**
+@brief Retrieves the model entities of the active context
+       (open group or component).
+@since SketchUp 2020.2, API 8.2
+@param[in]  model    The model object.
+@param[out] entities The entities retrieved.
+@related SUModelRef
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if \p model is an invalid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if \p entities is `NULL`
+*/
+SU_RESULT SUModelGetActiveEntities(SUModelRef model, SUEntitiesRef* entities);
+
+/**
+@brief Retrieves the instance path of the active context
+       (open group or component).
+@note This method only works from within the SketchUp application.
+@param[in]  model         The model object.
+@param[out] instance_path The instance path retrieved. This must be released to
+                          avoid memory leak.
+@related SUModelRef
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if \p model is an invalid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if \p instance_path is `NULL`
+- \ref SU_ERROR_OVERWRITE_VALID if \p instance_path is already a valid object
+- \ref SU_ERROR_NO_DATA if there is no active path open.
+- \ref SU_ERROR_NO_DATA if this isn't called from within SketchUp
+*/
+SU_RESULT SUModelGetActivePath(SUModelRef model,
+                               SUInstancePathRef* instance_path);
 
 /**
 @brief Retrieves the number of materials in a model object.
@@ -382,7 +494,7 @@ SU_RESULT SUModelSaveToFileWithVersion(SUModelRef model, const char* file_path,
 /**
 @brief Retrieves the camera of a model object. The returned camera object
         points to model's internal camera. So it must not be released via
-        \ref SUCameraRelease.
+        SUCameraRelease().
 @param[in]  model  The model object.
 @param[out] camera The camera object retrieved.
 @related SUModelRef
@@ -422,9 +534,12 @@ SU_RESULT SUModelGetNumScenes(SUModelRef model, size_t* num_scenes);
 
 /**
 @brief Retrieves the number of layers in a model object.
+@note This counts all layers regardless of whether or not they are contained
+in a \ref SULayerFolderRef.
 @param[in]  model The model object.
 @param[out] count The number of layers available.
 @related SUModelRef
+@see SUModelGetNumTopLevelLayers()
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT of model is not a valid object
@@ -434,11 +549,14 @@ SU_RESULT SUModelGetNumLayers(SUModelRef model, size_t* count);
 
 /**
 @brief Retrieves the layers in a model object.
+@note This retrieves all layers regardless of whether or not they are contained
+in a \ref SULayerFolderRef.
 @param[in]  model  The model object.
 @param[in]  len    The number of layers to retrieve.
 @param[out] layers The layers retrieved.
 @param[out] count  The number of layers retrieved.
 @related SUModelRef
+@see SUModelGetTopLevelLayers()
 @return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT of model is not a valid object
@@ -503,7 +621,7 @@ SU_RESULT SUModelRemoveLayers(SUModelRef model, size_t len,
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if layer is NULL
 */
 SU_RESULT SUModelGetActiveLayer(SUModelRef model, SULayerRef* layer);
-  
+
 /**
  @brief Sets the active layer object of a model object.
  @since SketchUp 2020, API 8.0
@@ -611,7 +729,7 @@ SU_RESULT SUModelGetLocation(SUModelRef model,
 /**
 @brief Calculates the sum of all entities by type in the model.
 @param[in]  model      The model object.
-@param[out] statistics The \ref SUModelStatistics struct that will be populated
+@param[out] statistics The SUModelStatistics() struct that will be populated
                        with the number of each entity type in the model.
 @related SUModelRef
 @return
@@ -747,10 +865,12 @@ SU_RESULT SUModelGetSceneWithName(SUModelRef model, const char* name,
 
 /**
 @brief Adds scenes to a model object.
-@warning *** Breaking Change: The behavior of SUModelAddScenes changed in
+
+@warning Breaking Change: The behavior of SUModelAddScenes changed in
          SketchUp SDK 2018 API 6.0 to return SU_ERROR_INVALID_ARGUMENT if at
          least one scene name already exists in the model or if there are
          duplicated names in the scenes array.
+
 @param[in] model  The model object.
 @param[in] len    The number of scene objects to add.
 @param[in] scenes The array of scene objects to add.
@@ -767,9 +887,11 @@ SU_RESULT SUModelAddScenes(SUModelRef model, size_t len,
 
 /**
 @brief Adds scenes to a model object.
-@warning *** Breaking Change: The behavior of SUModelAddScene changed in
+
+@warning Breaking Change: The behavior of SUModelAddScene changed in
          SketchUp SDK 2018 API 6.0 to return SU_ERROR_INVALID_ARGUMENT if the
          given scene name already exists in the model.
+
 @param[in]  model     The model object.
 @param[in]  index     Where in the list to add the scene. -1 to place at the end.
 @param[in]  scene     The scene object to add.
@@ -1033,9 +1155,9 @@ SU_RESULT SUModelGetDimensionStyle(SUModelRef model,
 
 /**
 @brief Retrieves length formatter settings from the model. The given length
-       formatter object must have been constructed using \ref
-       SULengthFormatterCreate. It must be released using \ref
-       SULengthFormatterRelease.
+       formatter object must have been constructed using
+       SULengthFormatterCreate(). It must be released using
+       SULengthFormatterRelease().
 @since SketchUp 2018, API 6.0
 @param[in]  model     The model object.
 @param[out] formatter The formatter used to retrieve the settings.
@@ -1112,6 +1234,8 @@ SU_RESULT SUModelGetLineStyles(SUModelRef model,
 
 /**
 @brief Loads a component from a file.
+@deprecated Replaced with SUModelLoadDefinitionWithStatus() which can load
+    components saved by newer versions of SketchUp.
 @since SketchUp 2019.2, API 7.1
 @param[in]  model       The model object.
 @param[in]  filename    The full path and filename to a SkethchUp model.
@@ -1119,14 +1243,40 @@ SU_RESULT SUModelGetLineStyles(SUModelRef model,
 @related SUModelRef
 @return
 - \ref SU_ERROR_NONE on success
-- \ref SU_ERROR_INVALID_INPUT if model is not a valid object
-- \ref SU_ERROR_NULL_POINTER_INPUT if filename is NULL
-- \ref SU_ERROR_NULL_POINTER_OUTPUT if definition is NULL
-- \ref SU_ERROR_OVERWRITE_VALID if definition is already a valid object
+- \ref SU_ERROR_INVALID_INPUT if \p model is not a valid object
+- \ref SU_ERROR_NULL_POINTER_INPUT if \p filename is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if \p definition is NULL
+- \ref SU_ERROR_OVERWRITE_VALID if \p definition is already a valid object
 - \ref SU_ERROR_SERIALIZATION if loading the file failed
 */
+SU_DEPRECATED_FUNCTION("9.0")
 SU_RESULT SUModelLoadDefinition(SUModelRef model, const char *filename,
     SUComponentDefinitionRef *definition);
+
+/**
+@brief Loads a component from a file.
+@since SketchUp 2021, API 9.0
+@param[in]  model       The model object.
+@param[in]  filename    The full path and filename to a SkethchUp model.
+@param[out] definition  The component definition that is created after load.
+@param[out] status      Returns additional information on the status of a
+                        successful operation. Valid when the return value is
+                        \ref SU_ERROR_NONE.
+@related SUModelRef
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if \p model is not a valid object
+- \ref SU_ERROR_NULL_POINTER_INPUT if \p filename is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if \p definition is NULL
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if \p status is NULL
+- \ref SU_ERROR_OVERWRITE_VALID if \p definition is already a valid object
+- \ref SU_ERROR_MODEL_VERSION if the component file has a newer version
+  than is supported by the current build of the SDK.
+- \ref SU_ERROR_SERIALIZATION if loading the file failed
+*/
+SU_RESULT SUModelLoadDefinitionWithStatus(SUModelRef model,
+    const char* filename, SUComponentDefinitionRef* definition,
+    enum SUModelLoadStatus* status);
 
 /**
 @brief Removes all materials provided in the array.
@@ -1167,9 +1317,11 @@ SU_RESULT SUModelRemoveScenes(SUModelRef model, size_t len,
 /**
 @brief Retrieves the number of all the materials in a model including those
        belonging to SUImageRef and SULayerRef.
-@warning *** Materials from SUImageRef and SULayerRef should not be applied to
-             any other entity in the model. They are uniquely owned by the image
-             or layer.
+
+@warning Materials from SUImageRef and SULayerRef should not be applied to
+         any other entity in the model. They are uniquely owned by the image
+         or layer.
+
 @since SketchUp 2019.2, API 7.1
 @param[in]  model The model object.
 @param[out] count The number of material objects available.
@@ -1184,9 +1336,11 @@ SU_RESULT SUModelGetNumAllMaterials(SUModelRef model, size_t* count);
 /**
 @brief Retrieves all the materials associated with a model object including
        those belonging to SUImageRef and SULayerRef.
-@warning *** Materials from SUImageRef and SULayerRef should not be applied to
-             any other entity in the model. They are uniquely owned by the image
-             or layer.
+
+@warning Materials from SUImageRef and SULayerRef should not be applied to
+         any other entity in the model. They are uniquely owned by the image
+         or layer.
+
 @since SketchUp 2019.2, API 7.1
 @param[in]  model     The model object.
 @param[in]  len       The number of material objects to retrieve.
@@ -1203,7 +1357,12 @@ SU_RESULT SUModelGetAllMaterials(SUModelRef model, size_t len,
 
 /**
 @since SketchUp 2019.2, API 7.1
+
 @brief Retrieves the guid of a model object.
+
+@see SUComponentDefinitionGetGuid
+@see SUSkpReadGuid
+
 @param[in]  model The model object.
 @param[out] guid  The guid string.
 @related SUModelRef
@@ -1217,11 +1376,14 @@ SU_RESULT SUModelGetAllMaterials(SUModelRef model, size_t len,
 SU_RESULT SUModelGetGuid(SUModelRef model, SUStringRef* guid);
 
 /**
-@brief Retrieves layers by their persistent ids. The layers retrieved will be in 
-       the same order as to the peristent ids passed in. If a persistent id 
-       doesn't belong to a layer, then a \ref SU_INVALID element will be 
+@brief Retrieves layers by their persistent ids. The layers retrieved will be in
+       the same order as to the peristent ids passed in. If a persistent id
+       doesn't belong to a layer, then a \ref SU_INVALID element will be
        returned along with \ref SU_ERROR_PARTIAL_SUCCESS.
 @since SketchUp 2020.0, API 8.0
+@see SUModelGetEntitiesOfTypeByPersistentIDs()
+@deprecated Prefer the more flexible SUModelGetEntitiesOfTypeByPersistentIDs() 
+            which lets you narrow the search scope.
 @param[in]  model       The model object.
 @param[in]  num_pids    The number of persistent ids.
 @param[in]  pids        The persistent ids.
@@ -1235,6 +1397,7 @@ SU_RESULT SUModelGetGuid(SUModelRef model, SUStringRef* guid);
 - \ref SU_ERROR_PARTIAL_SUCCESS if one or more layers could not be found
 - \ref SU_ERROR_OVERWRITE_VALID if layers contains a valid \ref SULayerRef
  */
+SU_DEPRECATED_FUNCTION("8.2")
 SU_RESULT SUModelGetLayersByPersistentIDs(SUModelRef model, size_t num_pids,
     const int64_t pids[], SULayerRef layers[]);
 
@@ -1244,8 +1407,9 @@ SU_RESULT SUModelGetLayersByPersistentIDs(SUModelRef model, size_t num_pids,
        This will take into account "DrawHiddenGeometry" and "DrawHiddenObjects"
        to determine if the drawing element is visible in the viewport.
 @since SketchUp 2020.0, API 8.0
-@param[in]  model       The model object.
-@param[out] visible     The retrieved layer objects.
+@param[in]  model    The model object.
+@param[in]  path     The instance path to resolve visibility for.
+@param[out] visible  The retrieved layer objects.
 @related SUModelRef
 @return
 - \ref SU_ERROR_NONE on success
@@ -1258,11 +1422,14 @@ SU_RESULT SUModelIsDrawingElementVisible(SUModelRef model,
     SUInstancePathRef path, bool* visible);
 
 /**
-@brief Retrieves entities by their persistent ids. The entities retrieved will 
-       be in the same order as to the peristent ids passed in. If a persistent 
-       id doesn't belong to a entity, then a \ref SU_INVALID element will be 
+@brief Retrieves entities by their persistent ids. The entities retrieved will
+       be in the same order as to the peristent ids passed in. If a persistent
+       id doesn't belong to a entity, then a \ref SU_INVALID element will be
        returned along with \ref SU_ERROR_PARTIAL_SUCCESS.
 @since SketchUp 2020.0, API 8.0
+@see SUModelGetEntitiesOfTypeByPersistentIDs()
+@deprecated Prefer the more flexible SUModelGetEntitiesOfTypeByPersistentIDs() 
+            which lets you narrow the search scope.
 @param[in]  model       The model object.
 @param[in]  num_pids    The number of persistent ids.
 @param[in]  pids        The persistent ids.
@@ -1276,7 +1443,207 @@ SU_RESULT SUModelIsDrawingElementVisible(SUModelRef model,
 - \ref SU_ERROR_PARTIAL_SUCCESS if one or more entities could not be found
 - \ref SU_ERROR_OVERWRITE_VALID if entities contains a valid \ref SUEntityRef
  */
+SU_DEPRECATED_FUNCTION("8.2")
 SU_RESULT SUModelGetEntitiesByPersistentIDs(SUModelRef model, size_t num_pids,
+    const int64_t pids[], SUEntityRef entities[]);
+
+/**
+@brief Retrieves the selection object for a model.
+@note This method only works from within the SketchUp application.
+@since SketchUp 2020.2, API 8.2
+@param[in]  model       The model object.
+@param[out] selection   The retrieved selection object.
+@related SUModelRef
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if model is an invalid object
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if selection is NULL
+- \ref SU_ERROR_OVERWRITE_VALID if selection is already a valid object
+- \ref SU_ERROR_NO_DATA if this isn't called from within SketchUp
+ */
+SU_RESULT SUModelGetSelection(SUModelRef model, SUSelectionRef* selection);
+  
+/**
+ @brief Gets the number of \ref SULayerFolderRef objects owned by the given 
+        model.
+ @since SketchUp 2021.0, API 9.0
+ @param[in]  model        The model object.
+ @param[out]  count       The number of layer folder objects.
+ @related SUModelRef
+ @return
+ - \ref SU_ERROR_NONE on success
+ - \ref SU_ERROR_INVALID_INPUT if \p model is an invalid object
+ - \ref SU_ERROR_NULL_POINTER_OUTPUT if \p count is NULL
+*/
+SU_RESULT SUModelGetNumLayerFolders(SUModelRef model, size_t* count);
+
+/**
+ @brief Gets the \ref SULayerFolderRef objects that are owned by the given model.
+ @since SketchUp 2021.0, API 9.0
+ @param[in]  model           The model object.
+ @param[in]  len             The number of elements in \p layer_folders.
+ @param[out]  layer_folders  An array of layer folder objects.
+ @param[out]  count          The number of elements written into \p layer_folders.
+ @related SUModelRef
+ @return
+ - \ref SU_ERROR_NONE on success
+ - \ref SU_ERROR_INVALID_INPUT if \p model is an invalid object
+ - \ref SU_ERROR_NULL_POINTER_OUTPUT if \p layer_folders or \p count is NULL
+ */
+SU_RESULT SUModelGetLayerFolders(SUModelRef model, 
+                                 size_t len, 
+                                 SULayerFolderRef* layer_folders, 
+                                 size_t* count);
+
+/**
+ @brief Removes empty \ref SULayerFolderRef objects from the model.
+ @since SketchUp 2021.0, API 9.0
+ @param[in]  model          The model object.
+ @param[out]  count         The number of empty layer folders removed. If NULL,
+                            count will not be retrieved.
+ @related SUModelRef
+ @return
+ - \ref SU_ERROR_NONE on success
+ - \ref SU_ERROR_INVALID_INPUT if \p model is an invalid object
+*/
+SU_RESULT SUModelPurgeEmptyLayerFolders(SUModelRef model, size_t* count);
+  
+/**
+ @brief Adds a \ref SULayerFolderRef object to the model.
+ @since SketchUp 2021.0, API 9.0
+ @param[in]  model          The model object.
+ @param[in]  layer_folder   The layer folder to add.
+ @related SUModelRef
+ @return
+ - \ref SU_ERROR_NONE on success
+ - \ref SU_ERROR_INVALID_INPUT if \p model or \p layer_folder is an invalid 
+   object
+ - \ref SU_ERROR_INVALID_ARGUMENT if \p layer_folder fails to be added or is
+   already part of the model.
+*/
+SU_RESULT SUModelAddLayerFolder(SUModelRef model, 
+                                SULayerFolderRef layer_folder);
+
+/**
+ @brief Removes unused \ref SULayerRef objects from the model.
+ @since SketchUp 2020.2, API 8.2
+ @param[in]  model          The model object.
+ @param[out]  count         The number of layers deleted. If NULL, count
+                            will not be retrieved.
+ @related SUModelRef
+ @return
+ - \ref SU_ERROR_NONE on success
+ - \ref SU_ERROR_INVALID_INPUT if \p model is an invalid object
+*/
+SU_RESULT SUModelPurgeUnusedLayers(SUModelRef model, size_t* count);
+
+/**
+ @brief Retrieves the number of layers in a model object that have not been
+ added to any layer folder.
+ @since SketchUp 2021.0, API 9.0
+ @param[in]  model The model object.
+ @param[out] count The number of top-level layers available.
+ @related SUModelRef
+ @see SUModelGetNumLayers()
+ @return
+ - \ref SU_ERROR_NONE on success
+ - \ref SU_ERROR_INVALID_INPUT if \p model is not a valid object
+ - \ref SU_ERROR_NULL_POINTER_OUTPUT if \p count is NULL
+*/
+SU_RESULT SUModelGetNumTopLevelLayers(SUModelRef model, size_t* count);
+
+/**
+ @brief Retrieves the layers in a model that have not been added to a
+ layer folder.
+ @since SketchUp 2021.0, API 9.0
+ @param[in]  model  The model object.
+ @param[in]  len    The number of layers to retrieve.
+ @param[out] layers The layers retrieved.
+ @param[out] count  The number of layers retrieved.
+ @related SUModelRef
+ @see SUModelGetLayers()
+ @return
+ - \ref SU_ERROR_NONE on success
+ - \ref SU_ERROR_INVALID_INPUT if \p model is not a valid object
+ - \ref SU_ERROR_NULL_POINTER_OUTPUT if \p layers or \p count is NULL
+*/
+SU_RESULT SUModelGetTopLevelLayers(SUModelRef model, size_t len,
+                                   SULayerRef layers[], size_t* count);
+
+/**
+ @brief Removes all layer folders provided in the array. All children of the
+ deleted layer folders will be moved to the parent of the deleted folder.
+ @since SketchUp 2021.0, API 9.0
+ @param[in]  model          The model object.
+ @param[in]  len            The length of the array.
+ @param[in]  layer_folders  The layer folders to be deleted.
+ @related SUModelRef
+ @return
+ - \ref SU_ERROR_NONE on success
+ - \ref SU_ERROR_INVALID_INPUT if \p model is not a valid object.
+ - \ref SU_ERROR_NULL_POINTER_INPUT if \p layer_folders is NULL
+ - \ref SU_ERROR_OUT_OF_RANGE if \p len is less than one.
+ - \ref SU_ERROR_INVALID_ARGUMENT if the number of successfully removed items
+ in \p layer_folders is 0.
+ - \ref SU_ERROR_PARTIAL_SUCCESS if we successfully remove at least 1 of the
+ items provided in \p layer_folders but fail to remove others.
+ */
+SU_RESULT SUModelRemoveLayerFolders(SUModelRef model, size_t len,
+                                    SULayerFolderRef layer_folders[]);
+  
+/**
+ * @anchor SUModelGetEntitiesType
+ * @since SketchUp 2020.2, API 8.2
+ * @name Entity Type Flags
+ * @brief Flags for SUModelGetEntitiesOfTypeByPersistentIDs(). These can be 
+ *        combined bitwise.
+ * @see SUModelRef
+ * @{
+*/
+/// Any entities inside the root or another definition's entities.
+#define FLAG_GET_ENTITIES_TYPE_DEFINITION_ENTITIES   0x0001
+/// SULayerRef entities.
+#define FLAG_GET_ENTITIES_TYPE_LAYERS                0x0002
+/// SULayerFolderRef entities.
+#define FLAG_GET_ENTITIES_TYPE_LAYER_FOLDERS         0x0004
+/// SUMaterialRef entities.
+#define FLAG_GET_ENTITIES_TYPE_MATERIALS             0x0008
+/// SUSceneRef entities.
+#define FLAG_GET_ENTITIES_TYPE_SCENES                0x0010
+/// SUStyleRef entities.
+#define FLAG_GET_ENTITIES_TYPE_STYLES                0x0020
+/// SUComponentDefinitionRef entities.
+#define FLAG_GET_ENTITIES_TYPE_DEFINITIONS           0x0040
+/// Search all types.
+#define FLAG_GET_ENTITIES_TYPE_ALL                   0xffff
+/**@}*/
+
+/**
+ @brief Retrieves entities of a given type by their persistent ids. The 
+ entities retrieved will be in the same order as to the peristent ids passed 
+ in. If a persistent id doesn't belong to an entity, then a \ref SU_INVALID 
+ element will be returned along with \ref SU_ERROR_PARTIAL_SUCCESS.
+ @note This method allows the user to search for specific types of entities
+ which allows us to ignore parts of the model for faster results.
+ @since SketchUp 2020.2, API 8.2
+ @param[in]  model       The model object.
+ @param[in]  type_flags  An integer made up by combining \ref SUModelGetEntitiesType 
+                         "Entity Type Flag" values together with bitwise 'or'. This
+                         determines what types of entities to look for.
+ @param[in]  num_pids    The number of persistent ids.
+ @param[in]  pids        The persistent ids.
+ @param[out] entities    The retrieved entity objects.
+ @related SUModelRef
+ @return
+ - \ref SU_ERROR_NONE on success or if num_pids is zero
+ - \ref SU_ERROR_INVALID_INPUT if model is an invalid object
+ - \ref SU_ERROR_NULL_POINTER_INPUT if pids is NULL
+ - \ref SU_ERROR_NULL_POINTER_OUTPUT if entities is NULL
+ - \ref SU_ERROR_PARTIAL_SUCCESS if one or more entities could not be found
+ - \ref SU_ERROR_OVERWRITE_VALID if entities contains a valid \ref SUEntityRef
+*/ 
+SU_RESULT SUModelGetEntitiesOfTypeByPersistentIDs(SUModelRef model,
+    const uint32_t type_flags, const size_t num_pids, 
     const int64_t pids[], SUEntityRef entities[]);
 
 #ifdef __cplusplus

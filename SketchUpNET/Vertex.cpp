@@ -18,6 +18,9 @@ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
+
+#pragma once
+
 #include <SketchUpAPI/slapi.h>
 #include <SketchUpAPI/geometry.h>
 #include <SketchUpAPI/initialize.h>
@@ -25,8 +28,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <SketchUpAPI/model/vertex.h>
 #include <msclr/marshal.h>
 #include <vector>
-
-#pragma once
 
 using namespace System;
 using namespace System::Collections;
@@ -42,11 +43,28 @@ namespace SketchUpNET
 		double Y;
 		double Z;
 
+		/// <summary>
+		/// Creates a new vertex
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <param name="z"></param>
 		Vertex(double x, double y, double z)
 		{
 			this->X = x;
 			this->Y = y;
 			this->Z = z;
+		};
+
+		/// <summary>
+		/// Creates a new vertex on z=0
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		Vertex(double x, double y) {
+			this->X = x;
+			this->Y = y;
+			this->Z = 0;
 		};
 
 		Vertex(){};

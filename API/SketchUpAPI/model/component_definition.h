@@ -1,4 +1,9 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013-2020 Trimble Inc. All Rights Reserved.
+
+/**
+ * @file
+ * @brief Interfaces for SUComponentDefinitionRef.
+ */
 #ifndef SKETCHUP_MODEL_COMPONENT_DEFINITION_H_
 #define SKETCHUP_MODEL_COMPONENT_DEFINITION_H_
 
@@ -24,6 +29,7 @@ extern "C" {
 
 /**
 @struct SUComponentDefinitionRef
+@extends SUEntityRef
 @brief  References a component definition.
 */
 
@@ -46,7 +52,8 @@ struct SUComponentBehavior {
     SUSnapToBehavior_Vertical,
     SUSnapToBehavior_Sloped
   };
-  enum SUSnapToBehavior component_snap;
+  enum SUSnapToBehavior component_snap; ///< How the component should snap to
+                                        ///< the surface where it's placed.
   bool component_cuts_opening; ///< Whether the component creates an opening
                                ///< when placed on a surface, e.g. a window
                                ///< frame component.
@@ -76,8 +83,8 @@ struct SUComponentBehavior {
 @brief Indicates the type of the component.
 */
 enum SUComponentType {
-  SUComponentType_Normal,  //< Regular component definition
-  SUComponentType_Group    //< Group definition
+  SUComponentType_Normal,  ///< Regular component definition
+  SUComponentType_Group    ///< Group definition
 };
 
 /**
@@ -132,11 +139,11 @@ SU_EXPORT SUComponentDefinitionRef SUComponentDefinitionFromDrawingElement(
 
 /**
 @brief Creates a new component definition. The created definition must be
-       released with \ref SUComponentDefinitionRelease, or attached to either a
-       parent component or parent model. Add the new component definition to
-       model using \ref SUModelAddComponentDefinitions before making any
+       released with SUComponentDefinitionRelease(), or attached to either
+       a parent component or parent model. Add the new component definition to
+       model using SUModelAddComponentDefinitions() before making any
        modifications to it. Once the component definition is owned by a model,
-       use \ref SUModelRemoveComponentDefinitions to remove it.
+       use SUModelRemoveComponentDefinitions() to remove it.
 @param[out] comp_def The component object created.
 @related SUComponentDefinitionRef
 @return
@@ -148,7 +155,7 @@ SU_RESULT SUComponentDefinitionCreate(SUComponentDefinitionRef* comp_def);
 /**
 @brief Releases a component definition object and its associated resources. If
        the provided definition was contained by a model, use
-       \ref SUModelRemoveComponentDefinitions to remove the definition and all
+       SUModelRemoveComponentDefinitions() to remove the definition and all
        instances.
 @param[in] comp_def The component definition object.
 @related SUComponentDefinitionRef
@@ -191,7 +198,12 @@ SU_RESULT SUComponentDefinitionSetName(SUComponentDefinitionRef comp_def,
 /**
 @brief Retrieves the globally unique identifier (guid) string of a component
        definition.
+
 @since SketchUp 2015, API 3.0
+
+@see SUModelGetGuid
+@see SUSkpReadGuid
+
 @param[in]  comp_def The component definition object.
 @param[out] guid_ref The guid retrieved.
 @related SUComponentDefinitionRef
@@ -251,21 +263,24 @@ SU_RESULT SUComponentDefinitionSetDescription(
 
 /**
 @brief Create an instance of a component definition.
-@warning *** Breaking Change: The behavior of this method was changed in
+
+@warning Breaking Change: The behavior of this method was changed in
          SketchUp 2018, API 6.0. In previous releases there was a
          recommendation to not release an instance created with this method if
-         it was associated with a parent using \ref SUEntitiesAddInstance. The 
-         limitation was removed by generalizing \ref SUComponentInstanceRelease
+         it was associated with a parent using SUEntitiesAddInstance(). The
+         limitation was removed by generalizing SUComponentInstanceRelease()
          to correctly release instances whether or not they are contained in a
          parent component.
+
+@related SUComponentDefinitionRef
 @param[in]  comp_def The component definition object.
 @param[out] instance The instance created.
-return
+@return
 - \ref SU_ERROR_NONE on success
 - \ref SU_ERROR_INVALID_INPUT if comp_def is invalid
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if instance is NULL
-- \ref SU_ERROR_GENERIC if comp_def is not the definition of a type that can be
-  instantiated
+- \ref SU_ERROR_GENERIC if comp_def is not the definition of a type that can
+  be instantiated
 */
 SU_RESULT SUComponentDefinitionCreateInstance(
     SUComponentDefinitionRef comp_def,
@@ -432,7 +447,7 @@ SU_RESULT SUComponentDefinitionGetNumOpenings(SUComponentDefinitionRef comp_def,
 
 /**
 @brief Retrieves the openings from the component definition. The openings
-       retrieved must be released with \ref SUOpeningRelease.
+       retrieved must be released with SUOpeningRelease().
 @since SketchUp 2016, API 4.0
 @param[in]  comp_def  The component definition object.
 @param[in]  len       The number of openings to retrieve.
@@ -462,10 +477,10 @@ SU_RESULT SUComponentDefinitionGetInsertPoint(SUComponentDefinitionRef comp_def,
     struct SUPoint3D* point);
 
 /**
-@brief Retrieves the \ref SUComponentType from the component definition.
+@brief Retrieves the \ref SUComponentType() from the component definition.
 @since SketchUp 2016, API 4.0
 @param[in]  comp_def  The component definition object.
-@param[out] type      The \ref SUComponentType retrieved.
+@param[out] type      The \ref SUComponentType() retrieved.
 @related SUComponentDefinitionRef
 @return
 - \ref SU_ERROR_NONE on success
@@ -491,19 +506,23 @@ SU_RESULT SUComponentDefinitionOrientFacesConsistently(
 /**
 @brief Sets the insertion point for the component definition.
 @since SketchUp 2016, API 4.0
-@deprecated This function will be removed. It is now a NOOP.
-@warning *** Breaking Change: The behavior of this method was changed in
+
+@deprecated As of SketchUp 2020.0 the insertion point cannot be changed.
+  This function is now a NOOP.
+
+@warning Breaking Change: The behavior of this method was changed in
          SketchUp 2018, API 6.0. In previous releases if the second argument was
          null this method returned \ref SU_ERROR_NULL_POINTER_OUTPUT, but this
          was changed to \ref SU_ERROR_NULL_POINTER_INPUT for consistency with
          other API methods.
+
 @param[in] comp_def  The component definition object.
 @param[in] point     The \ref SUPoint3D to use.
 @related SUComponentDefinitionRef
 @return
 - \ref SU_ERROR_NONE
 */
-SU_DEPRECATED_FUNCTION("8.0") 
+SU_DEPRECATED_FUNCTION("8.0")
 SU_RESULT SUComponentDefinitionSetInsertPoint(SUComponentDefinitionRef comp_def,
     const struct SUPoint3D* point);
 
@@ -519,6 +538,26 @@ SU_RESULT SUComponentDefinitionSetInsertPoint(SUComponentDefinitionRef comp_def,
 */
 SU_RESULT SUComponentDefinitionSetAxes(SUComponentDefinitionRef comp_def,
     SUAxesRef axes);
+
+/**
+@brief Retrieves a flag indicating whether the component definition is a Live
+  Component or a sub-definition of a Live Component.
+
+@note These components are parametrically generated and API users should not
+  modify them.
+
+@since SketchUp 2021.0, API9.0
+
+@param[in]  comp_def  The component definition object.
+@param[out] is_live   The bool value retrieved.
+@related SUComponentDefinitionRef
+@return
+- \ref SU_ERROR_NONE on success
+- \ref SU_ERROR_INVALID_INPUT if \p comp_def is invalid
+- \ref SU_ERROR_NULL_POINTER_OUTPUT if \p is_live is NULL
+*/
+SU_RESULT SUComponentDefinitionIsLiveComponent(SUComponentDefinitionRef comp_def,
+    bool* is_live);
 
 #ifdef __cplusplus
 }  // extern "C"

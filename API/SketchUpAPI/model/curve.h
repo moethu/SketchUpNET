@@ -1,4 +1,9 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013 Trimble Inc. All Rights Reserved.
+
+/**
+ * @file
+ * @brief Interfaces for SUCurveRef.
+ */
 #ifndef SKETCHUP_MODEL_CURVE_H_
 #define SKETCHUP_MODEL_CURVE_H_
 
@@ -11,6 +16,7 @@ extern "C" {
 
 /**
 @struct SUCurveRef
+@extends SUEntityRef
 @brief  References a curve.
 */
 
@@ -52,7 +58,7 @@ SU_EXPORT SUCurveRef SUCurveFromEntity(SUEntityRef entity);
         for each edge in the range [0, N] the start position of each edge is the
         same as the end position of the previous edge in the array.  Each
         element of the array of edges is subsequently associated with the
-        created curve object and must not be deallocated via \ref SUEdgeRelease.
+        created curve object and must not be deallocated via SUEdgeRelease().
 @param curve The curve object created.
 @param edges The array of edge objects.
 @param len   The number of edge objects in the array.

@@ -19,6 +19,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 */
 
+#pragma once
+
 #include <SketchUpAPI/slapi.h>
 #include <SketchUpAPI/geometry.h>
 #include <SketchUpAPI/initialize.h>
@@ -35,8 +37,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include "vertex.h"
 #include "utilities.h"
 
-#pragma once
-
 using namespace System;
 using namespace System::Collections;
 using namespace System::Collections::Generic;
@@ -51,6 +51,12 @@ namespace SketchUpNET
 		Vertex^ End;
 		System::String^ Layer;
 
+		/// <summary>
+		/// Creates a new edge by startpoint, endpoint and layer name
+		/// </summary>
+		/// <param name="start">Startpoint</param>
+		/// <param name="end">Endpoint</param>
+		/// <param name="layer">Layername</param>
 		Edge(Vertex ^ start, Vertex ^ end, System::String^ layer)
 		{
 			this->Start = start;
@@ -58,7 +64,18 @@ namespace SketchUpNET
 			this->Layer = layer;
 		};
 
-		Edge(){};
+		Edge() {};
+
+		/// <summary>
+		/// Creates a new edge by start end endpoint
+		/// </summary>
+		/// <param name="start">Startpoint</param>
+		/// <param name="end">Endpoint</param>
+		Edge(Vertex^ start, Vertex^ end){
+			this->Start = start;
+			this->End = end;
+		};
+
 	internal:
 		static Edge^ FromSU(SUEdgeRef edge)
 		{

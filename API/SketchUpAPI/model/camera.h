@@ -1,4 +1,9 @@
-// Copyright 2013 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2013-2020 Trimble Inc. All Rights Reserved.
+
+/**
+ * @file
+ * @brief Interfaces for SUCameraRef.
+ */
 #ifndef SKETCHUP_MODEL_CAMERA_H_
 #define SKETCHUP_MODEL_CAMERA_H_
 
@@ -80,7 +85,7 @@ SU_RESULT SUCameraSetOrientation(SUCameraRef camera,
 @param[in]  camera         The camera object.
 @param[out] transformation The look at matrix retrieved.
 @related SUCameraRef
-@return 
+@return
 - \ref SU_ERROR_NONE on success.
 - \ref SU_ERROR_INVALID_INPUT if camera is not a valid object
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if transformation is NULL
@@ -209,8 +214,8 @@ SU_RESULT SUCameraGetPerspective(SUCameraRef camera, bool* perspective);
 - \ref SU_ERROR_INVALID_INPUT if camera is an invalid object
 - \ref SU_ERROR_NULL_POINTER_OUTPUT if znear or zfar is NULL
 */
-SU_RESULT SUCameraGetClippingDistances(SUCameraRef camera, 
-                                       double* znear, 
+SU_RESULT SUCameraGetClippingDistances(SUCameraRef camera,
+                                       double* znear,
                                        double* zfar);
 
 /**
@@ -383,7 +388,7 @@ SU_RESULT SUCameraSetCenter2D(SUCameraRef camera,
 
 /**
 @brief Retrieves the camera's 2D center point. Since this is accessing a 2D
-       point with a 3D point structure the z coordinate is always set to 0.0. 
+       point with a 3D point structure the z coordinate is always set to 0.0.
 @since SketchUp 2017, API 5.0
 @param[in]  camera The camera object.
 @param[out] center The center point retrieved.

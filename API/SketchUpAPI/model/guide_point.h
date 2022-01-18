@@ -1,5 +1,10 @@
-// Copyright 2014 Trimble Navigation Ltd. All Rights Reserved.
+// Copyright 2014 Trimble Inc. All Rights Reserved.
 
+
+/**
+ * @file
+ * @brief Interfaces for SUGuidePointRef.
+ */
 #ifndef SKETCHUP_MODEL_GUIDE_POINT_H_
 #define SKETCHUP_MODEL_GUIDE_POINT_H_
 
@@ -13,6 +18,7 @@ extern "C" {
 
 /**
 @struct SUGuidePointRef
+@extends SUDrawingElementRef
 @brief  A guide point that has a position.
 @since SketchUp 2014 M1, API 2.1
 */
@@ -70,8 +76,8 @@ SU_EXPORT SUGuidePointRef SUGuidePointFromDrawingElement(SUDrawingElementRef
 
 /**
 @brief Creates a guide point object. The guide point object must be subsequently
-       deallocated with \ref SUGuidePointRelease unless it is associated with a
-       parent object.
+       deallocated with \ref SUGuidePointRelease() unless it is associated with
+       a parent object.
 @since SketchUp 2014 M1, API 2.1
 @param[in]  guide_point The guide point object.
 @param[out] position    The guide point position.
@@ -87,8 +93,8 @@ SU_RESULT SUGuidePointCreate(SUGuidePointRef* guide_point,
 
 /**
 @brief Releases a guide point object. The guide point object must have been
-       created with \ref SUGuidePointCreate and not subsequently associated with
-       a parent object (e.g. \ref SUEntitiesAddGuidePoints).
+       created with SUGuidePointCreate() and not subsequently associated
+       with a parent object (e.g. SUEntitiesAddGuidePoints()).
 @since SketchUp 2014 M1, API 2.1
 @param[in] guide_point The guide point object.
 @related SUGuidePointRef
