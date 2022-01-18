@@ -49,10 +49,6 @@ namespace SketchUpNET
 	{
 	public:
 		System::String^ Name;
-
-		/// <summary>
-		/// Surfaces
-		/// </summary>
 		List<Surface^>^ Surfaces;
 		List<Edge^>^ Edges;
 		List<Curve^>^ Curves;

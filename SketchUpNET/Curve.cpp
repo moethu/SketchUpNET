@@ -45,9 +45,21 @@ namespace SketchUpNET
 	{
 	public:
 
+		/// <summary>
+		/// Collection of edges forming the curve
+		/// </summary>
 		List<Edge^>^ Edges = gcnew List<Edge^>();
+
+		/// <summary>
+		/// Indicates if this curve should be interpreted as an arc
+		/// </summary>
 		bool isArc;
 
+		/// <summary>
+		/// Creates a new curve based on a set of edges
+		/// </summary>
+		/// <param name="edges">Underlying edges</param>
+		/// <param name="isarc">Should be interpreted as an arc</param>
 		Curve(List<Edge^>^ edges, bool isarc)
 		{
 			this->Edges = edges;

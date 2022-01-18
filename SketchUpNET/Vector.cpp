@@ -47,6 +47,12 @@ namespace SketchUpNET
 		double Y;
 		double Z;
 
+		/// <summary>
+		/// Creates a new vector
+		/// </summary>
+		/// <param name="x"></param>
+		/// <param name="y"></param>
+		/// <param name="z"></param>
 		Vector(double x, double y, double z)
 		{
 			this->X = x;
