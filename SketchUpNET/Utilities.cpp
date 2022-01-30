@@ -76,7 +76,12 @@ namespace SketchUpNET
 			return result;
 		}
 
-		
+		static System::Boolean comparePoints(SUPoint3D a, SUPoint3D b) {
+			double tolerance = 0.1;
+			double d = Math::Sqrt(Math::Pow(a.x - b.x,2) + Math::Pow(a.y - b.y, 2) + Math::Pow(a.z - b.z,2));
+			System::Console::WriteLine(d);
+			return (Math::Abs(d) < tolerance);
+		}
 
 
 

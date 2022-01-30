@@ -177,6 +177,8 @@ namespace SketchUpNET
 			return centroid;
 		}
 
+
+
 		SUFaceRef ToSU()
 		{
 			SUFaceRef face = SU_INVALID;
@@ -186,9 +188,21 @@ namespace SketchUpNET
 			int count = OuterEdges->Edges->Count;
 			if (count > 0) {
 				SUPoint3D* points = (SUPoint3D*)malloc(*&count * sizeof(SUPoint3D));
-				for (int i = 0; i < count; ++i) {
+				for (int i = 0; i < count; i++) {
 					SULoopInputAddVertexIndex(outer_loop, i);
-					points[i] = OuterEdges->Edges[i]->Start->ToSU();
+					SUPoint3D start_point = OuterEdges->Edges[i]->Start->ToSU();
+					SUPoint3D end_point = OuterEdges->Edges[i]->End->ToSU();
+					if (i > 0) {
+						if (Utilities::comparePoints(points[i - 1], end_point)) {
+							points[i] = start_point;
+						}
+						else {
+							points[i] = end_point;
+						}
+					}
+					else {
+						points[i] = end_point;
+					}	
 				}
 				SUFaceCreate(&face, points, &outer_loop);
 			} else {
@@ -196,7 +210,7 @@ namespace SketchUpNET
 				// surfaces only consisting of outer vertices
 				count = Vertices->Count;
 				SUPoint3D* points = (SUPoint3D*)malloc(*&count * sizeof(SUPoint3D));
-				for (int i = 0; i < count; ++i) {
+				for (int i = 0; i < count; i++) {
 					SULoopInputAddVertexIndex(outer_loop, i);
 					points[i] = Vertices[i]->ToSU();
 				}
@@ -205,14 +219,26 @@ namespace SketchUpNET
 			
 			int innner_count = InnerEdges->Count;
 			if (innner_count > 0) {
-				for (int i = 0; i < innner_count; ++i) {
+				for (int i = 0; i < innner_count; i++) {
 					SULoopInputRef inner_loop = SU_INVALID;
 					SULoopInputCreate(&inner_loop);
 					int count = InnerEdges[i]->Edges->Count;
 					SUPoint3D* points = (SUPoint3D*)malloc(*&count * sizeof(SUPoint3D));
-					for (int j = 0; j < count; ++j) {
+					for (int j = 0; j < count; j++) {
 						SULoopInputAddVertexIndex(inner_loop, j);
-						points[j] = InnerEdges[i]->Edges[j]->Start->ToSU();
+						SUPoint3D start_point = InnerEdges[i]->Edges[j]->Start->ToSU();
+						SUPoint3D end_point = InnerEdges[i]->Edges[j]->End->ToSU();
+						if (j > 0) {
+							if (Utilities::comparePoints(points[j - 1], end_point)) {
+								points[j] = start_point;
+							}
+							else {
+								points[j] = end_point;
+							}
+						}
+						else {
+							points[j] = end_point;
+						}
 					}
 					SUFaceAddInnerLoop(face, points, &inner_loop);
 				}
