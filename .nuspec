@@ -21,6 +21,7 @@
             <group targetFramework=".NETFramework4.0" />
         </dependencies>
 		<tags>sketchup</tags>
+		<license type="expression">MIT</license>
     </metadata>
     <files>
         <file src="x64\Debug\SketchUpNET.dll" target="lib/net40" />
