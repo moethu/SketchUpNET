@@ -57,8 +57,9 @@ namespace SketchUpNET
 		Transform^ Transformation;
 		SketchUpNET::Material^ Material;
 		System::String^ Layer;
+		System::String^ Guid;
 
-		Group(System::String^ name, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges, List<Instance^>^ insts, List<Group^>^ group, Transform^ transformation, System::String^ layername, SketchUpNET::Material^ mat)
+		Group(System::String^ name, List<Surface^>^ surfaces, List<Curve^>^ curves, List<Edge^>^ edges, List<Instance^>^ insts, List<Group^>^ group, Transform^ transformation, System::String^ layername, SketchUpNET::Material^ mat, System::String^ guid)
 		{
 			this->Name = name;
 			this->Surfaces = surfaces;
@@ -69,6 +70,7 @@ namespace SketchUpNET
 			this->Transformation = transformation;
 			this->Layer = layername;
 			this->Material = mat;
+			this->Guid = guid;
 		};
 
 		Group(){};
@@ -78,6 +80,10 @@ namespace SketchUpNET
 			SUStringRef name = SU_INVALID;
 			SUStringCreate(&name);
 			SUGroupGetName(group, &name);
+
+			SUStringRef guid = SU_INVALID;
+			SUStringCreate(&guid);
+			SUGroupGetGuid(group, &guid);
 
 
 			SUEntitiesRef entities = SU_INVALID;
@@ -113,7 +119,7 @@ namespace SketchUpNET
 				layername = SketchUpNET::Utilities::GetLayerName(layer);
 			}
 
-			Group^ v = gcnew Group(SketchUpNET::Utilities::GetString(name), surfaces, curves, edges, inst, grps, Transform::FromSU(transform), layername, groupMat);
+			Group^ v = gcnew Group(SketchUpNET::Utilities::GetString(name), surfaces, curves, edges, inst, grps, Transform::FromSU(transform), layername, groupMat, SketchUpNET::Utilities::GetString(guid));
 
 			return v;
 		};
