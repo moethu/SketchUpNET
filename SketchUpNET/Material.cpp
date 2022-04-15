@@ -86,6 +86,57 @@ namespace SketchUpNET
 
 	internal:
 
+		SUMaterialRef ToSU() {
+			SUMaterialRef mat = SU_INVALID;
+			SUMaterialCreate(&mat);
+			SUMaterialSetName(mat, Utilities::ToString(this->Name));
+			SUMaterialSetUseOpacity(mat, this->UseOpacity);
+			SUMaterialSetOpacity(mat, this->Opacity);
+			if (this->UsesColor && !this->UsesTexture) {
+				SUMaterialSetType(mat, SUMaterialType::SUMaterialType_Colored);
+			}
+			if (this->UsesColor && this->UsesTexture) {
+				SUMaterialSetType(mat, SUMaterialType::SUMaterialType_ColorizedTexture);
+			}
+			if (!this->UsesColor && this->UsesTexture) {
+				SUMaterialSetType(mat, SUMaterialType::SUMaterialType_Textured);
+			}
+			const SUColor c = this->Colour->ToSU();
+			SUMaterialSetColor(mat,&c);
+			
+			return mat;
+		}
+
+
+
+		static SUMaterialRef* ListToSU(List<Material^>^ list)
+		{
+			size_t size = list->Count;
+			SUMaterialRef* result = (SUMaterialRef*)malloc(*&size * sizeof(SUMaterialRef));
+			for (int i = 0; i < size; i++)
+			{
+				result[i] = list[i]->ToSU();
+			}
+			return result;
+		}
+
+		static SUMaterialRef FindMaterial(SUModelRef model, System::String^ materialname) {
+			size_t matCount = 0;
+			SUModelGetNumMaterials(model, &matCount);
+
+			if (matCount > 0) {
+				std::vector<SUMaterialRef> materials(matCount);
+				SUModelGetMaterials(model, matCount, &materials[0], &matCount);
+
+				for (size_t i = 0; i < matCount; i++) {
+					Material^ mat = Material::FromSU(materials[i]);
+					if (mat->Name->Equals(materialname))
+						return materials[i];
+				}
+			}
+
+			return SU_INVALID;
+		}
 
 		static Material^ FromSU(SUMaterialRef material)
 		{

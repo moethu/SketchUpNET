@@ -177,7 +177,7 @@ namespace SketchUpNET
 			return centroid;
 		}
 
-		SUFaceRef ToSU()
+		SUFaceRef ToSU(SUModelRef model)
 		{
 			SUFaceRef face = SU_INVALID;
 			SULoopInputRef outer_loop = SU_INVALID;
@@ -218,16 +218,20 @@ namespace SketchUpNET
 				}
 			}		
 			
+			SUMaterialRef back = Material::FindMaterial(model, this->BackMaterial->Name);
+			SUMaterialRef front = Material::FindMaterial(model, this->FrontMaterial->Name);
+			SUFaceSetBackMaterial(face, back);
+			SUFaceSetBackMaterial(face, front);
 			return face;
 		}
 
-		static SUFaceRef* ListToSU(List<Surface^>^ list)
+		static SUFaceRef* ListToSU(List<Surface^>^ list, SUModelRef model)
 		{
 			size_t size = list->Count;
 			SUFaceRef * result = (SUFaceRef *)malloc(*&size * sizeof(SUFaceRef));
 			for (int i = 0; i < size; i++)
 			{
-				result[i] = list[i]->ToSU();
+				result[i] = list[i]->ToSU(model);
 			}
 			return result;
 		}

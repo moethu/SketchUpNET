@@ -299,7 +299,9 @@ namespace SketchUpNET
 			SUEntitiesRef entities = SU_INVALID;
 			SUModelGetEntities(model, &entities);
 
-			SUEntitiesAddFaces(entities, Surfaces->Count, Surface::ListToSU(Surfaces));
+			
+			SUModelAddMaterials(model, Materials->Count, Material::ListToSU(Linq::Enumerable::ToList(Materials->Values)));
+			SUEntitiesAddFaces(entities, Surfaces->Count, Surface::ListToSU(Surfaces, model));
 			SUEntitiesAddEdges(entities, Edges->Count, Edge::ListToSU(Edges));
 			SUEntitiesAddCurves(entities, Curves->Count, Curve::ListToSU(Curves));
 
@@ -339,7 +341,9 @@ namespace SketchUpNET
 			SUEntitiesRef entities = SU_INVALID;
 			SUModelGetEntities(model, &entities);
 
-			SUEntitiesAddFaces(entities, Surfaces->Count, Surface::ListToSU(Surfaces));
+			
+			SUModelAddMaterials(model, Materials->Count, Material::ListToSU(Linq::Enumerable::ToList(Materials->Values)));
+			SUEntitiesAddFaces(entities, Surfaces->Count, Surface::ListToSU(Surfaces, model));
 			SUEntitiesAddEdges(entities, Edges->Count, Edge::ListToSU(Edges));
 			SUEntitiesAddCurves(entities, Curves->Count, Curve::ListToSU(Curves));
 			
