@@ -33,6 +33,17 @@ namespace SketchUpNET.Unittest
         }
 
         /// <summary>
+        /// Test loading options
+        /// </summary>
+        [TestMethod]
+        public void TestOptions()
+        {
+            SketchUpNET.SketchUp skp = new SketchUp();
+            skp.LoadModel(TestFile, true);
+            Assert.IsNotNull(skp.Options);
+        }
+
+        /// <summary>
         /// Test saving file as
         /// </summary>
         [TestMethod]

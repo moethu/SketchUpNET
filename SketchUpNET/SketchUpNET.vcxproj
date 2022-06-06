@@ -159,6 +159,8 @@
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshFace.cpp" />
+    <ClCompile Include="OptionsManager.cpp" />
+    <ClCompile Include="OptionsProvider.cpp" />
     <ClCompile Include="SketchUpNET.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -179,6 +181,8 @@
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshFace.h" />
+    <ClInclude Include="OptionsManager.h" />
+    <ClInclude Include="OptionsProvider.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="Texture.h" />

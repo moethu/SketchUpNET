@@ -40,6 +40,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include "Group.h"
 #include "Instance.h"
 #include "Component.h"
+#include "OptionsManager.h"
 
 using namespace System;
 using namespace System::Collections;
@@ -113,6 +114,8 @@ namespace SketchUpNET
 		/// </summary>
 		bool MoreRecentFileVersion;
 
+		OptionsManager^ Options;
+
 		/// <summary>
 		/// Loads a SketchUp Model from filepath without loading Meshes.
 		/// Use this if you don't need meshed geometries.
@@ -150,6 +153,7 @@ namespace SketchUpNET
 			Groups = gcnew System::Collections::Generic::List<Group^>();
 			Components = gcnew System::Collections::Generic::Dictionary<String^,Component^>();
 			Materials = gcnew System::Collections::Generic::Dictionary<String^, Material^>();
+			Options = SketchUpNET::OptionsManager::FromModel(model);
 
 			SUEntitiesRef entities = SU_INVALID;
 			SUModelGetEntities(model, &entities);

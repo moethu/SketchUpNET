@@ -30,6 +30,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <SketchUpAPI/model/layer.h>
 #include <msclr/marshal.h>
 #include <vector>
+#include <SketchUpAPI/model/typed_value.h>
+#include "Color.h"
+#include "Vector.h"
 
 using namespace System;
 using namespace System::Collections;
@@ -76,8 +79,77 @@ namespace SketchUpNET
 			return result;
 		}
 
-		
+		static const char* ToCharArray(SUStringRef name)
+		{
+			size_t name_length = 0;
+			SUStringGetUTF8Length(name, &name_length);
+			char* name_utf8 = new char[name_length + 1];
+			SUStringGetUTF8(name, name_length + 1, name_utf8, &name_length);
+			return name_utf8;
+		}
 
+		static Object^ ToObject(SUTypedValueRef tvref) {
+			SUTypedValueType t;
+			SUTypedValueGetType(tvref, &t);
+			switch (t)
+			{
+			case SUTypedValueType_Empty:
+				return NULL;
+				break;
+			case SUTypedValueType_Byte:
+				char valueByte;
+				SUTypedValueGetByte(tvref, &valueByte);
+				return valueByte;
+				break;
+			case SUTypedValueType_Short:
+				Int16 valueShort;
+				SUTypedValueGetInt16(tvref, &valueShort);
+				return valueShort;
+				break;
+			case SUTypedValueType_Int32:
+				Int32 valueInt;
+				SUTypedValueGetInt32(tvref, &valueInt);
+				return valueInt;
+				break;
+			case SUTypedValueType_Float:
+				float valueFloat;
+				SUTypedValueGetFloat(tvref, &valueFloat);
+				return valueFloat;
+				break;
+			case SUTypedValueType_Double:
+				double valueDouble;
+				SUTypedValueGetDouble(tvref, &valueDouble);
+				return valueDouble;
+				break;
+			case SUTypedValueType_Bool:
+				bool valueBool;
+				SUTypedValueGetBool(tvref, &valueBool);
+				return valueBool;
+				break;
+			case SUTypedValueType_Color:
+				SUColor valueColor;
+				SUTypedValueGetColor(tvref, &valueColor);
+				return Color::FromSU(valueColor);
+				break;
+			case SUTypedValueType_Time:
+				return NULL;
+				break;
+			case SUTypedValueType_String:
+				SUStringRef str;
+				SUTypedValueGetString(tvref, &str);
+				return GetString(str);
+				break;
+			case SUTypedValueType_Vector3D:
+				return NULL;
+				break;
+			case SUTypedValueType_Array:
+				return NULL;
+				break;
+			default:
+				return NULL;
+				break;
+			}
+		}
 
 
 	};
