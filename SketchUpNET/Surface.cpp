@@ -26,6 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <SketchUpAPI/unicodestring.h>
 #include <SketchUpAPI/model/model.h>
 #include <SketchUpAPI/model/entities.h>
+#include <SketchUpAPI/model/entity.h>
 #include <SketchUpAPI/model/face.h>
 #include <SketchUpAPI/model/edge.h>
 #include <SketchUpAPI/model/vertex.h>
@@ -92,7 +93,12 @@ namespace SketchUpNET
 
 		System::String^ Layer;
 
-		Surface(Loop^ outer, List<Loop^>^ inner, Vector^ normal, double area, List<Vertex^>^ vertices, Mesh^ m, System::String^ layername, Material^ backmat, Material^ frontmat)
+		/// <summary>
+		/// Persistent ID (interhited from SUEntityRef)
+		/// </summary>
+		int64_t PersistentID;
+
+		Surface(Loop^ outer, List<Loop^>^ inner, Vector^ normal, double area, List<Vertex^>^ vertices, Mesh^ m, System::String^ layername, Material^ backmat, Material^ frontmat, int64_t persistentID)
 		{
 			this->OuterEdges = outer;
 			this->InnerEdges = inner;
@@ -103,6 +109,7 @@ namespace SketchUpNET
 			this->Area = area;
 			this->Vertices = vertices;
 			this->Layer = layername;
+			this->PersistentID = persistentID;
 		};
 
 		Surface(){};
@@ -269,7 +276,9 @@ namespace SketchUpNET
 			{
 				layername = Utilities::GetLayerName(layer);
 			}
-				
+			
+			int64_t persistentID;
+			SUEntityGetPersistentID(SUFaceToEntity(face), &persistentID);
 			
 			List<Vertex^>^ vertices = gcnew List<Vertex^>();
 
@@ -308,7 +317,7 @@ namespace SketchUpNET
 			Material^ backMat = (materials->ContainsKey(mbackName)) ? materials[mbackName] : Material::FromSU(mback);
 			Material^ frontMat = (materials->ContainsKey(minnerName)) ? materials[minnerName] : Material::FromSU(minner);
 
-			Surface^ v = gcnew Surface(Loop::FromSU(outer), inner, normal, area, vertices,m, layername, backMat, frontMat);
+			Surface^ v = gcnew Surface(Loop::FromSU(outer), inner, normal, area, vertices,m, layername, backMat, frontMat, persistentID);
 
 			return v;
 		}
